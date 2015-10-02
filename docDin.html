@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Descri&ccedil;&atilde;o</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-28"><meta name="DC.source" content="docDin.m"><style type="text/css">
+      --><title>Gerador de documenta&ccedil;&atilde;o</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-10-02"><meta name="DC.source" content="docDin.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,164 +65,316 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Descri&ccedil;&atilde;o</h1><!--introduction--><p>Script que gera toda a documenta&ccedil;&atilde;o do reposit&oacute;rio.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Documenta&ccedil;&atilde;o do pr&oacute;prio gerador de documenta&ccedil;&atilde;o</a></li><li><a href="#2">P&aacute;gina inicial da documenta&ccedil;&atilde;o</a></li><li><a href="#3">P&aacute;gina principal do modelo de pneu</a></li><li><a href="#4">P&aacute;gina principal do modelo de ve&iacute;culo</a></li><li><a href="#5">Simula&ccedil;&otilde;es</a></li><li><a href="#6">Seletor</a></li><li><a href="#7">Frame</a></li><li><a href="#8">Anima&ccedil;&atilde;o</a></li></ul></div><h2>Documenta&ccedil;&atilde;o do pr&oacute;prio gerador de documenta&ccedil;&atilde;o<a name="1"></a></h2><pre class="codeinput">publish(<span class="string">'docDin'</span>,<span class="string">'evalCode'</span>,false)
-</pre><h2>P&aacute;gina inicial da documenta&ccedil;&atilde;o<a name="2"></a></h2><pre class="codeinput">publish(<span class="string">'index'</span>,<span class="string">'evalCode'</span>,false)
-publish(<span class="string">'fluxograma'</span>) <span class="comment">% Gera o fluxograma ilustrativo</span>
-close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-</pre><h2>P&aacute;gina principal do modelo de pneu<a name="3"></a></h2><pre class="codeinput">publish(<span class="string">'pneuDoc'</span>)
-close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-
-    <span class="comment">% pneuLinear</span>
-    publish(<span class="string">'pneuLinearFun'</span>,<span class="string">'evalCode'</span>,false)
-    publish(<span class="string">'pneuLinearDados'</span>,<span class="string">'evalCode'</span>,false)
-    <span class="comment">% pneuSadri</span>
-    publish(<span class="string">'pneuSadriFun'</span>,<span class="string">'evalCode'</span>,false)
-    publish(<span class="string">'pneuSadriDadosTaylor'</span>,<span class="string">'evalCode'</span>,false)
-    publish(<span class="string">'pneuSadriDadosAjuste'</span>,<span class="string">'evalCode'</span>,false)
-    <span class="comment">% pneuPacejka</span>
-    publish(<span class="string">'pneuPacejkaFun'</span>,<span class="string">'evalCode'</span>,false)
-    publish(<span class="string">'pneuPacejkaDados'</span>,<span class="string">'evalCode'</span>,false)
-</pre><h2>P&aacute;gina principal do modelo de ve&iacute;culo<a name="4"></a></h2><pre class="codeinput">publish(<span class="string">'veiculoDoc'</span>)
+  </style></head><body><div class="content"><h1>Gerador de documenta&ccedil;&atilde;o</h1><!--introduction--><p>Script que gera toda a documenta&ccedil;&atilde;o do reposit&oacute;rio.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Documenta&ccedil;&atilde;o do pr&oacute;prio gerador de documenta&ccedil;&atilde;o</a></li><li><a href="#2">P&aacute;gina inicial da documenta&ccedil;&atilde;o</a></li><li><a href="#3">Estudos</a></li><li><a href="#4">P&aacute;gina principal do modelo de ve&iacute;culo</a></li><li><a href="#5">PNEU</a></li><li><a href="#6">Seletor</a></li><li><a href="#7">Frame</a></li><li><a href="#8">Anima&ccedil;&atilde;o</a></li><li><a href="#9">Ver tamb&eacute;m</a></li></ul></div><h2>Documenta&ccedil;&atilde;o do pr&oacute;prio gerador de documenta&ccedil;&atilde;o<a name="1"></a></h2><pre class="codeinput">close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'docDin'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+</pre><h2>P&aacute;gina inicial da documenta&ccedil;&atilde;o<a name="2"></a></h2><pre class="codeinput">close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'index'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
 close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
 clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
-    <span class="comment">% veiculoLinear2gdl</span>
-    publish(<span class="string">'veiculoLinear2gdl'</span>,<span class="string">'evalCode'</span>,false)
-    <span class="comment">%publish('veiculoLinear2gdlDados','evalCode',false)</span>
-    <span class="comment">% veiculoNaoLinear2gdl</span>
-    publish(<span class="string">'veiculoNaoLinear2gdl'</span>,<span class="string">'evalCode'</span>,false)
-    <span class="comment">%publish('veiculoLinear2gdlDados','evalCode',false)</span>
-    <span class="comment">% veiculoNaoLinear3gdl</span>
-    publish(<span class="string">'veiculoNaoLinear3gdl'</span>,<span class="string">'evalCode'</span>,false)
-    <span class="comment">%publish('veiculoLinear2gdlDados','evalCode',false)</span>
-    <span class="comment">% veiculoNaoLinear3gdlEst</span>
-    publish(<span class="string">'veiculoNaoLinear3gdlEst'</span>,<span class="string">'evalCode'</span>,false)
-    <span class="comment">%publish('veiculoLinear2gdlDados','evalCode',false)</span>
-</pre><h2>Simula&ccedil;&otilde;es<a name="5"></a></h2><pre class="codeinput">    <span class="comment">% Simula&ccedil;&atilde;o</span>
-    publish(<span class="string">'simulacao'</span>)
-    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
-    <span class="comment">% Compara&ccedil;&atilde;o DELTA 14</span>
-    publish(<span class="string">'comparacaoDelta14'</span>)
-    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
-    <span class="comment">% Compara&ccedil;&atilde;o DELTA 45</span>
-    publish(<span class="string">'comparacaoDelta45'</span>)
-    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
-    <span class="comment">% Compara&ccedil;&atilde;o dPSI 2</span>
-    publish(<span class="string">'comparacaoDpsi2'</span>)
-    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
-    <span class="comment">% Compara&ccedil;&atilde;o dPSI 3</span>
-    publish(<span class="string">'comparacaoDpsi3'</span>)
-    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
-    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
-</pre><h2>Seletor<a name="6"></a></h2><pre class="codeinput">publish(<span class="string">'seletor'</span>,<span class="string">'evalCode'</span>,false)
-</pre><h2>Frame<a name="7"></a></h2><pre class="codeinput">publish(<span class="string">'frame'</span>,<span class="string">'evalCode'</span>,false)
-</pre><h2>Anima&ccedil;&atilde;o<a name="8"></a></h2><pre class="codeinput">publish(<span class="string">'animacao'</span>,<span class="string">'evalCode'</span>,false)
-<span class="comment">% Vetor</span>
-publish(<span class="string">'vetor'</span>,<span class="string">'evalCode'</span>,false)
-
-
+publish(<span class="string">'fluxograma'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>) <span class="comment">% Gera o fluxograma ilustrativo</span>
+</pre><h2>Estudos<a name="3"></a></h2><pre class="codeinput"><span class="comment">% Simples</span>
 clear <span class="string">all</span>
-clc
+close <span class="string">all</span>
+publish(<span class="string">'estudoSimples'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
 
-cd <span class="string">html</span> <span class="comment">% Entrando na pasta da documenta&ccedil;&atilde;o</span>
-open <span class="string">index.html</span> <span class="comment">% Abrindo a p&aacute;gina inicial da documenta&ccedil;&atilde;o</span>
-cd <span class="string">..</span> <span class="comment">% Voltando para a pasta ra&iacute;z do reposit&oacute;rio</span>
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+<span class="comment">% Compara&ccedil;&atilde;o DELTA 14</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDelta14'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+<span class="comment">% Compara&ccedil;&atilde;o DELTA 45</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDelta45'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+<span class="comment">% Compara&ccedil;&atilde;o dPSI 2</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDpsi2'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+<span class="comment">% Compara&ccedil;&atilde;o dPSI 3 com</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDpsi3com'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+<span class="comment">% Compara&ccedil;&atilde;o dPSI 3 sem</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDpsi3sem'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+<span class="comment">% Compara&ccedil;&atilde;o dPSI 3 est</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDpsi3est'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+<span class="comment">% Compara&ccedil;&atilde;o dPSI 3 veiculo</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'estudoComparacaoDpsi3veiculo'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+</pre><h2>P&aacute;gina principal do modelo de ve&iacute;culo<a name="4"></a></h2><pre class="codeinput"><span class="comment">% Doc</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'veiculoDoc'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+    <span class="comment">% veiculoLinear2gdl</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'veiculoLinear2gdl'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+    <span class="comment">% veiculoNaoLinear2gdl</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'veiculoNaoLinear2gdl'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+    <span class="comment">% veiculoNaoLinear3gdl</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'veiculoNaoLinear3gdl'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    <span class="comment">% Dados ve&iacute;culo</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'veiculoDadosDelta0'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'veiculoDadosDelta14'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'veiculoDadosDelta45'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+</pre><h2>PNEU<a name="5"></a></h2><pre class="codeinput"><span class="comment">%Doc</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'pneuDoc'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>)
+
+    <span class="comment">% pneuLinear</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuLinearFun'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuLinearDados'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    <span class="comment">% pneuSadri</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuSadriFun'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuSadriDadosTaylor'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuSadriDadosAjuste'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    <span class="comment">% pneuPacejka</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuPacejkaFun'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    <span class="comment">% pneuPacejka estendido</span>
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuPacejkaEstFun'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+    close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+    clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+    publish(<span class="string">'pneuPacejkaDados'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+</pre><h2>Seletor<a name="6"></a></h2><pre class="codeinput">close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'seletor'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+</pre><h2>Frame<a name="7"></a></h2><pre class="codeinput">close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'frame'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+</pre><h2>Anima&ccedil;&atilde;o<a name="8"></a></h2><pre class="codeinput">close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'animacao'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+<span class="comment">% Vetor</span>
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+publish(<span class="string">'vetor'</span>,<span class="string">'outputDir'</span>,<span class="string">'../documentacao/'</span>,<span class="string">'evalCode'</span>,false)
+
+close <span class="string">all</span> <span class="comment">% Fechando as figuras geradas</span>
+clear <span class="string">all</span> <span class="comment">% Limpando o workspace</span>
+
+clc <span class="comment">% Limpando a command window</span>
+
+<span class="comment">% Abrindo a p&aacute;gina inicial da documenta&ccedil;&atilde;o</span>
+open <span class="string">../documentacao/index.html</span>
+</pre><h2>Ver tamb&eacute;m<a name="9"></a></h2><p><a href="index.html">In&iacute;cio</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Descrição
+%% Gerador de documentação
 % Script que gera toda a documentação do repositório.
 
 %% Documentação do próprio gerador de documentação
 
-publish('docDin','evalCode',false)
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('docDin','outputDir','../documentacao/','evalCode',false)
 
 %% Página inicial da documentação
 
-publish('index','evalCode',false)
-publish('fluxograma') % Gera o fluxograma ilustrativo
 close all % Fechando as figuras geradas
-
-%% Página principal do modelo de pneu
-
-publish('pneuDoc')
+clear all % Limpando o workspace
+publish('index','outputDir','../documentacao/','evalCode',false)
 close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('fluxograma','outputDir','../documentacao/') % Gera o fluxograma ilustrativo
 
-    % pneuLinear
-    publish('pneuLinearFun','evalCode',false)
-    publish('pneuLinearDados','evalCode',false)
-    % pneuSadri
-    publish('pneuSadriFun','evalCode',false)
-    publish('pneuSadriDadosTaylor','evalCode',false)
-    publish('pneuSadriDadosAjuste','evalCode',false)
-    % pneuPacejka
-    publish('pneuPacejkaFun','evalCode',false)
-    publish('pneuPacejkaDados','evalCode',false)
+%% Estudos
+
+% Simples
+clear all
+close all
+publish('estudoSimples','outputDir','../documentacao/')
+
+% Comparação DELTA 14
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDelta14','outputDir','../documentacao/')
+
+% Comparação DELTA 45
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDelta45','outputDir','../documentacao/')
+
+% Comparação dPSI 2
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDpsi2','outputDir','../documentacao/')
+
+% Comparação dPSI 3 com
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDpsi3com','outputDir','../documentacao/')
+
+% Comparação dPSI 3 sem
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDpsi3sem','outputDir','../documentacao/')
+
+% Comparação dPSI 3 est
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDpsi3est','outputDir','../documentacao/')
+
+% Comparação dPSI 3 veiculo
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('estudoComparacaoDpsi3veiculo','outputDir','../documentacao/')
 
 %% Página principal do modelo de veículo
 
-publish('veiculoDoc')
+% Doc
 close all % Fechando as figuras geradas
 clear all % Limpando o workspace
-    % veiculoLinear2gdl
-    publish('veiculoLinear2gdl','evalCode',false)
-    %publish('veiculoLinear2gdlDados','evalCode',false)
+publish('veiculoDoc','outputDir','../documentacao/')
+    % veiculoLinear2gdl    
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('veiculoLinear2gdl','outputDir','../documentacao/','evalCode',false)
     % veiculoNaoLinear2gdl
-    publish('veiculoNaoLinear2gdl','evalCode',false)
-    %publish('veiculoLinear2gdlDados','evalCode',false)
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('veiculoNaoLinear2gdl','outputDir','../documentacao/','evalCode',false)
     % veiculoNaoLinear3gdl
-    publish('veiculoNaoLinear3gdl','evalCode',false)
-    %publish('veiculoLinear2gdlDados','evalCode',false)
-    % veiculoNaoLinear3gdlEst
-    publish('veiculoNaoLinear3gdlEst','evalCode',false)
-    %publish('veiculoLinear2gdlDados','evalCode',false)
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('veiculoNaoLinear3gdl','outputDir','../documentacao/','evalCode',false)
 
-%% Simulações
+    % Dados veículo
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('veiculoDadosDelta0','outputDir','../documentacao/','evalCode',false)
 
-    % Simulação
-    publish('simulacao')
     close all % Fechando as figuras geradas
     clear all % Limpando o workspace
-    % Comparação DELTA 14
-    publish('comparacaoDelta14')
-    close all % Fechando as figuras geradas
-    clear all % Limpando o workspace
-    % Comparação DELTA 45
-    publish('comparacaoDelta45')
-    close all % Fechando as figuras geradas
-    clear all % Limpando o workspace
-    % Comparação dPSI 2
-    publish('comparacaoDpsi2')
-    close all % Fechando as figuras geradas
-    clear all % Limpando o workspace
-    % Comparação dPSI 3
-    publish('comparacaoDpsi3')
-    close all % Fechando as figuras geradas
-    clear all % Limpando o workspace
+    publish('veiculoDadosDelta14','outputDir','../documentacao/','evalCode',false)
 
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('veiculoDadosDelta45','outputDir','../documentacao/','evalCode',false)
     
+%% PNEU
+
+%Doc
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('pneuDoc','outputDir','../documentacao/')
+
+    % pneuLinear
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuLinearFun','outputDir','../documentacao/','evalCode',false)
+
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuLinearDados','outputDir','../documentacao/','evalCode',false)
+
+    % pneuSadri
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuSadriFun','outputDir','../documentacao/','evalCode',false)
+    
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuSadriDadosTaylor','outputDir','../documentacao/','evalCode',false)
+
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuSadriDadosAjuste','outputDir','../documentacao/','evalCode',false)
+
+    % pneuPacejka
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuPacejkaFun','outputDir','../documentacao/','evalCode',false)
+
+    % pneuPacejka estendido
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuPacejkaEstFun','outputDir','../documentacao/','evalCode',false)
+
+    close all % Fechando as figuras geradas
+    clear all % Limpando o workspace
+    publish('pneuPacejkaDados','outputDir','../documentacao/','evalCode',false)
+
 %% Seletor
 
-publish('seletor','evalCode',false)
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('seletor','outputDir','../documentacao/','evalCode',false)
 
 %% Frame
 
-publish('frame','evalCode',false)
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('frame','outputDir','../documentacao/','evalCode',false)
 
 %% Animação
 
-publish('animacao','evalCode',false)
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('animacao','outputDir','../documentacao/','evalCode',false)
+
 % Vetor
-publish('vetor','evalCode',false)
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
+publish('vetor','outputDir','../documentacao/','evalCode',false)
 
+close all % Fechando as figuras geradas
+clear all % Limpando o workspace
 
-clear all
-clc    
+clc % Limpando a command window
 
-cd html % Entrando na pasta da documentação
-open index.html % Abrindo a página inicial da documentação
-cd .. % Voltando para a pasta raíz do repositório
+% Abrindo a página inicial da documentação
+open ../documentacao/index.html
+
+%% Ver também
+%
+% <index.html Início>
+%
 ##### SOURCE END #####
 --></body></html>

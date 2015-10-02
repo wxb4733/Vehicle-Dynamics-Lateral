@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Ve&iacute;culo n&atilde;o linear com 2 GDL</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-28"><meta name="DC.source" content="veiculoNaoLinear2gdl.m"><style type="text/css">
+      --><title>Ve&iacute;culo n&atilde;o linear com 2 GDL</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-10-02"><meta name="DC.source" content="veiculoNaoLinear2gdl.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -92,8 +92,8 @@ ALPHAT = x(2);
 PSI = x(3);
 
 <span class="comment">% Angulos de deriva n&atilde;o linear</span>
-ALPHAF = atan((v*sin(ALPHAT) + a*dPSI)/(v*cos(ALPHAT))) - DELTA; <span class="comment">% Dianteiro</span>
-ALPHAR = atan((v*sin(ALPHAT) - b*dPSI)/(v*cos(ALPHAT)));         <span class="comment">% Traseiro</span>
+ALPHAF = atan2((v*sin(ALPHAT) + a*dPSI),(v*cos(ALPHAT))) - DELTA; <span class="comment">% Dianteiro</span>
+ALPHAR = atan2((v*sin(ALPHAT) - b*dPSI),(v*cos(ALPHAT)));         <span class="comment">% Traseiro</span>
 
 <span class="comment">% Curva caracter&iacute;stica</span>
 FyF = pneuFun(ALPHAF,pneuDadosFrente);
@@ -110,7 +110,7 @@ dx(3,1) = dPSI; <span class="comment">% dPSI</span>
 dx(4,1) = v*cos(ALPHAT + PSI); <span class="comment">% X</span>
 dx(5,1) = v*sin(ALPHAT + PSI); <span class="comment">% Y</span>
 <span class="keyword">end</span>
-</pre><h2>Ver tamb&eacute;m<a name="4"></a></h2><p><a href="inicio.html">In&iacute;cio</a> | <a href="veiculoDoc.html">Modelo de ve&iacute;culo</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><h2>Ver tamb&eacute;m<a name="4"></a></h2><p><a href="index.html">In&iacute;cio</a> | <a href="veiculoDoc.html">Modelo de ve&iacute;culo</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Veículo não linear com 2 GDL
 % Modelo bicicleta não linear com 2 graus de liberdade
@@ -157,8 +157,8 @@ ALPHAT = x(2);
 PSI = x(3);
 
 % Angulos de deriva não linear
-ALPHAF = atan((v*sin(ALPHAT) + a*dPSI)/(v*cos(ALPHAT))) - DELTA; % Dianteiro
-ALPHAR = atan((v*sin(ALPHAT) - b*dPSI)/(v*cos(ALPHAT)));         % Traseiro
+ALPHAF = atan2((v*sin(ALPHAT) + a*dPSI),(v*cos(ALPHAT))) - DELTA; % Dianteiro
+ALPHAR = atan2((v*sin(ALPHAT) - b*dPSI),(v*cos(ALPHAT)));         % Traseiro
 
 % Curva característica
 FyF = pneuFun(ALPHAF,pneuDadosFrente);
@@ -178,7 +178,7 @@ end
 
 %% Ver também
 %
-% <inicio.html Início> | <veiculoDoc.html Modelo de veículo>
+% <index.html Início> | <veiculoDoc.html Modelo de veículo>
 %
 ##### SOURCE END #####
 --></body></html>
