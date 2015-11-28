@@ -1,0 +1,432 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>VeiculoArticuladoNaoLinear4GDL</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-28"><meta name="DC.source" content="VeiculoArticuladoNaoLinear4GDL.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Ve&iacute;culo Articulado N&atilde;o Linear 4GDL</a></li><li><a href="#2">Ver tamb&eacute;m</a></li></ul></div><h2>Ve&iacute;culo Articulado N&atilde;o Linear 4GDL<a name="1"></a></h2><div><ul><li><a href="EquacionamentoVeiculoArticuladoNaoLinear4GDL.html">Equacinamento</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> VeiculoArticuladoNaoLinear4GDL &lt; DinamicaVeicular.Veiculo
+	<span class="keyword">methods</span>
+        <span class="comment">% constructor</span>
+        <span class="keyword">function</span> self = VeiculoArticuladoNaoLinear4GDL(varargin)
+            <span class="keyword">if</span> nargin == 0
+                <span class="comment">% Entrada padr&atilde;o dos dados do ve&iacute;culo</span>
+                entradaVetor = [5237 2440 6000 10000 17000 46100 452010 0 -0.310 3.550 7.700 2 4 8 2.6 2.550];
+                <span class="comment">% 01 - mF0 - Massa no eixo dianteiro do caminh&atilde;o-trator desacoplado [kg]</span>
+                <span class="comment">% 02 - mR0 - Massa no eixo traseiro do caminh&atilde;o-trator desacoplado [kg]</span>
+                <span class="comment">% 03 - mF - Massa no eixo dianteiro do caminh&atilde;o-trator (F) [kg]</span>
+                <span class="comment">% 04 - mR - Massa no eixo traseiro do caminh&atilde;o-trator (R) [kg]</span>
+                <span class="comment">% 05 - mM - Massa no eixo do semirreboque (M) [kg]</span>
+                <span class="comment">% 06 - IT - Momento de in&eacute;rcia do caminh&atilde;o-trator [kg*m2]</span>
+                <span class="comment">% 07 - IS - Momento de in&eacute;rcia do semirreboque [kg*m2]</span>
+                <span class="comment">% 08 - DELTA - Ester&ccedil;amento do eixo dianteiro [rad]</span>
+                <span class="comment">% 09 - c - Dist&acirc;ncia da articula&ccedil;&atilde;o ao eixo traseiro do caminh&atilde;o-trator (A-R) [m]</span>
+                <span class="comment">% 10 - lT - Dist&acirc;ncia entre os eixos do caminh&atilde;o-trator [m]</span>
+                <span class="comment">% 11 - lS - Dist&acirc;ncia entre a articula&ccedil;&atilde;o e o eixo do semirreboque [m]</span>
+                <span class="comment">% 12 - nF - N&uacute;mero de pneus no eixo dianteiro do caminh&atilde;o-trator</span>
+                <span class="comment">% 13 - nR - N&uacute;mero de pneus no eixo traseiro do caminh&atilde;o-trator</span>
+                <span class="comment">% 14 - nM - N&uacute;mero de pneus no eixo do semirreboque</span>
+                <span class="comment">% 15 - largT - Largura do caminh&atilde;o-trator [m]</span>
+                <span class="comment">% 16 - largS - Largura do semirreboque [m]</span>
+
+                <span class="comment">% Definindo os par&acirc;metros da classe</span>
+                self.params = self.conversao(entradaVetor);
+                self.pneu = DinamicaVeicular.PneuPacejka;
+            <span class="keyword">else</span>
+                self.params = self.conversao(varargin{1});
+                <span class="comment">% if  isa(varargin{2}, DinamicaVeicular.Pneu)</span>
+                self.pneu = varargin{2};
+                <span class="comment">% else</span>
+                <span class="comment">%     % AQUI VAI O ERRO</span>
+                <span class="comment">%     erro = 1 + 1;</span>
+                <span class="comment">% end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+		<span class="keyword">function</span> dx = Model(self,~,estados)
+            <span class="comment">% Dados do ve&iacute;culo</span>
+            mT = self.params(17);       <span class="comment">% massa do veiculo [kg]</span>
+            mS = self.params(18);       <span class="comment">% massa do veiculo [kg]</span>
+            IT = self.params(6);       <span class="comment">% momento de inercia [kg]</span>
+            IS = self.params(7);       <span class="comment">% momento de inercia [kg]</span>
+            a = self.params(19);        <span class="comment">% distancia do eixo dianteiro ao centro de massa do caminh&atilde;o-trator [m]</span>
+            b = self.params(20);        <span class="comment">% distancia do eixo traseiro ao centro de massa do caminh&atilde;o-trator [m]</span>
+            c = self.params(9);        <span class="comment">% distancia da articula&ccedil;&atilde;o ao centro de massa do caminh&atilde;o-trator [m]</span>
+            d = self.params(21);        <span class="comment">% distancia do eixo traseiro ao centro de massa do caminh&atilde;o-trator [m]</span>
+            e = self.params(22);        <span class="comment">% distancia da articula&ccedil;&atilde;o ao centro de massa do caminh&atilde;o-trator [m]</span>
+            DELTA = self.params(8);   <span class="comment">% Ester&ccedil;amento [rad]</span>
+            nF = self.params(12);      <span class="comment">% N&uacute;mero de pneus no eixo dianteiro do caminh&atilde;o-trator</span>
+            nR = self.params(13);      <span class="comment">% N&uacute;mero de pneus no eixo traseiro do caminh&atilde;o-trator</span>
+            nM = self.params(14);      <span class="comment">% N&uacute;mero de pneus no eixo do semirreboque</span>
+            g = 9.81;                  <span class="comment">% Acelera&ccedil;&atilde;o da gravidade [m/s^2]</span>
+            <span class="comment">% Defini&ccedil;&atilde;o dos estados</span>
+            dPSI = estados(1,1);              <span class="comment">% Velocidade angular do caminh&atilde;o-trator [rad/s]</span>
+            ALPHAT = estados(2,1);            <span class="comment">% &Acirc;ngulo de deriva do CG do caminh&atilde;o-trator [rad]</span>
+            dPHI = estados(3,1);              <span class="comment">% Velocidade angular relativa entre o semirreboque e o caminh&atilde;o-trator [rad/s]</span>
+            VEL = estados(4,1);               <span class="comment">% &Acirc;ngulo relativo entre o semirreboque e o caminh&atilde;o-trator [rad]</span>
+            PHI = estados(5,1);               <span class="comment">% M&oacute;dulo do vetor velocidade do CG do caminh&atilde;o-trator [m/s]</span>
+            PSI = estados(6,1);               <span class="comment">% &Acirc;ngulo de orienta&ccedil;&atilde;o do caminh&atilde;o-trator [rad]</span>
+
+            <span class="comment">% Angulos de deriva n&atilde;o linear</span>
+            ALPHAF = atan2((a*dPSI + VEL*sin(ALPHAT)),(VEL*cos(ALPHAT))) - DELTA;
+            ALPHAR = atan2((-b*dPSI + VEL*sin(ALPHAT)),(VEL*cos(ALPHAT)));
+            ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VEL*sin(ALPHAT + PHI) - b*dPSI*cos(PHI) - c*dPSI*cos(PHI)),(VEL*cos(ALPHAT + PHI) + b*dPSI*sin(PHI) + c*dPSI*sin(PHI)));
+
+            <span class="comment">% For&ccedil;as longitudinais</span>
+            FxF = 0;
+            FxR = 0;
+            FxM = 0;
+            <span class="comment">% For&ccedil;as laterais nos pneus - Curva caracter&iacute;stica</span>
+            self.pneu.params(7) = self.params(3)*g; <span class="comment">% Mudando a carga vertical no eixo dianteiro</span>
+            FyF = nF*self.pneu.Characteristic(ALPHAF);
+            self.pneu.params(7) = self.params(4)*g; <span class="comment">% Mudando a carga vertical no eixo traseiro</span>
+            FyR = nR*self.pneu.Characteristic(ALPHAR);
+            self.pneu.params(7) = self.params(5)*g; <span class="comment">% Mudando a carga vertical no eixo do semirreboque</span>
+            FyM = nM*self.pneu.Characteristic(ALPHAM);
+
+            <span class="comment">% Matriz de massa</span>
+            M11 = -d*mS*sin(PHI);
+            M12 = -VEL*sin(ALPHAT)*(mS + mT);
+            M13 =  d*mS*sin(PHI);
+            M14 = cos(ALPHAT)*(mS + mT);
+            M21 = -mS*(b + c + d*cos(PHI));
+            M22 = VEL*cos(ALPHAT)*(mS + mT);
+            M23 = d*mS*cos(PHI);
+            M24 = sin(ALPHAT)*(mS + mT);
+            M31 = IT + mS*(b + c)*(b + c + d*cos(PHI));
+            M32 = -VEL*mS*cos(ALPHAT)*(b + c);
+            M33 = -d*mS*cos(PHI)*(b + c);
+            M34 = -mS*sin(ALPHAT)*(b + c);
+            M41 = IS + d*mS*(d + cos(PHI)*(b + c));
+            M42 = -VEL*d*mS*cos(ALPHAT + PHI);
+            M43 = - mS*d^2 - IS;
+            M44 = -d*mS*sin(ALPHAT + PHI);
+
+            M = [M11 M12 M13 M14 0;<span class="keyword">...</span>
+                 M21 M22 M23 M24 0;<span class="keyword">...</span>
+                 M31 M32 M33 M34 0;<span class="keyword">...</span>
+                 M41 M42 M43 M44 0;<span class="keyword">...</span>
+                  0   0   0   0  1];
+
+            <span class="comment">% ddPSI,dALPHAT,ddPHI,dPHI,dVEL</span>
+            f1 = FxR + FxF*cos(DELTA) + FxM*cos(PHI) - FyF*sin(DELTA) + FyM*sin(PHI) - b*dPSI^2*mS - c*dPSI^2*mS + VEL*dPSI*mS*sin(ALPHAT) + VEL*dPSI*mT*sin(ALPHAT) - d*dPHI^2*mS*cos(PHI) - d*dPSI^2*mS*cos(PHI) + 2*d*dPHI*dPSI*mS*cos(PHI);
+            f2 = FyR + FyF*cos(DELTA) + FyM*cos(PHI) + FxF*sin(DELTA) - FxM*sin(PHI) - VEL*dPSI*mS*cos(ALPHAT) - VEL*dPSI*mT*cos(ALPHAT) + d*dPHI^2*mS*sin(PHI) + d*dPSI^2*mS*sin(PHI) - 2*d*dPHI*dPSI*mS*sin(PHI);
+            f3 = a*(FyF*cos(DELTA) + FxF*sin(DELTA)) - FyR*b - (b + c)*(d*mS*sin(PHI)*dPHI^2 - 2*d*mS*sin(PHI)*dPHI*dPSI + d*mS*sin(PHI)*dPSI^2 - VEL*mS*cos(ALPHAT)*dPSI + FyM*cos(PHI) - FxM*sin(PHI));
+            f4 = d*(b*dPSI^2*mS*sin(PHI) - FyM + c*dPSI^2*mS*sin(PHI) + VEL*dPSI*mS*cos(ALPHAT + PHI)) - FyM*e;
+            f5 = dPHI;
+
+            f = [f1 ; f2 ; f3 ; f4 ; f5];
+
+            <span class="comment">% Equa&ccedil;&otilde;es adicionais para o posicionamento (N&atilde;o necess&aacute;rias para a din&acirc;mica em guinada)</span>
+            dx6 = dPSI;
+            dx7 = VEL*cos(ALPHAT + PSI); <span class="comment">% X</span>
+            dx8 = VEL*sin(ALPHAT + PSI); <span class="comment">% Y</span>
+
+            dx = [M\f;<span class="keyword">...</span>
+                  dx6;<span class="keyword">...</span>
+                  dx7;<span class="keyword">...</span>
+                  dx8];
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span> (Static)
+        <span class="keyword">function</span> parametros = conversao(entrada)
+            mF0 = entrada(1);       <span class="comment">% Massa no eixo dianteiro do caminh&atilde;o-trator desacoplado [kg]</span>
+            mR0 = entrada(2);       <span class="comment">% Massa no eixo traseiro do caminh&atilde;o-trator desacoplado [kg]</span>
+            mF = entrada(3);        <span class="comment">% Massa no eixo dianteiro do caminh&atilde;o-trator (F) [kg]</span>
+            mR = entrada(4);        <span class="comment">% Massa no eixo traseiro do caminh&atilde;o-trator (R) [kg]</span>
+            mM = entrada(5);        <span class="comment">% Massa no eixo do semirreboque (M) [kg]</span>
+            lT = entrada(10);       <span class="comment">% Dist&acirc;ncia entre os eixos do caminh&atilde;o-trator [m]</span>
+            lS = entrada(11);       <span class="comment">% Dist&acirc;ncia entre a articula&ccedil;&atilde;o e o eixo do semirreboque [m]</span>
+            <span class="comment">% Convers&atilde;o dos dados para os par&acirc;metros usados na equa&ccedil;&atilde;o de movimento</span>
+            g = 9.81;               <span class="comment">% Acelera&ccedil;&atilde;o da gravidade [m/s^2]</span>
+            mT = mF0 + mR0;         <span class="comment">% massa do caminh&atilde;o-trator [kg]</span>
+            a = mR0/mT*lT;          <span class="comment">% Dist&acirc;ncia do eixo dianteiro ao CG do caminh&atilde;o-trator (F-T) [m]</span>
+            b = lT - a;             <span class="comment">% Dist&acirc;ncia do eixo traseiro ao CG do caminh&atilde;o-trator (R-T) [m]</span>
+            A = mF*g + mR*g - mT*g; <span class="comment">% For&ccedil;a vertical na articula&ccedil;&atilde;o [N]</span>
+            mS = (A + mM*g)/g;      <span class="comment">% massa do semirreboque [kg]</span>
+            d = (lS*mM)/mS;         <span class="comment">% Dist&acirc;ncia da articula&ccedil;&atilde;o ao CG do semirreboque (A-S) [m]</span>
+            e = lS - d;             <span class="comment">% Dist&acirc;ncia do eixo traseiro ao CG do semirreboque (M-S) [m]</span>
+            <span class="comment">% Sa&iacute;da</span>
+            parametros = [entrada mT mS a b d e];
+        <span class="keyword">end</span>
+	<span class="keyword">end</span>
+
+	<span class="keyword">properties</span>
+		params
+        pneu
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% mF0 - Massa no eixo dianteiro do caminh&atilde;o-trator desacoplado [kg]</span>
+<span class="comment">% mR0 - Massa no eixo traseiro do caminh&atilde;o-trator desacoplado [kg]</span>
+<span class="comment">% mF - Massa no eixo dianteiro do caminh&atilde;o-trator (F) [kg]</span>
+<span class="comment">% mR - Massa no eixo traseiro do caminh&atilde;o-trator (R) [kg]</span>
+<span class="comment">% mM - Massa no eixo do semirreboque (M) [kg]</span>
+<span class="comment">% IT - Momento de in&eacute;rcia do caminh&atilde;o-trator [kg*m2]</span>
+<span class="comment">% IS - Momento de in&eacute;rcia do semirreboque [kg*m2]</span>
+<span class="comment">% DELTA - Ester&ccedil;amento do eixo dianteiro [rad]</span>
+<span class="comment">% c - Dist&acirc;ncia da articula&ccedil;&atilde;o ao eixo traseiro do caminh&atilde;o-trator (A-R) [m]</span>
+<span class="comment">% lT - Dist&acirc;ncia entre os eixos do caminh&atilde;o-trator [m]</span>
+<span class="comment">% lS - Dist&acirc;ncia entre a articula&ccedil;&atilde;o e o eixo do semirreboque [m]</span>
+<span class="comment">% nF - N&uacute;mero de pneus no eixo dianteiro do caminh&atilde;o-trator</span>
+<span class="comment">% nR - N&uacute;mero de pneus no eixo traseiro do caminh&atilde;o-trator</span>
+<span class="comment">% nM - N&uacute;mero de pneus no eixo do semirreboque</span>
+<span class="comment">% largT - Largura do caminh&atilde;o-trator [m]</span>
+<span class="comment">% largS - Largura do semirreboque [m]</span>
+
+<span class="comment">% mT - massa do caminh&atilde;o-trator [kg]</span>
+<span class="comment">% mS - massa do semirreboque [kg]</span>
+<span class="comment">% a - Dist&acirc;ncia do eixo dianteiro ao CG do caminh&atilde;o-trator (F-T) [m]</span>
+<span class="comment">% b - Dist&acirc;ncia do eixo traseiro ao CG do caminh&atilde;o-trator (R-T) [m]</span>
+<span class="comment">% d - Dist&acirc;ncia da articula&ccedil;&atilde;o ao CG do semirreboque (A-S) [m]</span>
+<span class="comment">% e - Dist&acirc;ncia do eixo traseiro ao CG do semirreboque (M-S) [m]</span>
+</pre><h2>Ver tamb&eacute;m<a name="2"></a></h2><p><a href="index.html">In&iacute;cio</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Veículo Articulado Não Linear 4GDL
+%
+% * <EquacionamentoVeiculoArticuladoNaoLinear4GDL.html Equacinamento>
+classdef VeiculoArticuladoNaoLinear4GDL < DinamicaVeicular.Veiculo
+	methods
+        % constructor
+        function self = VeiculoArticuladoNaoLinear4GDL(varargin)
+            if nargin == 0
+                % Entrada padrão dos dados do veículo
+                entradaVetor = [5237 2440 6000 10000 17000 46100 452010 0 -0.310 3.550 7.700 2 4 8 2.6 2.550];
+                % 01 - mF0 - Massa no eixo dianteiro do caminhão-trator desacoplado [kg]
+                % 02 - mR0 - Massa no eixo traseiro do caminhão-trator desacoplado [kg]
+                % 03 - mF - Massa no eixo dianteiro do caminhão-trator (F) [kg]
+                % 04 - mR - Massa no eixo traseiro do caminhão-trator (R) [kg]
+                % 05 - mM - Massa no eixo do semirreboque (M) [kg]
+                % 06 - IT - Momento de inércia do caminhão-trator [kg*m2]
+                % 07 - IS - Momento de inércia do semirreboque [kg*m2]
+                % 08 - DELTA - Esterçamento do eixo dianteiro [rad]
+                % 09 - c - Distância da articulação ao eixo traseiro do caminhão-trator (A-R) [m]
+                % 10 - lT - Distância entre os eixos do caminhão-trator [m]
+                % 11 - lS - Distância entre a articulação e o eixo do semirreboque [m]
+                % 12 - nF - Número de pneus no eixo dianteiro do caminhão-trator
+                % 13 - nR - Número de pneus no eixo traseiro do caminhão-trator
+                % 14 - nM - Número de pneus no eixo do semirreboque
+                % 15 - largT - Largura do caminhão-trator [m]
+                % 16 - largS - Largura do semirreboque [m]
+
+                % Definindo os parâmetros da classe
+                self.params = self.conversao(entradaVetor);
+                self.pneu = DinamicaVeicular.PneuPacejka;
+            else
+                self.params = self.conversao(varargin{1});
+                % if  isa(varargin{2}, DinamicaVeicular.Pneu)
+                self.pneu = varargin{2};
+                % else
+                %     % AQUI VAI O ERRO
+                %     erro = 1 + 1;
+                % end
+            end
+        end
+
+		function dx = Model(self,~,estados)
+            % Dados do veículo
+            mT = self.params(17);       % massa do veiculo [kg]
+            mS = self.params(18);       % massa do veiculo [kg]
+            IT = self.params(6);       % momento de inercia [kg]
+            IS = self.params(7);       % momento de inercia [kg]
+            a = self.params(19);        % distancia do eixo dianteiro ao centro de massa do caminhão-trator [m]
+            b = self.params(20);        % distancia do eixo traseiro ao centro de massa do caminhão-trator [m]
+            c = self.params(9);        % distancia da articulação ao centro de massa do caminhão-trator [m]
+            d = self.params(21);        % distancia do eixo traseiro ao centro de massa do caminhão-trator [m]
+            e = self.params(22);        % distancia da articulação ao centro de massa do caminhão-trator [m]
+            DELTA = self.params(8);   % Esterçamento [rad]
+            nF = self.params(12);      % Número de pneus no eixo dianteiro do caminhão-trator
+            nR = self.params(13);      % Número de pneus no eixo traseiro do caminhão-trator
+            nM = self.params(14);      % Número de pneus no eixo do semirreboque
+            g = 9.81;                  % Aceleração da gravidade [m/s^2]
+            % Definição dos estados
+            dPSI = estados(1,1);              % Velocidade angular do caminhão-trator [rad/s]
+            ALPHAT = estados(2,1);            % Ângulo de deriva do CG do caminhão-trator [rad]
+            dPHI = estados(3,1);              % Velocidade angular relativa entre o semirreboque e o caminhão-trator [rad/s]
+            VEL = estados(4,1);               % Ângulo relativo entre o semirreboque e o caminhão-trator [rad]
+            PHI = estados(5,1);               % Módulo do vetor velocidade do CG do caminhão-trator [m/s]
+            PSI = estados(6,1);               % Ângulo de orientação do caminhão-trator [rad]
+
+            % Angulos de deriva não linear
+            ALPHAF = atan2((a*dPSI + VEL*sin(ALPHAT)),(VEL*cos(ALPHAT))) - DELTA;
+            ALPHAR = atan2((-b*dPSI + VEL*sin(ALPHAT)),(VEL*cos(ALPHAT)));
+            ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VEL*sin(ALPHAT + PHI) - b*dPSI*cos(PHI) - c*dPSI*cos(PHI)),(VEL*cos(ALPHAT + PHI) + b*dPSI*sin(PHI) + c*dPSI*sin(PHI)));
+
+            % Forças longitudinais
+            FxF = 0;
+            FxR = 0;
+            FxM = 0;
+            % Forças laterais nos pneus - Curva característica
+            self.pneu.params(7) = self.params(3)*g; % Mudando a carga vertical no eixo dianteiro
+            FyF = nF*self.pneu.Characteristic(ALPHAF);
+            self.pneu.params(7) = self.params(4)*g; % Mudando a carga vertical no eixo traseiro
+            FyR = nR*self.pneu.Characteristic(ALPHAR);
+            self.pneu.params(7) = self.params(5)*g; % Mudando a carga vertical no eixo do semirreboque
+            FyM = nM*self.pneu.Characteristic(ALPHAM);
+
+            % Matriz de massa
+            M11 = -d*mS*sin(PHI);
+            M12 = -VEL*sin(ALPHAT)*(mS + mT);
+            M13 =  d*mS*sin(PHI);
+            M14 = cos(ALPHAT)*(mS + mT);
+            M21 = -mS*(b + c + d*cos(PHI));
+            M22 = VEL*cos(ALPHAT)*(mS + mT);
+            M23 = d*mS*cos(PHI);
+            M24 = sin(ALPHAT)*(mS + mT);
+            M31 = IT + mS*(b + c)*(b + c + d*cos(PHI));
+            M32 = -VEL*mS*cos(ALPHAT)*(b + c);
+            M33 = -d*mS*cos(PHI)*(b + c);
+            M34 = -mS*sin(ALPHAT)*(b + c);
+            M41 = IS + d*mS*(d + cos(PHI)*(b + c));
+            M42 = -VEL*d*mS*cos(ALPHAT + PHI);
+            M43 = - mS*d^2 - IS;
+            M44 = -d*mS*sin(ALPHAT + PHI);
+
+            M = [M11 M12 M13 M14 0;...
+                 M21 M22 M23 M24 0;...
+                 M31 M32 M33 M34 0;...
+                 M41 M42 M43 M44 0;...
+                  0   0   0   0  1];
+
+            % ddPSI,dALPHAT,ddPHI,dPHI,dVEL
+            f1 = FxR + FxF*cos(DELTA) + FxM*cos(PHI) - FyF*sin(DELTA) + FyM*sin(PHI) - b*dPSI^2*mS - c*dPSI^2*mS + VEL*dPSI*mS*sin(ALPHAT) + VEL*dPSI*mT*sin(ALPHAT) - d*dPHI^2*mS*cos(PHI) - d*dPSI^2*mS*cos(PHI) + 2*d*dPHI*dPSI*mS*cos(PHI);
+            f2 = FyR + FyF*cos(DELTA) + FyM*cos(PHI) + FxF*sin(DELTA) - FxM*sin(PHI) - VEL*dPSI*mS*cos(ALPHAT) - VEL*dPSI*mT*cos(ALPHAT) + d*dPHI^2*mS*sin(PHI) + d*dPSI^2*mS*sin(PHI) - 2*d*dPHI*dPSI*mS*sin(PHI);
+            f3 = a*(FyF*cos(DELTA) + FxF*sin(DELTA)) - FyR*b - (b + c)*(d*mS*sin(PHI)*dPHI^2 - 2*d*mS*sin(PHI)*dPHI*dPSI + d*mS*sin(PHI)*dPSI^2 - VEL*mS*cos(ALPHAT)*dPSI + FyM*cos(PHI) - FxM*sin(PHI));
+            f4 = d*(b*dPSI^2*mS*sin(PHI) - FyM + c*dPSI^2*mS*sin(PHI) + VEL*dPSI*mS*cos(ALPHAT + PHI)) - FyM*e;
+            f5 = dPHI;
+
+            f = [f1 ; f2 ; f3 ; f4 ; f5];
+
+            % Equações adicionais para o posicionamento (Não necessárias para a dinâmica em guinada)
+            dx6 = dPSI;
+            dx7 = VEL*cos(ALPHAT + PSI); % X
+            dx8 = VEL*sin(ALPHAT + PSI); % Y
+
+            dx = [M\f;...
+                  dx6;...
+                  dx7;...
+                  dx8];
+        end
+    end
+
+    methods (Static)
+        function parametros = conversao(entrada)
+            mF0 = entrada(1);       % Massa no eixo dianteiro do caminhão-trator desacoplado [kg]
+            mR0 = entrada(2);       % Massa no eixo traseiro do caminhão-trator desacoplado [kg]
+            mF = entrada(3);        % Massa no eixo dianteiro do caminhão-trator (F) [kg]
+            mR = entrada(4);        % Massa no eixo traseiro do caminhão-trator (R) [kg]
+            mM = entrada(5);        % Massa no eixo do semirreboque (M) [kg]
+            lT = entrada(10);       % Distância entre os eixos do caminhão-trator [m]
+            lS = entrada(11);       % Distância entre a articulação e o eixo do semirreboque [m]
+            % Conversão dos dados para os parâmetros usados na equação de movimento
+            g = 9.81;               % Aceleração da gravidade [m/s^2]
+            mT = mF0 + mR0;         % massa do caminhão-trator [kg]
+            a = mR0/mT*lT;          % Distância do eixo dianteiro ao CG do caminhão-trator (F-T) [m]
+            b = lT - a;             % Distância do eixo traseiro ao CG do caminhão-trator (R-T) [m]
+            A = mF*g + mR*g - mT*g; % Força vertical na articulação [N]
+            mS = (A + mM*g)/g;      % massa do semirreboque [kg]
+            d = (lS*mM)/mS;         % Distância da articulação ao CG do semirreboque (A-S) [m]
+            e = lS - d;             % Distância do eixo traseiro ao CG do semirreboque (M-S) [m]
+            % Saída
+            parametros = [entrada mT mS a b d e];
+        end
+	end
+
+	properties
+		params
+        pneu
+    end
+end
+
+% mF0 - Massa no eixo dianteiro do caminhão-trator desacoplado [kg]
+% mR0 - Massa no eixo traseiro do caminhão-trator desacoplado [kg]
+% mF - Massa no eixo dianteiro do caminhão-trator (F) [kg]
+% mR - Massa no eixo traseiro do caminhão-trator (R) [kg]
+% mM - Massa no eixo do semirreboque (M) [kg]
+% IT - Momento de inércia do caminhão-trator [kg*m2]
+% IS - Momento de inércia do semirreboque [kg*m2]
+% DELTA - Esterçamento do eixo dianteiro [rad]
+% c - Distância da articulação ao eixo traseiro do caminhão-trator (A-R) [m]
+% lT - Distância entre os eixos do caminhão-trator [m]
+% lS - Distância entre a articulação e o eixo do semirreboque [m]
+% nF - Número de pneus no eixo dianteiro do caminhão-trator
+% nR - Número de pneus no eixo traseiro do caminhão-trator
+% nM - Número de pneus no eixo do semirreboque
+% largT - Largura do caminhão-trator [m]
+% largS - Largura do semirreboque [m]
+
+% mT - massa do caminhão-trator [kg]
+% mS - massa do semirreboque [kg]
+% a - Distância do eixo dianteiro ao CG do caminhão-trator (F-T) [m]
+% b - Distância do eixo traseiro ao CG do caminhão-trator (R-T) [m]
+% d - Distância da articulação ao CG do semirreboque (A-S) [m]
+% e - Distância do eixo traseiro ao CG do semirreboque (M-S) [m]
+
+%% Ver também
+%
+% <index.html Início>
+%
+
+##### SOURCE END #####
+--></body></html>
