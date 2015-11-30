@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Pneu Pacejka Estendido</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-28"><meta name="DC.source" content="PneuPacejka.m"><style type="text/css">
+      --><title>Pneu Pacejka Estendido</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-30"><meta name="DC.source" content="PneuPacejka.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -70,21 +70,19 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
         <span class="comment">% constructor</span>
         <span class="keyword">function</span> self = PneuPacejka(varargin)
             <span class="keyword">if</span> nargin == 0
-                self.params = [30e+03 0.8 1.5 -2 3.59 1.33 30e+03 0.3];
-                <span class="comment">% Fz0 - Carga vertical nominal</span>
-                <span class="comment">% muy0 - Coeficiente de atrito nominal</span>
-                <span class="comment">% Cy - Coeficiente experimental</span>
-                <span class="comment">% Ey - Coeficiente experimental</span>
-                <span class="comment">% c1 - Coeficiente experimental</span>
-                <span class="comment">% c2 - Coeficiente experimental</span>
-                <span class="comment">% Fz0 - Carga vertical nominal</span>
-                <span class="comment">% muy0 - Coeficiente de atrito nominal</span>
+                Fz0 = 30e+03;   <span class="comment">% Carga vertical nominal</span>
+                muy0 = 0.8;     <span class="comment">% Coeficiente de atrito nominal</span>
+                Cy = 1.5;       <span class="comment">% Coeficiente experimental</span>
+                Ey = -2;        <span class="comment">% Coeficiente experimental</span>
+                c1 =  3.59;     <span class="comment">% Coeficiente experimental</span>
+                c2 =  1.33;     <span class="comment">% Coeficiente experimental</span>
+                self.params = [Fz0 muy0 Cy Ey c1 c2];
             <span class="keyword">else</span>
                 self.params = varargin{1};
             <span class="keyword">end</span>
         <span class="keyword">end</span>
 
-        <span class="keyword">function</span> Fy = Characteristic(self,alpha)
+        <span class="keyword">function</span> Fy = Characteristic(self,alpha,Fz,muy)
                         <span class="comment">% Par&acirc;metros nominais</span>
             Fz0 = self.params(1);
             muy0 = self.params(2);
@@ -93,9 +91,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             Ey = self.params(4);
             c1 = self.params(5);
             c2 = self.params(6);
-            <span class="comment">% Condi&ccedil;&otilde;es de opera&ccedil;&atilde;o</span>
-            Fz = self.params(7);
-            muy = self.params(8);
             <span class="comment">% &Acirc;ngulo de deriva - Com tratamento</span>
             ALPHA = asin(sin(alpha)); <span class="comment">% [rad]</span>
             <span class="comment">% Modelo de pneu</span>
@@ -169,21 +164,19 @@ classdef PneuPacejka < DinamicaVeicular.Pneu
         % constructor
         function self = PneuPacejka(varargin)
             if nargin == 0
-                self.params = [30e+03 0.8 1.5 -2 3.59 1.33 30e+03 0.3];
-                % Fz0 - Carga vertical nominal
-                % muy0 - Coeficiente de atrito nominal
-                % Cy - Coeficiente experimental
-                % Ey - Coeficiente experimental
-                % c1 - Coeficiente experimental
-                % c2 - Coeficiente experimental
-                % Fz0 - Carga vertical nominal
-                % muy0 - Coeficiente de atrito nominal
+                Fz0 = 30e+03;   % Carga vertical nominal
+                muy0 = 0.8;     % Coeficiente de atrito nominal
+                Cy = 1.5;       % Coeficiente experimental
+                Ey = -2;        % Coeficiente experimental
+                c1 =  3.59;     % Coeficiente experimental
+                c2 =  1.33;     % Coeficiente experimental
+                self.params = [Fz0 muy0 Cy Ey c1 c2];
             else
                 self.params = varargin{1};
             end
         end
 
-        function Fy = Characteristic(self,alpha)
+        function Fy = Characteristic(self,alpha,Fz,muy)
                         % Parâmetros nominais
             Fz0 = self.params(1);
             muy0 = self.params(2);
@@ -192,9 +185,6 @@ classdef PneuPacejka < DinamicaVeicular.Pneu
             Ey = self.params(4);
             c1 = self.params(5);
             c2 = self.params(6);
-            % Condições de operação
-            Fz = self.params(7);
-            muy = self.params(8);
             % Ângulo de deriva - Com tratamento
             ALPHA = asin(sin(alpha)); % [rad]
             % Modelo de pneu

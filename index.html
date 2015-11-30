@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Dinamica Veicular</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-28"><meta name="DC.source" content="index.m"><style type="text/css">
+      --><title>Din&acirc;mica Veicular</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-30"><meta name="DC.source" content="index.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,13 +65,35 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Dinamica Veicular</h1><!--introduction--><p>Este reposit&oacute;rio fornece as classes de simula&ccedil;&atilde;o, modelo de pneu, modelo de ve&iacute;culo e gera&ccedil;&atilde;o de gr&aacute;ficos.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Simula&ccedil;&atilde;o</a></li><li><a href="#2">Pneu</a></li><li><a href="#3">Veiculo</a></li><li><a href="#4">Gr&aacute;ficos</a></li></ul></div><h2>Simula&ccedil;&atilde;o<a name="1"></a></h2><p>Integra&ccedil;&atilde;o num&eacute;rica do sistema. <a href="Simula.html">Simula</a></p><h2>Pneu<a name="2"></a></h2><p>Rela&ccedil;&atilde;o entre a for&ccedil;a lateral e o &acirc;ngulo de deriva. <a href="Pneu.html">Pneu (Abstract)</a></p><p><img vspace="5" hspace="5" src="CurvaCaracteristica.png" alt=""> </p><p>Modelos de pneu:</p><div><ul><li><a href="PneuLinear.html">Pneu Linar</a></li><li><a href="PneuPolinomial.html">Pneu Polinomial</a></li><li><a href="PneuPacejka.html">Pneu Pacejka</a></li></ul></div><h2>Veiculo<a name="3"></a></h2><p>Equa&ccedil;&atilde;o do movimento. <a href="Veiculo.html">Veiculo (Abstract)</a></p><p><img vspace="5" hspace="5" src="modelo.png" alt=""> </p><p>Modelos de ve&iacute;culo:</p><div><ul><li><a href="VeiculoArticuladoNaoLinear4GDL.html">Veiculo Articulado Linear 4 GDL</a> (Pendente)</li><li><a href="VeiculoArticuladoNaoLinear4GDL.html">Veiculo Articulado N&atilde;o Linear 4 GDL</a></li></ul></div><h2>Gr&aacute;ficos<a name="4"></a></h2><p>Evolu&ccedil;&atilde;o dos estados, planos e espa&ccedil;o de fase, frame e anima&ccedil;&atilde;o. * <a href="Graficos.html">Graficos</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+  </style></head><body><div class="content"><h1>Din&acirc;mica Veicular</h1><!--introduction--><p>Este reposit&oacute;rio fornece as classes de simula&ccedil;&atilde;o, modelo de pneu, modelo de ve&iacute;culo e gera&ccedil;&atilde;o de gr&aacute;ficos.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Instru&ccedil;&otilde;es</a></li><li><a href="#2">Simula&ccedil;&atilde;o</a></li><li><a href="#4">Pneu</a></li><li><a href="#5">Veiculo</a></li><li><a href="#6">Gr&aacute;ficos</a></li></ul></div><h2>Instru&ccedil;&otilde;es<a name="1"></a></h2><p>Para a utiliza&ccedil;&atilde;o do pacote &eacute; necess&aacute;rio realizar os seguintes passos:</p><div><ul><li>Baixar o pacote Dinamica-Veicular clicando em "Download ZIP" na p&aacute;gina <a href="https://github.com/andresmendes/Dinamica-Veicular">https://github.com/andresmendes/Dinamica-Veicular</a>.</li><li>Salvar o pacote num <i>path</i> do MATLAB&reg; ou adicionar o diret&oacute;rio na lista de <i>paths</i>. Mais detalhes em <a href="http://www.mathworks.com/help/matlab/ref/path.html">help Path</a>.</li><li>Importar o pacote inteiro digitando no <i>command window</i>:</li></ul></div><pre class="codeinput">import <span class="string">DinamicaVeicular.*</span>
+</pre><h2>Simula&ccedil;&atilde;o<a name="2"></a></h2><p>A simula&ccedil;&atilde;o consiste na integra&ccedil;&atilde;o num&eacute;rica do sistema.</p><p>Para Rodar simula&ccedil;&atilde;o padr&atilde;o:</p><pre class="codeinput">Simula
+</pre><p>Para maiores detalhes ver: <a href="Simula.html">Simula</a></p><p>Para rodar simula&ccedil;&atilde;o diferente da padr&atilde;o: ver <a href="Template.html">Template.m</a>.</p><h2>Pneu<a name="4"></a></h2><p>Rela&ccedil;&atilde;o entre a for&ccedil;a lateral e o &acirc;ngulo de deriva. <a href="Pneu.html">Pneu (Abstract)</a></p><p><img vspace="5" hspace="5" src="CurvaCaracteristica.png" alt=""> </p><p>Modelos de pneu:</p><div><ul><li><a href="PneuLinear.html">Pneu Linar</a></li><li><a href="PneuPolinomial.html">Pneu Polinomial</a></li><li><a href="PneuPacejka.html">Pneu Pacejka</a></li></ul></div><h2>Veiculo<a name="5"></a></h2><p>Equa&ccedil;&atilde;o do movimento. <a href="Veiculo.html">Veiculo (Abstract)</a></p><p><img vspace="5" hspace="5" src="modelo.png" alt=""> </p><p>Modelos de ve&iacute;culo:</p><div><ul><li><a href="VeiculoArticuladoNaoLinear4GDL.html">Veiculo Articulado Linear 4 GDL</a> (Pendente)</li><li><a href="VeiculoArticuladoNaoLinear4GDL.html">Veiculo Articulado N&atilde;o Linear 4 GDL</a></li></ul></div><h2>Gr&aacute;ficos<a name="6"></a></h2><p>Evolu&ccedil;&atilde;o dos estados, planos e espa&ccedil;o de fase, frame e anima&ccedil;&atilde;o. <a href="Graficos.html">Graficos</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Dinamica Veicular
+%% Dinâmica Veicular
 % Este repositório fornece as classes de simulação, modelo de pneu, modelo de veículo e geração de gráficos.
 %
+%% Instruções
+% Para a utilização do pacote é necessário realizar os seguintes passos:
+%
+% * Baixar o pacote Dinamica-Veicular clicando em "Download ZIP" na página <https://github.com/andresmendes/Dinamica-Veicular https://github.com/andresmendes/Dinamica-Veicular>.
+% * Salvar o pacote num _path_ do MATLAB(R) ou adicionar o diretório na lista de _paths_. Mais detalhes em <http://www.mathworks.com/help/matlab/ref/path.html  help Path>.
+% * Importar o pacote inteiro digitando no _command window_:
+%
+
+import DinamicaVeicular.*
+
 %% Simulação
-% Integração numérica do sistema. <Simula.html Simula>
+% A simulação consiste na integração numérica do sistema.
+%
+% Para Rodar simulação padrão:
+%
+
+Simula
+
+%%
+% Para maiores detalhes ver: <Simula.html Simula>
+%
+% Para rodar simulação diferente da padrão: ver <Template.html Template.m>.
 %
 %% Pneu
 % Relação entre a força lateral e o ângulo de deriva. <Pneu.html Pneu (Abstract)>
@@ -95,8 +117,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % * <VeiculoArticuladoNaoLinear4GDL.html Veiculo Articulado Não Linear 4 GDL>
 %
 %% Gráficos
-% Evolução dos estados, planos e espaço de fase, frame e animação.
-% * <Graficos.html Graficos>
+% Evolução dos estados, planos e espaço de fase, frame e animação. <Graficos.html Graficos>
 
 ##### SOURCE END #####
 --></body></html>
