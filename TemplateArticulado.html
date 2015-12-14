@@ -1,0 +1,188 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Template articulado</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-12-14"><meta name="DC.source" content="TemplateArticulado.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Template articulado</h1><!--introduction--><p>Exemplo de script para simula&ccedil;&atilde;o de ve&iacute;culo articulado.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Code start</a></li><li><a href="#2">Integration parameters</a></li><li><a href="#3">Default models and parameters</a></li><li><a href="#4">Integration</a></li><li><a href="#5">Post integration</a></li><li><a href="#6">Results</a></li><li><a href="#10">See Also</a></li></ul></div><h2>Code start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+clc                         <span class="comment">% Clear command window</span>
+
+import <span class="string">DinamicaVeicular.*</span>   <span class="comment">% Import package Dinamica Veicular</span>
+</pre><h2>Integration parameters<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Simulation time</span>
+T = 7;                     <span class="comment">% Total simulation time [s]</span>
+resol = 50;                 <span class="comment">% Resolution</span>
+TSPAN = 0:T/resol:T;        <span class="comment">% Time span [s]</span>
+<span class="comment">% Initial conditions</span>
+dPSI0 = 0.25;               <span class="comment">% Initial tractor yaw rate [rad/s]</span>
+ALPHAT0 = 0.3;              <span class="comment">% Initial tractor side slip angle [rad]</span>
+dPHI0 = dPSI0;              <span class="comment">% Initial articulation rate [rad/s]</span>
+VEL0 = 20;                  <span class="comment">% Initial tractor CG velocity [m/s]</span>
+PHI0 = 0;                   <span class="comment">% Initial articulation angle [rad]</span>
+PSI0 = 0;                   <span class="comment">% Initial tractor yaw angle [rad]</span>
+X0 = 0;                     <span class="comment">% Initial tractor CG horizontal position [m]</span>
+Y0 = 0;                     <span class="comment">% Initial tractor CG vertical position [m]</span>
+x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
+</pre><h2>Default models and parameters<a name="3"></a></h2><p>Definindo o modelo de ve&iacute;culo sem passagem de argumentos os par&acirc;metros e modelos padr&atilde;o s&atilde;o usados.</p><pre class="codeinput">ModeloSistema = DinamicaVeicular.VeiculoArticuladoNaoLinear4GDL;
+</pre><h2>Integration<a name="4"></a></h2><p>Integration using mass matrix. Details: <a href="http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22">ode45 (Mass matrix)</a></p><pre class="codeinput"><span class="comment">% Configurando as op&ccedil;&otilde;es do integrador para levar em considera&ccedil;&atilde;o a matriz de massa</span>
+options = odeset(<span class="string">'Mass'</span>,@ModeloSistema.MatrizMassa);
+
+[TOUT,XOUT] = ode45(@(t, estados) ModeloSistema.Model(t, estados),TSPAN,x0,options);
+</pre><h2>Post integration<a name="5"></a></h2><pre class="codeinput"><span class="comment">% Retrieving states</span>
+dPSI = XOUT(:,1);           <span class="comment">% Tractor yaw rate [rad/s]</span>
+ALPHAT = XOUT(:,2);         <span class="comment">% Tractor side slip angle [rad]</span>
+dPHI = XOUT(:,3);           <span class="comment">% Articulation rate [rad/s]</span>
+VEL = XOUT(:,4);            <span class="comment">% Tractor CG velocity [m/s]</span>
+PHI = XOUT(:,5);            <span class="comment">% Articulation angle [rad]</span>
+PSI = XOUT(:,6);            <span class="comment">% Tractor yaw angle [rad]</span>
+XT = XOUT(:,7);             <span class="comment">% Tractor CG horizontal position [m]</span>
+YT = XOUT(:,8);             <span class="comment">% Tractor CG vertical position [m]</span>
+</pre><h2>Results<a name="6"></a></h2><p>Details: <a href="Graficos.html">Graficos.m</a></p><pre class="codeinput">g = DinamicaVeicular.Graficos(ModeloSistema);
+</pre><p>Trajectory</p><pre class="codeinput">g.Trajetoria([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
+</pre><img vspace="5" hspace="5" src="TemplateArticulado_01.png" alt=""> <p>Animation</p><pre class="codeinput"><span class="comment">% g.Animacao([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);</span>
+</pre><p><img vspace="5" hspace="5" src="ilustracoes/AnimacaoArticulado.gif" alt=""> </p><h2>See Also<a name="10"></a></h2><p><a href="index.html">In&iacute;cio</a> | <a href="TemplateSimples.html">Template Simples</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Template articulado
+% Exemplo de script para simulação de veículo articulado.
+%
+%% Code start
+
+clear all                   % Clear workspace
+close all                   % Closing figures
+clc                         % Clear command window
+
+import DinamicaVeicular.*   % Import package Dinamica Veicular
+
+%% Integration parameters
+%
+
+% Simulation time
+T = 7;                     % Total simulation time [s]
+resol = 50;                 % Resolution
+TSPAN = 0:T/resol:T;        % Time span [s]
+% Initial conditions
+dPSI0 = 0.25;               % Initial tractor yaw rate [rad/s]
+ALPHAT0 = 0.3;              % Initial tractor side slip angle [rad]
+dPHI0 = dPSI0;              % Initial articulation rate [rad/s]
+VEL0 = 20;                  % Initial tractor CG velocity [m/s]
+PHI0 = 0;                   % Initial articulation angle [rad]
+PSI0 = 0;                   % Initial tractor yaw angle [rad]
+X0 = 0;                     % Initial tractor CG horizontal position [m]
+Y0 = 0;                     % Initial tractor CG vertical position [m]
+x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
+
+%% Default models and parameters
+% Definindo o modelo de veículo sem passagem de argumentos os parâmetros e modelos padrão são usados.
+
+ModeloSistema = DinamicaVeicular.VeiculoArticuladoNaoLinear4GDL;
+
+%% Integration
+% Integration using mass matrix. Details: <http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22 ode45 (Mass matrix)>
+
+% Configurando as opções do integrador para levar em consideração a matriz de massa
+options = odeset('Mass',@ModeloSistema.MatrizMassa);
+
+[TOUT,XOUT] = ode45(@(t, estados) ModeloSistema.Model(t, estados),TSPAN,x0,options);
+
+%% Post integration
+%
+
+% Retrieving states
+dPSI = XOUT(:,1);           % Tractor yaw rate [rad/s]
+ALPHAT = XOUT(:,2);         % Tractor side slip angle [rad]
+dPHI = XOUT(:,3);           % Articulation rate [rad/s]
+VEL = XOUT(:,4);            % Tractor CG velocity [m/s]
+PHI = XOUT(:,5);            % Articulation angle [rad]
+PSI = XOUT(:,6);            % Tractor yaw angle [rad]
+XT = XOUT(:,7);             % Tractor CG horizontal position [m]
+YT = XOUT(:,8);             % Tractor CG vertical position [m]
+
+%% Results
+% Details: <Graficos.html Graficos.m>
+
+g = DinamicaVeicular.Graficos(ModeloSistema);
+
+%%
+% Trajectory
+%
+
+g.Trajetoria([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
+
+%%
+% Animation
+%
+
+% g.Animacao([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
+
+%%
+%
+% <<ilustracoes/AnimacaoArticulado.gif>>
+%
+%% See Also
+%
+% <index.html Início> | <TemplateSimples.html Template Simples>
+%
+
+##### SOURCE END #####
+--></body></html>

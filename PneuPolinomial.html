@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Pneu Polinomial</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-30"><meta name="DC.source" content="PneuPolinomial.m"><style type="text/css">
+      --><title>Polynomial tire</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-12-14"><meta name="DC.source" content="PneuPolinomial.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,85 +65,99 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Pneu Polinomial</h1><!--introduction--><p>Rela&ccedil;&atilde;o n&atilde;o linear entre a for&ccedil;a lateral e o &acirc;ngulo de deriva.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Equacionamento</a></li><li><a href="#2">C&oacute;digo</a></li><li><a href="#3">Ver tamb&eacute;m</a></li></ul></div><h2>Equacionamento<a name="1"></a></h2><p>A equa&ccedil;&atilde;o que descreve este modelo &eacute; dada por:</p><p><img src="PneuPolinomial_eq28957.png" alt="$$ F_y = k_1 \alpha  - k_2\alpha^3 $$"></p><p>Onde <img src="PneuPolinomial_eq40767.png" alt="$F_y$"> &eacute; a for&ccedil;a lateral e <img src="PneuPolinomial_eq87919.png" alt="$\alpha$"> &eacute; o &acirc;ngulo de deriva. <img src="PneuPolinomial_eq27372.png" alt="$k_1$"> e <img src="PneuPolinomial_eq32346.png" alt="$k_2$"> s&atilde;o constantes do modelo.</p><p><b>Hip&oacute;teses</b></p><div><ul><li>Rela&ccedil;&atilde;o n&atilde;o linear.</li><li>V&aacute;lido apenas at&eacute; o &acirc;ngulos de deriva que fornece a m&aacute;xima for&ccedil;a lateral (Satura&ccedil;&atilde;o do pneu).</li></ul></div><h2>C&oacute;digo<a name="2"></a></h2><p>C&oacute;digo da fun&ccedil;&atilde;o:</p><pre class="codeinput"><span class="keyword">classdef</span> PneuPolinomial &lt; DinamicaVeicular.Pneu
-    <span class="keyword">methods</span>
-        <span class="comment">% constructor</span>
+  </style></head><body><div class="content"><h1>Polynomial tire</h1><!--introduction--><p>Rela&ccedil;&atilde;o n&atilde;o linear entre a for&ccedil;a lateral e o &acirc;ngulo de deriva atrav&eacute;s de uma express&atilde;o polinomial.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#6">Properties</a></li><li><a href="#8">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>Fy = <i>TireModel</i>.Characteristic(alpha)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
+<tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
+</table> </p><h2>Description<a name="3"></a></h2><p>A equa&ccedil;&atilde;o que descreve este modelo &eacute; dada por:</p><p><img src="PneuPolinomial_eq28957.png" alt="$$ F_y = k_1 \alpha  - k_2\alpha^3 $$"></p><p><img src="PneuPolinomial_eq40767.png" alt="$F_y$"> is the lateral force and <img src="PneuPolinomial_eq87919.png" alt="$\alpha$"> is the tire slip angle. <img src="PneuPolinomial_eq27372.png" alt="$k_1$"> e <img src="PneuPolinomial_eq32346.png" alt="$k_2$"> are the model coefficients.</p><p><b>Hip&oacute;teses</b></p><div><ul><li>Rela&ccedil;&atilde;o n&atilde;o linear.</li><li>V&aacute;lido apenas at&eacute; o &acirc;ngulos de deriva que fornece a m&aacute;xima for&ccedil;a lateral (Tire saturation).</li></ul></div><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> PneuPolinomial &lt; DinamicaVeicular.Pneu
+</pre><pre class="codeinput">    methods
+        <span class="comment">% Constructor</span>
         <span class="keyword">function</span> self = PneuPolinomial(varargin)
             <span class="keyword">if</span> nargin == 0
-                self.params = [1000 500];
-                <span class="comment">% k1 - Coeficiente angular</span>
-                <span class="comment">% k2 - Coeficiente do modelo polinomial</span>
+                k1 = 1000;
+                k2 = 500;
+                self.params = [k1 k2];
             <span class="keyword">else</span>
                 self.params = varargin{1};
             <span class="keyword">end</span>
         <span class="keyword">end</span>
 
         <span class="keyword">function</span> Fy = Characteristic(self,alpha)
-            <span class="comment">% Coeficientes do modelo polinomial</span>
+            <span class="comment">% Polynomial model coefficients</span>
             k1 = self.params(1);
             k2 = self.params(2);
-            <span class="comment">% For&ccedil;a lateral polinomial</span>
+            <span class="comment">% Lateral force</span>
             Fy = - (k1*alpha-k2*alpha.^3);
         <span class="keyword">end</span>
     <span class="keyword">end</span>
-
-    <span class="keyword">properties</span>
+</pre><h2>Properties<a name="6"></a></h2><pre class="codeinput">    properties
         params
     <span class="keyword">end</span>
-<span class="keyword">end</span>
-</pre><h2>Ver tamb&eacute;m<a name="3"></a></h2><p><a href="index.html">In&iacute;cio</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>See Also<a name="8"></a></h2><p><a href="index.html">In&iacute;cio</a> | <a href="PneuLinear.html">Pneu linear</a> | <a href="PneuPacejka1989.html">Pneu Pacejka 1989</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Pneu Polinomial
-% Relação não linear entre a força lateral e o ângulo de deriva.
+%% Polynomial tire
+% Relação não linear entre a força lateral e o ângulo de deriva através de uma expressão polinomial.
 %
-%% Equacionamento
+%% Sintax
+% |Fy = _TireModel_.Characteristic(alpha)|
+%
+%% Arguments
+% The following table describes the input arguments:
+%
+% <html> <table border=1 width="97%">
+% <tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
+% </table> </html>
+%
+%% Description
 %
 % A equação que descreve este modelo é dada por:
 %
 % $$ F_y = k_1 \alpha  - k_2\alpha^3 $$
 %
-% Onde $F_y$ é a força lateral e $\alpha$ é o ângulo de deriva. $k_1$ e
-% $k_2$ são constantes do modelo.
+% $F_y$ is the lateral force and $\alpha$ is the tire slip angle. $k_1$ e
+% $k_2$ are the model coefficients.
 %
 % *Hipóteses*
 %
 % * Relação não linear.
 % * Válido apenas até o ângulos de deriva que fornece a máxima força
-% lateral (Saturação do pneu).
+% lateral (Tire saturation).
 %
-%% Código
-% Código da função:
+%% Code
+%
 
 classdef PneuPolinomial < DinamicaVeicular.Pneu
     methods
-        % constructor
+        % Constructor
         function self = PneuPolinomial(varargin)
             if nargin == 0
-                self.params = [1000 500];
-                % k1 - Coeficiente angular
-                % k2 - Coeficiente do modelo polinomial
+                k1 = 1000;
+                k2 = 500;
+                self.params = [k1 k2];
             else
                 self.params = varargin{1};
             end
         end
 
         function Fy = Characteristic(self,alpha)
-            % Coeficientes do modelo polinomial
+            % Polynomial model coefficients
             k1 = self.params(1);
             k2 = self.params(2);
-            % Força lateral polinomial
+            % Lateral force
             Fy = - (k1*alpha-k2*alpha.^3);
         end
     end
+
+    %% Properties
+    %
 
     properties
         params
     end
 end
 
-%% Ver também
+%% See Also
 %
-% <index.html Início>
+% <index.html Início> | <PneuLinear.html Pneu linear> | <PneuPacejka1989.html Pneu Pacejka 1989>
 %
 
 ##### SOURCE END #####

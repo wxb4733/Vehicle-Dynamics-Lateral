@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Pneu linear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-30"><meta name="DC.source" content="PneuLinear.m"><style type="text/css">
+      --><title>Linear tire</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-12-14"><meta name="DC.source" content="PneuLinear.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,9 +65,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Pneu linear</h1><!--introduction--><p>Rela&ccedil;&atilde;o linear entre a for&ccedil;a lateral e o &acirc;ngulo de deriva</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Equacionamento</a></li><li><a href="#2">C&oacute;digo</a></li><li><a href="#3">Ver tamb&eacute;m</a></li></ul></div><h2>Equacionamento<a name="1"></a></h2><p>A equa&ccedil;&atilde;o que descreve este modelo &eacute; dada por:</p><p><img src="PneuLinear_eq73516.png" alt="$$ F_y = C \alpha $$"></p><p>Onde <img src="PneuLinear_eq40767.png" alt="$F_y$"> &eacute; a for&ccedil;a lateral, <img src="PneuLinear_eq22407.png" alt="$C$"> &eacute; o coeficiente de rigidez de curva e <img src="PneuLinear_eq87919.png" alt="$\alpha$"> &eacute; o &acirc;ngulo de deriva.</p><p><b>Hip&oacute;teses</b></p><div><ul><li>Rela&ccedil;&atilde;o linear.</li><li>V&aacute;lido apenas para pequenos &acirc;ngulos de deriva.</li></ul></div><h2>C&oacute;digo<a name="2"></a></h2><p>C&oacute;digo da classe:</p><pre class="codeinput"><span class="keyword">classdef</span> PneuLinear &lt; DinamicaVeicular.Pneu
-	<span class="keyword">methods</span>
-        <span class="comment">% constructor</span>
+  </style></head><body><div class="content"><h1>Linear tire</h1><!--introduction--><p>Rela&ccedil;&atilde;o linear entre a for&ccedil;a lateral e o &acirc;ngulo de deriva</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#6">Properties</a></li><li><a href="#8">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>Fy = <i>TireModel</i>.Characteristic(alpha)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
+<tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
+</table> </p><h2>Description<a name="3"></a></h2><p>A equa&ccedil;&atilde;o que descreve este modelo &eacute; dada por:</p><p><img src="PneuLinear_eq84890.png" alt="$$ F_y = K \alpha $$"></p><p><img src="PneuLinear_eq40767.png" alt="$F_y$"> is the lateral force, <img src="PneuLinear_eq14888.png" alt="$K$"> is the cornering stiffness and <img src="PneuLinear_eq87919.png" alt="$\alpha$"> is the tire slip angle.</p><p><b>Hip&oacute;teses</b></p><div><ul><li>Rela&ccedil;&atilde;o linear.</li><li>V&aacute;lido apenas para pequenos &acirc;ngulos de deriva.</li></ul></div><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> PneuLinear &lt; DinamicaVeicular.Pneu
+</pre><pre class="codeinput">    methods
+        <span class="comment">% Constructor</span>
         <span class="keyword">function</span> self = PneuLinear(varargin)
             <span class="keyword">if</span> nargin == 0
                 self.params = 1000;
@@ -76,41 +78,48 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             <span class="keyword">end</span>
         <span class="keyword">end</span>
 
-		<span class="keyword">function</span> Fy = Characteristic(self,alpha)
+        <span class="keyword">function</span> Fy = Characteristic(self,alpha)
             Fy = -self.params*alpha;
         <span class="keyword">end</span>
-
-	<span class="keyword">end</span>
-
-	<span class="keyword">properties</span>
-		params
     <span class="keyword">end</span>
-<span class="keyword">end</span>
-</pre><h2>Ver tamb&eacute;m<a name="3"></a></h2><p><a href="index.html">In&iacute;cio</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><h2>Properties<a name="6"></a></h2><pre class="codeinput">    properties
+        params
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>See Also<a name="8"></a></h2><p><a href="index.html">In&iacute;cio</a> | <a href="PneuPolinomial.html">Pneu polinomial</a> | <a href="PneuPacejka1989.html">Pneu Pacejka 1989</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Pneu linear
+%% Linear tire
 % Relação linear entre a força lateral e o ângulo de deriva
 %
-%% Equacionamento
+%% Sintax
+% |Fy = _TireModel_.Characteristic(alpha)|
+%
+%% Arguments
+% The following table describes the input arguments:
+%
+% <html> <table border=1 width="97%">
+% <tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
+% </table> </html>
+%
+%% Description
 %
 % A equação que descreve este modelo é dada por:
 %
-% $$ F_y = C \alpha $$
+% $$ F_y = K \alpha $$
 %
-% Onde $F_y$ é a força lateral, $C$ é o coeficiente de rigidez de curva e
-% $\alpha$ é o ângulo de deriva.
+% $F_y$ is the lateral force, $K$ is the cornering stiffness and $\alpha$ is the tire slip angle.
 %
 % *Hipóteses*
 %
 % * Relação linear.
 % * Válido apenas para pequenos ângulos de deriva.
 %
-%% Código
-% Código da classe:
+%% Code
+%
 
 classdef PneuLinear < DinamicaVeicular.Pneu
-	methods
-        % constructor
+    methods
+        % Constructor
         function self = PneuLinear(varargin)
             if nargin == 0
                 self.params = 1000;
@@ -119,20 +128,22 @@ classdef PneuLinear < DinamicaVeicular.Pneu
             end
         end
 
-		function Fy = Characteristic(self,alpha)
+        function Fy = Characteristic(self,alpha)
             Fy = -self.params*alpha;
         end
+    end
 
-	end
-
-	properties
-		params
+    %% Properties
+    %
+    
+    properties
+        params
     end
 end
 
-%% Ver também
+%% See Also
 %
-% <index.html Início>
+% <index.html Início> | <PneuPolinomial.html Pneu polinomial> | <PneuPacejka1989.html Pneu Pacejka 1989>
 %
 
 ##### SOURCE END #####
