@@ -1,0 +1,307 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Template simples</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Template simples</h1><!--introduction--><p>Exemplo de script para simula&#65533;&#65533;o de ve&#65533;culo simples, sem articula&#65533;&#65533;o.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Code start</a></li><li><a href="#2">Integration parameters</a></li><li><a href="#3">Tire parameters</a></li><li><a href="#4">Vehicle parameters</a></li><li><a href="#5">Integration</a></li><li><a href="#6">Post integration</a></li><li><a href="#7">Results</a></li><li><a href="#11">See Also</a></li></ul></div><h2>Code start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+clc                         <span class="comment">% Clear command window</span>
+
+import <span class="string">DinamicaVeicular.*</span>   <span class="comment">% Import package Dinamica Veicular</span>
+</pre><h2>Integration parameters<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Simulation time</span>
+T = 6;                      <span class="comment">% Total simulation time [s]</span>
+resol = 50;                 <span class="comment">% Resolution</span>
+TSPAN = 0:T/resol:T;        <span class="comment">% Time span [s]</span>
+<span class="comment">% Initial conditions</span>
+dPSI0 = 0.7;                <span class="comment">% Initial yaw rate [rad/s]</span>
+ALPHAT0 = -0.2;             <span class="comment">% Initial side slip angle [rad]</span>
+PSI0 = 0;                   <span class="comment">% Initial yaw angle [rad]</span>
+X0 = 0;                     <span class="comment">% Initial CG horizontal position [m]</span>
+Y0 = 0;                     <span class="comment">% Initial CG vertical position [m]</span>
+V0 = 20;                    <span class="comment">% Initial CG velocity [m/s]</span>
+x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
+</pre><h2>Tire parameters<a name="3"></a></h2><p>Pneu escolhido: <a href="PneuPacejka1989.html">PneuPacejka1989.m</a>.</p><pre class="codeinput">a0 = 1.002806;
+a1 = 2.014156;
+a2 = 710.5013;
+a3 = 5226.341;
+a4 = 78.87699;
+a5 = 0.01078379;
+a6 = -0.004759443;
+a7 = 0.6704447;
+a8 = 0;
+a9 = 0;
+a10 = 0;
+a11 = 0;
+a12 = 0;
+a13 = 0;
+PneuDados = [a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13];
+PneuModelo = DinamicaVeicular.PneuPacejka1989(PneuDados);
+</pre><pre class="codeoutput">Undefined variable "DinamicaVeicular" or class "DinamicaVeicular.PneuPacejka1989".
+
+Error in TemplateSimple (line 47)
+PneuModelo = DinamicaVeicular.PneuPacejka1989(PneuDados);
+</pre><h2>Vehicle parameters<a name="4"></a></h2><p>Ve&#65533;culo escolhido: <a href="VeiculoSimplesNaoLinear3GDL.html">VeiculoSimplesNaoLinear3GDL.m</a>.</p><pre class="codeinput">mF0 = 700;                  <span class="comment">% Massa sobre o eixo dianteiro [kg]</span>
+mR0 = 600;                  <span class="comment">% Massa sobre o eixo traseiro [kg]</span>
+IT = 10000;                 <span class="comment">% Momento de in&#65533;rcia [kg*m2]</span>
+DELTA = 0;                  <span class="comment">% Ester&#65533;amento do eixo dianteiro [rad]</span>
+lT = 3.550;                 <span class="comment">% Dist&#65533;ncia entre os eixos[m]</span>
+nF = 2;                     <span class="comment">% N&#65533;mero de pneus no eixo dianteiro</span>
+nR = 2;                     <span class="comment">% N&#65533;mero de pneus no eixo traseiro</span>
+largT = 2;                  <span class="comment">% Largura [m]</span>
+muy = 0.8;                  <span class="comment">% Coeficiente de atrito de opera&#65533;&#65533;o</span>
+VeiculoDados = [mF0 mR0 IT DELTA lT nF nR largT muy];
+ModeloSistema = DinamicaVeicular.VeiculoSimplesNaoLinear3GDL(VeiculoDados,PneuModelo);
+</pre><h2>Integration<a name="5"></a></h2><pre class="codeinput">[TOUT,XOUT] = ode45(@(t, estados) ModeloSistema.Model(t, estados),TSPAN,x0);
+</pre><h2>Post integration<a name="6"></a></h2><pre class="codeinput"><span class="comment">% Retrieving states</span>
+dPSI = XOUT(:,1);           <span class="comment">% Yaw rate [rad/s]</span>
+ALPHAT = XOUT(:,2);         <span class="comment">% Side slip angle [rad]</span>
+PSI = XOUT(:,3);            <span class="comment">% Yaw angle [rad]</span>
+XT = XOUT(:,4);             <span class="comment">% CG horizontal position [m]</span>
+YT = XOUT(:,5);             <span class="comment">% CG vertical position [m]</span>
+VEL = XOUT(:,6);            <span class="comment">% CG velocity [m/s]</span>
+</pre><h2>Results<a name="7"></a></h2><p>Details: <a href="Graficos.html">Graficos.m</a></p><pre class="codeinput">g = DinamicaVeicular.Graficos(ModeloSistema);
+
+f1 = figure(1);
+set(f1,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
+set(f1,<span class="string">'Position'</span>,[5 0 16 16])
+set(f1,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
+set(f1,<span class="string">'PaperPosition'</span>,[0 0 16 16])
+PaperPos = get(f1,<span class="string">'PaperPosition'</span>);
+set(f1,<span class="string">'PaperSize'</span>,PaperPos(3:4))
+<span class="comment">% Subplot grid</span>
+ax1 = subplot(2,2,1);
+ax2 = subplot(2,2,2);
+ax3 = subplot(2,2,3);
+ax4 = subplot(2,2,4);
+    <span class="comment">% Subplot (1)</span>
+    set(ax1,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
+    plot(ax1,TOUT,dPSI,<span class="string">'r'</span>)
+    xlabel(ax1,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    ylabel(ax1,<span class="string">'$\dot{\psi}$ [rad/s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    title(ax1,<span class="string">'$\dot{\psi}$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    <span class="comment">% Subplot (2)</span>
+    set(ax2,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
+    plot(ax2,TOUT,ALPHAT,<span class="string">'r'</span>)
+    xlabel(ax2,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    ylabel(ax2,<span class="string">'$\alpha_T$ [rad]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    title(ax2,<span class="string">'$\alpha_T$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    <span class="comment">% Subplot (3)</span>
+    set(ax3,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
+    plot(ax3,TOUT,PSI,<span class="string">'r'</span>)
+    xlabel(ax3,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    ylabel(ax3,<span class="string">'$\psi$ [rad]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    title(ax3,<span class="string">'$\psi$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    <span class="comment">% Subplot (4)</span>
+    set(ax4,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
+    plot(ax4,TOUT,VEL,<span class="string">'r'</span>)
+    xlabel(ax4,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    ylabel(ax4,<span class="string">'$v$ [m/s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    title(ax4,<span class="string">'$v$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+</pre><p>Trajectory</p><pre class="codeinput">g.Trajetoria([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+</pre><p>Animation</p><pre class="codeinput">g.Animacao([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+</pre><p><img vspace="5" hspace="5" src="ilustracoes/AnimacaoSimples.gif" alt=""> </p><h2>See Also<a name="11"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateArticulated.html">TemplateArticulated</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Template simples
+% Exemplo de script para simula��o de ve�culo simples, sem articula��o.
+%
+%% Code start
+
+clear all                   % Clear workspace
+close all                   % Closing figures
+clc                         % Clear command window
+
+import DinamicaVeicular.*   % Import package Dinamica Veicular
+
+%% Integration parameters
+%
+
+% Simulation time
+T = 6;                      % Total simulation time [s]
+resol = 50;                 % Resolution
+TSPAN = 0:T/resol:T;        % Time span [s]
+% Initial conditions
+dPSI0 = 0.7;                % Initial yaw rate [rad/s]
+ALPHAT0 = -0.2;             % Initial side slip angle [rad]
+PSI0 = 0;                   % Initial yaw angle [rad]
+X0 = 0;                     % Initial CG horizontal position [m]
+Y0 = 0;                     % Initial CG vertical position [m]
+V0 = 20;                    % Initial CG velocity [m/s]
+x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
+
+%% Tire parameters
+% Pneu escolhido: <PneuPacejka1989.html PneuPacejka1989.m>.
+%
+
+a0 = 1.002806;
+a1 = 2.014156;
+a2 = 710.5013;
+a3 = 5226.341;
+a4 = 78.87699;
+a5 = 0.01078379;
+a6 = -0.004759443;
+a7 = 0.6704447;
+a8 = 0;
+a9 = 0;
+a10 = 0;
+a11 = 0;
+a12 = 0;
+a13 = 0;
+PneuDados = [a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13];
+PneuModelo = DinamicaVeicular.PneuPacejka1989(PneuDados);
+
+%% Vehicle parameters
+% Ve�culo escolhido: <VeiculoSimplesNaoLinear3GDL.html VeiculoSimplesNaoLinear3GDL.m>.
+
+mF0 = 700;                  % Massa sobre o eixo dianteiro [kg]
+mR0 = 600;                  % Massa sobre o eixo traseiro [kg]
+IT = 10000;                 % Momento de in�rcia [kg*m2]
+DELTA = 0;                  % Ester�amento do eixo dianteiro [rad]
+lT = 3.550;                 % Dist�ncia entre os eixos[m]
+nF = 2;                     % N�mero de pneus no eixo dianteiro
+nR = 2;                     % N�mero de pneus no eixo traseiro
+largT = 2;                  % Largura [m]
+muy = 0.8;                  % Coeficiente de atrito de opera��o
+VeiculoDados = [mF0 mR0 IT DELTA lT nF nR largT muy];
+ModeloSistema = DinamicaVeicular.VeiculoSimplesNaoLinear3GDL(VeiculoDados,PneuModelo);
+
+%% Integration
+[TOUT,XOUT] = ode45(@(t, estados) ModeloSistema.Model(t, estados),TSPAN,x0);
+
+%% Post integration
+%
+
+% Retrieving states
+dPSI = XOUT(:,1);           % Yaw rate [rad/s]
+ALPHAT = XOUT(:,2);         % Side slip angle [rad]
+PSI = XOUT(:,3);            % Yaw angle [rad]
+XT = XOUT(:,4);             % CG horizontal position [m]
+YT = XOUT(:,5);             % CG vertical position [m]
+VEL = XOUT(:,6);            % CG velocity [m/s]
+
+%% Results
+% Details: <Graficos.html Graficos.m>
+
+g = DinamicaVeicular.Graficos(ModeloSistema);
+
+f1 = figure(1);
+set(f1,'Units','centimeters')
+set(f1,'Position',[5 0 16 16])
+set(f1,'PaperUnits','centimeters')
+set(f1,'PaperPosition',[0 0 16 16])
+PaperPos = get(f1,'PaperPosition');
+set(f1,'PaperSize',PaperPos(3:4))
+% Subplot grid
+ax1 = subplot(2,2,1);
+ax2 = subplot(2,2,2);
+ax3 = subplot(2,2,3);
+ax4 = subplot(2,2,4);
+    % Subplot (1)
+    set(ax1,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+    plot(ax1,TOUT,dPSI,'r')
+    xlabel(ax1,'$t$ [s]','Interpreter','Latex')
+    ylabel(ax1,'$\dot{\psi}$ [rad/s]','Interpreter','Latex')
+    title(ax1,'$\dot{\psi}$ x $t$','Interpreter','Latex')
+    % Subplot (2)
+    set(ax2,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+    plot(ax2,TOUT,ALPHAT,'r')
+    xlabel(ax2,'$t$ [s]','Interpreter','Latex')
+    ylabel(ax2,'$\alpha_T$ [rad]','Interpreter','Latex')
+    title(ax2,'$\alpha_T$ x $t$','Interpreter','Latex')
+    % Subplot (3)
+    set(ax3,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+    plot(ax3,TOUT,PSI,'r')
+    xlabel(ax3,'$t$ [s]','Interpreter','Latex')
+    ylabel(ax3,'$\psi$ [rad]','Interpreter','Latex')
+    title(ax3,'$\psi$ x $t$','Interpreter','Latex')
+    % Subplot (4)
+    set(ax4,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+    plot(ax4,TOUT,VEL,'r')
+    xlabel(ax4,'$t$ [s]','Interpreter','Latex')
+    ylabel(ax4,'$v$ [m/s]','Interpreter','Latex')
+    title(ax4,'$v$ x $t$','Interpreter','Latex')
+
+%%
+% Trajectory
+%
+
+g.Trajetoria([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+
+%%
+% Animation
+%
+
+g.Animacao([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+
+%%
+%
+% <<ilustracoes/AnimacaoSimples.gif>>
+%
+%% See Also
+%
+% <index.html Index> | <TemplateArticulated.html TemplateArticulated>
+%
+
+##### SOURCE END #####
+--></body></html>

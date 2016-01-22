@@ -1,0 +1,295 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Pacejka 1989 tire</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="TirePacejka1989.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Pacejka 1989 tire</h1><!--introduction--><p>Nonlinear relation between tire lateral force and slip angle expressed by a semi-empirical model with experimental coefficients [1].</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#6">Properties</a></li><li><a href="#8">References</a></li><li><a href="#9">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>Fy = <i>TireModel</i>.Characteristic(alpha,Fz,muy)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
+<tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
+<tr> <td width="30%"><tt>Fz</tt></td> <td width="70%">Vertical force [N]</td> </tr>
+<tr> <td width="30%"><tt>muy</tt></td> <td width="70%">Friction coefficient [-]</td> </tr>
+</table> </p><h2>Description<a name="3"></a></h2><p>Model equation:</p><p><img src="TirePacejka1989_eq39608.png" alt="$$ F_y = - \frac{\mu_y}{\mu_{y,n}} (F_{y,n}(\alpha_{eq}) + S_v)$$"></p><p>Onde <img src="TirePacejka1989_eq37715.png" alt="$\alpha_{eq}$"> &#65533; o &#65533;ngulo de deriva equivalente:</p><p><img src="TirePacejka1989_eq23717.png" alt="$$ \alpha_{eq} = \frac{\mu_{y0}}{\mu_y} \frac{F_{z0}}{F_z} (\alpha + S_h)$$"></p><p>e <img src="TirePacejka1989_eq82272.png" alt="$F_{y,n}$"> &#65533; a equa&#65533;&#65533;o caracter&#65533;stica nominal dada por:</p><p><img src="TirePacejka1989_eq37294.png" alt="$$ F_{y,n} = D \sin(C \arctan(B \alpha - E (B \alpha - \arctan(B \alpha)))) $$"></p><p>Onde <img src="TirePacejka1989_eq73617.png" alt="$B$">, <img src="TirePacejka1989_eq22407.png" alt="$C$">, <img src="TirePacejka1989_eq35719.png" alt="$D$"> e <img src="TirePacejka1989_eq85525.png" alt="$E$"> s&#65533;o coeficientes do modelo que podem ser obtidos atrav&#65533;s das seguintes express&#65533;es:</p><p><img src="TirePacejka1989_eq11418.png" alt="$$ C = a_0 $$"></p><p><img src="TirePacejka1989_eq37440.png" alt="$$ D = \mu_{y,n} F_z = (a_1 F_z + a_2) F_z $$"></p><p><img src="TirePacejka1989_eq04793.png" alt="$$ B = \frac{B C D}{C D} = a_3 \sin \left\{ 2 \arctan \left( \frac{F_z}{a_4} \right) \right\} (1 - a_5 |\gamma|)$$"></p><p><img src="TirePacejka1989_eq47689.png" alt="$$ E = a_6 F_z + a_7$$"></p><p>Os deslocamentos da curva s&#65533;o dados por:</p><p><img src="TirePacejka1989_eq96294.png" alt="$$ S_h = a_8 \gamma + a_9 F_z + a_{10} $$"></p><p><img src="TirePacejka1989_eq07415.png" alt="$$ S_v = a_{11} F_z \gamma + a_{12} F_z + a_{13} $$"></p><p>O modelo implementado aqui realiza tratamento do &#65533;ngulo de deriva para valores acima de 90 graus. A partir deste valor a dire&#65533;&#65533;o de avan&#65533;o sobre a curva caracter&#65533;stica se inverte. O &#65533;ngulo utilizado no modelo de Tire deve ser igual a zero quando o &#65533;ngulo de deriva no m&#65533;todo convencional for igual a 180. Isto deve ser feito porque a for&#65533;a lateral com 180 graus de &#65533;ngulo de deriva deve ser igual a zero e n&#65533;o m&#65533;xima como ocorre no modelo sem tratamento. Isto &#65533; obtido atrav&#65533;s da inclus&#65533;o da linha de c&#65533;digo:</p><p><i>ALPHA = asin(sin(alpha));</i></p><p>Em que o &#65533;ngulo de deriva sem tratamento "alpha" da origem ao &#65533;ngulo com tratamento "ALPHA" que ser&#65533; usado no c&#65533;lculo da for&#65533;a lateral.</p><p><b>Hip&#65533;teses</b></p><div><ul><li>Rela&#65533;&#65533;o n&#65533;o linear.</li><li>&#65533;ngulo de deriva vai de -180 a 180 graus.</li></ul></div><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> TirePacejka1989 &lt; VehicleDynamics.Tire
+</pre><pre class="codeinput">    methods
+        <span class="comment">% constructor</span>
+        <span class="keyword">function</span> self = TirePacejka1989(varargin)
+            <span class="keyword">if</span> nargin == 0
+                a0 = 1.002806;      <span class="comment">% Shape factor [-]</span>
+                a1 = 2.014156;      <span class="comment">% Load dependency of lateral friction (*1000) [1/kN]</span>
+                a2 = 710.5013;      <span class="comment">% Lateral friction level (*1000) [-]</span>
+                a3 = 5226.341;      <span class="comment">% Maximum cornering stiffness [N/deg]</span>
+                a4 = 78.87699;      <span class="comment">% Load at maximum cornering stiffness [kN]</span>
+                a5 = 0.01078379;    <span class="comment">% Camber sensitivity of cornering stiffness</span>
+                a6 = -0.004759443;  <span class="comment">% Load dependency of curvature factor</span>
+                a7 = 0.6704447;     <span class="comment">% Curvature factor level</span>
+                a8 = 0;             <span class="comment">% Camber sensitivity of horizontal shift</span>
+                a9 = 0;             <span class="comment">% Load dependency of horizontal shift</span>
+                a10 = 0;            <span class="comment">% Horizontal shift level</span>
+                a11 = 0;            <span class="comment">% Combined load and camber sensitivity of vertical shift</span>
+                a12 = 0;            <span class="comment">% Load dependency of vertical shift</span>
+                a13 = 0;            <span class="comment">% Vertical shift level</span>
+                self.params = [a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13];
+            <span class="keyword">else</span>
+                self.params = varargin{1};
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> Fy = Characteristic(self,alpha,Fz,muy)
+            <span class="comment">% Input</span>
+            <span class="comment">% alpha - &#65533;ngulo de deriva [rad]</span>
+            <span class="comment">% Fz - Load [N]</span>
+            <span class="comment">% muy - Lateral friction coefficient (*1000) [-]</span>
+
+            <span class="comment">% Tratamento do &#65533;ngulo de deriva</span>
+            ALPHA = asin(sin(alpha));           <span class="comment">% [rad]</span>
+            ALPHA = 180/pi*ALPHA;               <span class="comment">% Convers&#65533;o [rad] - [deg]</span>
+            <span class="comment">% Par&#65533;metros nominais</span>
+            a0 = self.params(1);
+            a1 = self.params(2);
+            a2 = self.params(3);
+            a3 = self.params(4);
+            a4 = self.params(5);
+            a5 = self.params(6);
+            a6 = self.params(7);
+            a7 = self.params(8);
+            a8 = self.params(9);
+            a9 = self.params(10);
+            a10 = self.params(11);
+            a11 = self.params(12);
+            a12 = self.params(13);
+            a13 = self.params(14);
+
+            Fz = Fz/1000;                       <span class="comment">% Convers&#65533;o [N] - [kN]</span>
+
+            camber = 0;                         <span class="comment">% Camber angle</span>
+
+            C = a0;                             <span class="comment">% Shape factor</span>
+            muy0 = a1*Fz + a2;                  <span class="comment">% Lateral friction coefficient nominal [-]</span>
+            muy = muy*1000;                     <span class="comment">% Lateral friction coefficient operacional</span>
+            D = muy0*Fz;                        <span class="comment">% muy = lateral friction coefficient</span>
+            BCD = a3*sin(2*atan(Fz/a4))*(1-a5*abs(camber)); <span class="comment">% Cornering stiffness</span>
+            E = a6*Fz + a7;                     <span class="comment">% Curvature factor</span>
+            B = BCD/(C*D);                      <span class="comment">% stiffness factor</span>
+            Sh = a8*camber + a9*Fz + a10;       <span class="comment">% Horizontal shift</span>
+            Sv = a11*Fz*camber + a12*Fz + a13;  <span class="comment">% Vertical shift</span>
+            ALPHAeq = muy0/muy*(ALPHA + Sh);    <span class="comment">% &#65533;ngulo de deriva equivalente</span>
+            <span class="comment">% Reference characteristics</span>
+            fy = D*sin(C*atan(B*ALPHAeq - E*(B*ALPHAeq - atan(B*ALPHAeq))));
+            <span class="comment">% Lateral force</span>
+            Fy = -muy/muy0*(fy + Sv);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2>Properties<a name="6"></a></h2><pre class="codeinput">    properties
+        params
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>References<a name="8"></a></h2><p>[1] BAKKER, E.; PACEJKA, H. B.; LIDNER, L. A new tire model with an application in vehicle dynamics studies. [S.l.], 1989</p><h2>See Also<a name="9"></a></h2><p><a href="index.html">Index</a> | <a href="TireLinear.html">Tire linear</a> | <a href="TirePolynomial.html">Tire polynomial</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Pacejka 1989 tire
+% Nonlinear relation between tire lateral force and slip angle expressed by a semi-empirical model with experimental coefficients [1].
+%
+%% Sintax
+% |Fy = _TireModel_.Characteristic(alpha,Fz,muy)|
+%
+%% Arguments
+% The following table describes the input arguments:
+%
+% <html> <table border=1 width="97%">
+% <tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
+% <tr> <td width="30%"><tt>Fz</tt></td> <td width="70%">Vertical force [N]</td> </tr>
+% <tr> <td width="30%"><tt>muy</tt></td> <td width="70%">Friction coefficient [-]</td> </tr>
+% </table> </html>
+%
+%% Description
+% Model equation:
+%
+% $$ F_y = - \frac{\mu_y}{\mu_{y,n}} (F_{y,n}(\alpha_{eq}) + S_v)$$
+%
+% Onde $\alpha_{eq}$ � o �ngulo de deriva equivalente:
+%
+% $$ \alpha_{eq} = \frac{\mu_{y0}}{\mu_y} \frac{F_{z0}}{F_z} (\alpha + S_h)$$
+%
+% e $F_{y,n}$ � a equa��o caracter�stica nominal dada por:
+%
+% $$ F_{y,n} = D \sin(C \arctan(B \alpha - E (B \alpha - \arctan(B \alpha)))) $$
+%
+% Onde $B$, $C$, $D$ e $E$ s�o coeficientes do modelo que podem ser obtidos atrav�s das seguintes express�es:
+%
+% $$ C = a_0 $$
+%
+% $$ D = \mu_{y,n} F_z = (a_1 F_z + a_2) F_z $$
+%
+% $$ B = \frac{B C D}{C D} = a_3 \sin \left\{ 2 \arctan \left( \frac{F_z}{a_4} \right) \right\} (1 - a_5 |\gamma|)$$
+%
+% $$ E = a_6 F_z + a_7$$
+%
+% Os deslocamentos da curva s�o dados por:
+%
+% $$ S_h = a_8 \gamma + a_9 F_z + a_{10} $$
+%
+% $$ S_v = a_{11} F_z \gamma + a_{12} F_z + a_{13} $$
+%
+% O modelo implementado aqui realiza tratamento do �ngulo de deriva para valores acima de 90 graus. A partir deste valor a dire��o de avan�o sobre a curva caracter�stica se inverte. O �ngulo utilizado no modelo de Tire deve ser igual a zero quando o �ngulo de deriva no m�todo convencional for igual a 180. Isto deve ser feito porque a for�a lateral com 180 graus de �ngulo de deriva deve ser igual a zero e n�o m�xima como ocorre no modelo sem tratamento. Isto � obtido atrav�s da inclus�o da linha de c�digo:
+%
+% _ALPHA = asin(sin(alpha));_
+%
+% Em que o �ngulo de deriva sem tratamento "alpha" da origem ao �ngulo com
+% tratamento "ALPHA" que ser� usado no c�lculo da for�a lateral.
+%
+% *Hip�teses*
+%
+% * Rela��o n�o linear.
+% * �ngulo de deriva vai de -180 a 180 graus.
+%
+%% Code
+%
+
+classdef TirePacejka1989 < VehicleDynamics.Tire
+    methods
+        % constructor
+        function self = TirePacejka1989(varargin)
+            if nargin == 0
+                a0 = 1.002806;      % Shape factor [-]
+                a1 = 2.014156;      % Load dependency of lateral friction (*1000) [1/kN]
+                a2 = 710.5013;      % Lateral friction level (*1000) [-]
+                a3 = 5226.341;      % Maximum cornering stiffness [N/deg]
+                a4 = 78.87699;      % Load at maximum cornering stiffness [kN]
+                a5 = 0.01078379;    % Camber sensitivity of cornering stiffness
+                a6 = -0.004759443;  % Load dependency of curvature factor
+                a7 = 0.6704447;     % Curvature factor level
+                a8 = 0;             % Camber sensitivity of horizontal shift
+                a9 = 0;             % Load dependency of horizontal shift
+                a10 = 0;            % Horizontal shift level
+                a11 = 0;            % Combined load and camber sensitivity of vertical shift
+                a12 = 0;            % Load dependency of vertical shift
+                a13 = 0;            % Vertical shift level
+                self.params = [a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13];
+            else
+                self.params = varargin{1};
+            end
+        end
+
+        function Fy = Characteristic(self,alpha,Fz,muy)
+            % Input
+            % alpha - �ngulo de deriva [rad]
+            % Fz - Load [N]
+            % muy - Lateral friction coefficient (*1000) [-]
+
+            % Tratamento do �ngulo de deriva
+            ALPHA = asin(sin(alpha));           % [rad]
+            ALPHA = 180/pi*ALPHA;               % Convers�o [rad] - [deg]
+            % Par�metros nominais
+            a0 = self.params(1);
+            a1 = self.params(2);
+            a2 = self.params(3);
+            a3 = self.params(4);
+            a4 = self.params(5);
+            a5 = self.params(6);
+            a6 = self.params(7);
+            a7 = self.params(8);
+            a8 = self.params(9);
+            a9 = self.params(10);
+            a10 = self.params(11);
+            a11 = self.params(12);
+            a12 = self.params(13);
+            a13 = self.params(14);
+
+            Fz = Fz/1000;                       % Convers�o [N] - [kN]
+
+            camber = 0;                         % Camber angle
+
+            C = a0;                             % Shape factor
+            muy0 = a1*Fz + a2;                  % Lateral friction coefficient nominal [-]
+            muy = muy*1000;                     % Lateral friction coefficient operacional
+            D = muy0*Fz;                        % muy = lateral friction coefficient
+            BCD = a3*sin(2*atan(Fz/a4))*(1-a5*abs(camber)); % Cornering stiffness
+            E = a6*Fz + a7;                     % Curvature factor
+            B = BCD/(C*D);                      % stiffness factor
+            Sh = a8*camber + a9*Fz + a10;       % Horizontal shift
+            Sv = a11*Fz*camber + a12*Fz + a13;  % Vertical shift
+            ALPHAeq = muy0/muy*(ALPHA + Sh);    % �ngulo de deriva equivalente
+            % Reference characteristics
+            fy = D*sin(C*atan(B*ALPHAeq - E*(B*ALPHAeq - atan(B*ALPHAeq))));
+            % Lateral force
+            Fy = -muy/muy0*(fy + Sv);
+        end
+    end
+
+    %% Properties
+    %
+
+    properties
+        params
+    end
+end
+
+%% References
+% [1] BAKKER, E.; PACEJKA, H. B.; LIDNER, L. A new tire model with an application in vehicle dynamics studies. [S.l.], 1989
+%
+%% See Also
+%
+% <index.html Index> | <TireLinear.html Tire linear> | <TirePolynomial.html Tire polynomial>
+%
+
+##### SOURCE END #####
+--></body></html>

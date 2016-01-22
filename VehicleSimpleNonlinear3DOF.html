@@ -1,0 +1,301 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Nonlinear 3 DOF vehicle model</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="VehicleSimpleNonlinear3DOF.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Nonlinear 3 DOF vehicle model</h1><!--introduction--><p>Bicycle model nonlinear with 3 degrees of freedom.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#7">Model</a></li><li><a href="#9">convert</a></li><li><a href="#11">Properties</a></li><li><a href="#13">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>dx = <i>VehicleModel</i>.Model(~,estados)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
+<tr> <td width="30%"><tt>estados</tt></td> <td width="70%">Estados do modelo: [dPSI ALPHAT PSI XT YT VEL]</td> </tr>
+</table> </p><h2>Description<a name="3"></a></h2><p>O centro de massa do ve&#65533;culo &#65533; dado pelo ponto <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> e os eixos dianteiro e traseiro s&#65533;o dados pelos pontos <img src="VehicleSimpleNonlinear3DOF_eq86924.png" alt="$F$"> e <img src="VehicleSimpleNonlinear3DOF_eq85930.png" alt="$R$">, respectivamente. A constante <img src="VehicleSimpleNonlinear3DOF_eq34276.png" alt="$a$"> mede a dist&#65533;ncia do ponto <img src="VehicleSimpleNonlinear3DOF_eq86924.png" alt="$F$"> ao <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> e <img src="VehicleSimpleNonlinear3DOF_eq28812.png" alt="$b$"> a dist&#65533;ncia do ponto <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> ao <img src="VehicleSimpleNonlinear3DOF_eq85930.png" alt="$R$">. Os &#65533;ngulos <img src="VehicleSimpleNonlinear3DOF_eq95504.png" alt="$\alpha_F$"> e <img src="VehicleSimpleNonlinear3DOF_eq04922.png" alt="$\alpha_R$"> s&#65533;o os &#65533;ngulos de deriva nos eixos dianteiro e traseiro. <img src="VehicleSimpleNonlinear3DOF_eq58160.png" alt="$\alpha_T$"> is the vehicle side slip angle and <img src="VehicleSimpleNonlinear3DOF_eq46646.png" alt="$\psi$"> is the vehicle yaw angle. Por fim, <img src="VehicleSimpleNonlinear3DOF_eq71031.png" alt="$\delta$"> &#65533; o &#65533;ngulo de ester&#65533;amento.</p><p><img vspace="5" hspace="5" src="ilustracoes/modeloSimples.svg" alt=""> </p><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> VehicleSimpleNonlinear3DOF &lt; VehicleDynamics.VehicleSimple
+</pre><pre class="codeinput">	methods
+</pre><pre class="codeinput">        <span class="comment">% Constructor</span>
+        <span class="keyword">function</span> self = VehicleSimpleNonlinear3DOF(varargin)
+            <span class="keyword">if</span> nargin == 0
+                <span class="comment">% Entrada padr&#65533;o dos dados do ve&#65533;culo</span>
+                mF0 = 5237;     <span class="comment">% Massa no eixo dianteiro [kg]</span>
+                mR0 = 2440;     <span class="comment">% Massa no eixo traseiro [kg]</span>
+                IT = 46100;     <span class="comment">% Momento de in&#65533;rcia [kg*m2]</span>
+                DELTA = 0;      <span class="comment">% Ester&#65533;amento do eixo dianteiro [rad]</span>
+                lT = 3.550;     <span class="comment">% Dist&#65533;ncia entre os eixos [m]</span>
+                nF = 2;         <span class="comment">% N&#65533;mero de tires no eixo dianteiro</span>
+                nR = 2;         <span class="comment">% N&#65533;mero de tires no eixo traseiro</span>
+                largT = 2;      <span class="comment">% width do ve&#65533;culo[m]</span>
+                muy = 0.3;      <span class="comment">% Coeficiente de atrito de opera&#65533;&#65533;o</span>
+                entradaVetor = [mF0 mR0 IT DELTA lT nF nR largT muy];
+                <span class="comment">% Definindo os par&#65533;metros da classe</span>
+                self.params = self.convert(entradaVetor);
+                self.tire = VehicleDynamics.tirePacejka;
+            <span class="keyword">else</span>
+                self.params = self.convert(varargin{1});
+                self.tire = varargin{2};
+            <span class="keyword">end</span>
+                self.distFT = self.params(11);
+                self.distTR = self.params(12);
+                self.width = self.params(8);
+        <span class="keyword">end</span>
+</pre><h2>Model<a name="7"></a></h2><p>Fun&#65533;&#65533;o com as equa&#65533;&#65533;es de estado do modelo</p><pre class="codeinput">        <span class="keyword">function</span> dx = Model(self,~,estados)
+            <span class="comment">% Dados do ve&#65533;culo</span>
+            m = self.params(10);        <span class="comment">% massa do veiculo [kg]</span>
+            I = self.params(3);         <span class="comment">% momento de inercia [kg]</span>
+            a = self.params(11);        <span class="comment">% distancia do eixo dianteiro ao centro de massa [m]</span>
+            b = self.params(12);        <span class="comment">% distancia do eixo dianteiro ao centro de massa [m]</span>
+            nF = self.params(6);        <span class="comment">% N&#65533;mero de tires no eixo dianteiro do caminh&#65533;o-trator</span>
+            nR = self.params(7);        <span class="comment">% N&#65533;mero de tires no eixo traseiro do caminh&#65533;o-trator</span>
+            muy = self.params(9);       <span class="comment">% Coeficiente de atrito de opera&#65533;&#65533;o</span>
+            DELTA = self.params(4);
+            g = 9.81;                   <span class="comment">% Acelera&#65533;&#65533;o da gravidade [m/s^2]</span>
+            FzF = self.params(1)*g;     <span class="comment">% Carga vertical no eixo dianteiro [N]</span>
+            FzR = self.params(2)*g;     <span class="comment">% Carga vertical no eixo traseiro [N]</span>
+            <span class="comment">% Estados</span>
+            dPSI = estados(1);
+            ALPHAT = estados(2);
+            v = estados(6);
+            PSI = estados(3);
+
+            <span class="comment">% Angulos de deriva n&#65533;o linear</span>
+            ALPHAF = atan2((v*sin(ALPHAT) + a*dPSI),(v*cos(ALPHAT))) - DELTA; <span class="comment">% Dianteiro</span>
+            ALPHAR = atan2((v*sin(ALPHAT) - b*dPSI),(v*cos(ALPHAT)));         <span class="comment">% Traseiro</span>
+
+            <span class="comment">% For&#65533;as longitudinais</span>
+            FxF = 0;
+            FxR = 0;
+
+            <span class="comment">% Curva caracter&#65533;stica</span>
+            FyF = nF*self.tire.Characteristic(ALPHAF,FzF/nF,muy);
+            FyR = nR*self.tire.Characteristic(ALPHAR,FzR/nR,muy);
+
+            <span class="comment">% Equa&#65533;&#65533;es de estado</span>
+            dx(1,1) = (FyF*a*cos(DELTA) - FyR*b + FxF*a*sin(DELTA))/I;
+            dx(2,1) = (FyR + FyF*cos(DELTA) + FxF*sin(DELTA) - m*(dPSI*v*cos(ALPHAT) + (sin(ALPHAT)*(FxR + 	FxF*cos(DELTA) - FyF*sin(DELTA) +<span class="keyword">...</span>
+                      dPSI*m*v*sin(ALPHAT)))/(m*cos(ALPHAT))))/(m*(v*cos(ALPHAT) + (v*sin(ALPHAT)^2)/cos(ALPHAT)));
+            dx(6,1) = (FxR*cos(ALPHAT) + FyR*sin(ALPHAT) - FyF*cos(ALPHAT)*sin(DELTA) + FyF*cos(DELTA)*sin(ALPHAT) + <span class="keyword">...</span>
+                      FxF*sin(ALPHAT)*sin(DELTA) + FxF*cos(ALPHAT)*cos(DELTA))/(m*cos(ALPHAT)^2 + m*sin(ALPHAT)^2);
+
+            <span class="comment">% Obten&#65533;&#65533;o da orienta&#65533;&#65533;o</span>
+            dx(3,1) = dPSI; <span class="comment">% dPSI</span>
+
+            <span class="comment">% Equa&#65533;&#65533;es adicionais para o posicionamento (N&#65533;o necess&#65533;rias para a din&#65533;mica em guinada)</span>
+            dx(4,1) = v*cos(ALPHAT + PSI); <span class="comment">% X</span>
+            dx(5,1) = v*sin(ALPHAT + PSI); <span class="comment">% Y</span>
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+
+    methods (Static)
+</pre><h2>convert<a name="9"></a></h2><p>A fun&#65533;&#65533;o convert adiciona no vetor de entrada ([mF0 mR0 IT DELTA lT nF nR largT muy]) os par&#65533;metros restantes do modelo de ve&#65533;culo ([mT a b]).</p><pre class="codeinput">        <span class="keyword">function</span> parametros = convert(entrada)
+            mF0 = entrada(1);       <span class="comment">% Massa no eixo dianteiro [kg]</span>
+            mR0 = entrada(2);       <span class="comment">% Massa no eixo traseiro [kg]</span>
+            lT = entrada(5);        <span class="comment">% Dist&#65533;ncia entre os eixos [m]</span>
+            <span class="comment">% Convers&#65533;o dos dados para os par&#65533;metros usados na equa&#65533;&#65533;o de movimento</span>
+            mT = mF0 + mR0;         <span class="comment">% massa do ve&#65533;culo [kg]</span>
+            a = mR0/mT*lT;          <span class="comment">% Dist&#65533;ncia (F-T) [m]</span>
+            b = lT - a;             <span class="comment">% Dist&#65533;ncia (R-T) [m]</span>
+            <span class="comment">% Sa&#65533;da</span>
+            parametros = [entrada mT a b];
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><h2>Properties<a name="11"></a></h2><pre class="codeinput">    properties
+        params
+        tire
+        distFT
+        distTR
+        width
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>See Also<a name="13"></a></h2><p><a href="index.html">Index</a> | <a href="VehicleArticulatedNonlinear4DOF.html">VehicleArticulatedNonlinear4DOF</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Nonlinear 3 DOF vehicle model
+% Bicycle model nonlinear with 3 degrees of freedom.
+%
+%% Sintax
+% |dx = _VehicleModel_.Model(~,estados)|
+%
+%% Arguments
+% The following table describes the input arguments:
+%
+% <html> <table border=1 width="97%">
+% <tr> <td width="30%"><tt>estados</tt></td> <td width="70%">Estados do modelo: [dPSI ALPHAT PSI XT YT VEL]</td> </tr>
+% </table> </html>
+%
+%% Description
+% O centro de massa do ve�culo � dado pelo ponto $T$ e os eixos dianteiro e traseiro s�o dados pelos pontos $F$ e $R$, respectivamente. A constante $a$ mede a dist�ncia do ponto $F$ ao $T$ e $b$ a dist�ncia do ponto $T$ ao $R$. Os �ngulos $\alpha_F$ e $\alpha_R$ s�o os �ngulos de deriva nos eixos dianteiro e traseiro. $\alpha_T$ is the vehicle side slip angle and $\psi$ is the vehicle yaw angle. Por fim, $\delta$ � o �ngulo de ester�amento.
+%
+% <<ilustracoes/modeloSimples.svg>>
+%
+%% Code
+%
+
+classdef VehicleSimpleNonlinear3DOF < VehicleDynamics.VehicleSimple
+	methods
+        % Constructor
+        function self = VehicleSimpleNonlinear3DOF(varargin)
+            if nargin == 0
+                % Entrada padr�o dos dados do ve�culo
+                mF0 = 5237;     % Massa no eixo dianteiro [kg]
+                mR0 = 2440;     % Massa no eixo traseiro [kg]
+                IT = 46100;     % Momento de in�rcia [kg*m2]
+                DELTA = 0;      % Ester�amento do eixo dianteiro [rad]
+                lT = 3.550;     % Dist�ncia entre os eixos [m]
+                nF = 2;         % N�mero de tires no eixo dianteiro
+                nR = 2;         % N�mero de tires no eixo traseiro
+                largT = 2;      % width do ve�culo[m]
+                muy = 0.3;      % Coeficiente de atrito de opera��o
+                entradaVetor = [mF0 mR0 IT DELTA lT nF nR largT muy];
+                % Definindo os par�metros da classe
+                self.params = self.convert(entradaVetor);
+                self.tire = VehicleDynamics.tirePacejka;
+            else
+                self.params = self.convert(varargin{1});
+                self.tire = varargin{2};
+            end
+                self.distFT = self.params(11);
+                self.distTR = self.params(12);
+                self.width = self.params(8);
+        end
+
+        %% Model
+        % Fun��o com as equa��es de estado do modelo
+        function dx = Model(self,~,estados)
+            % Dados do ve�culo
+            m = self.params(10);        % massa do veiculo [kg]
+            I = self.params(3);         % momento de inercia [kg]
+            a = self.params(11);        % distancia do eixo dianteiro ao centro de massa [m]
+            b = self.params(12);        % distancia do eixo dianteiro ao centro de massa [m]
+            nF = self.params(6);        % N�mero de tires no eixo dianteiro do caminh�o-trator
+            nR = self.params(7);        % N�mero de tires no eixo traseiro do caminh�o-trator
+            muy = self.params(9);       % Coeficiente de atrito de opera��o
+            DELTA = self.params(4);
+            g = 9.81;                   % Acelera��o da gravidade [m/s^2]
+            FzF = self.params(1)*g;     % Carga vertical no eixo dianteiro [N]
+            FzR = self.params(2)*g;     % Carga vertical no eixo traseiro [N]
+            % Estados
+            dPSI = estados(1);
+            ALPHAT = estados(2);
+            v = estados(6);
+            PSI = estados(3);
+
+            % Angulos de deriva n�o linear
+            ALPHAF = atan2((v*sin(ALPHAT) + a*dPSI),(v*cos(ALPHAT))) - DELTA; % Dianteiro
+            ALPHAR = atan2((v*sin(ALPHAT) - b*dPSI),(v*cos(ALPHAT)));         % Traseiro
+
+            % For�as longitudinais
+            FxF = 0;
+            FxR = 0;
+
+            % Curva caracter�stica
+            FyF = nF*self.tire.Characteristic(ALPHAF,FzF/nF,muy);
+            FyR = nR*self.tire.Characteristic(ALPHAR,FzR/nR,muy);
+
+            % Equa��es de estado
+            dx(1,1) = (FyF*a*cos(DELTA) - FyR*b + FxF*a*sin(DELTA))/I;
+            dx(2,1) = (FyR + FyF*cos(DELTA) + FxF*sin(DELTA) - m*(dPSI*v*cos(ALPHAT) + (sin(ALPHAT)*(FxR + 	FxF*cos(DELTA) - FyF*sin(DELTA) +...
+                      dPSI*m*v*sin(ALPHAT)))/(m*cos(ALPHAT))))/(m*(v*cos(ALPHAT) + (v*sin(ALPHAT)^2)/cos(ALPHAT)));
+            dx(6,1) = (FxR*cos(ALPHAT) + FyR*sin(ALPHAT) - FyF*cos(ALPHAT)*sin(DELTA) + FyF*cos(DELTA)*sin(ALPHAT) + ...
+                      FxF*sin(ALPHAT)*sin(DELTA) + FxF*cos(ALPHAT)*cos(DELTA))/(m*cos(ALPHAT)^2 + m*sin(ALPHAT)^2);
+
+            % Obten��o da orienta��o
+            dx(3,1) = dPSI; % dPSI
+
+            % Equa��es adicionais para o posicionamento (N�o necess�rias para a din�mica em guinada)
+            dx(4,1) = v*cos(ALPHAT + PSI); % X
+            dx(5,1) = v*sin(ALPHAT + PSI); % Y
+        end
+
+    end
+
+    methods (Static)
+        %% convert
+        % A fun��o convert adiciona no vetor de entrada ([mF0 mR0 IT DELTA lT nF nR largT muy]) os par�metros restantes do modelo de ve�culo ([mT a b]).
+        function parametros = convert(entrada)
+            mF0 = entrada(1);       % Massa no eixo dianteiro [kg]
+            mR0 = entrada(2);       % Massa no eixo traseiro [kg]
+            lT = entrada(5);        % Dist�ncia entre os eixos [m]
+            % Convers�o dos dados para os par�metros usados na equa��o de movimento
+            mT = mF0 + mR0;         % massa do ve�culo [kg]
+            a = mR0/mT*lT;          % Dist�ncia (F-T) [m]
+            b = lT - a;             % Dist�ncia (R-T) [m]
+            % Sa�da
+            parametros = [entrada mT a b];
+        end
+    end
+
+    %% Properties
+    %
+
+    properties
+        params
+        tire
+        distFT
+        distTR
+        width
+    end
+
+end
+
+%% See Also
+%
+% <index.html Index> | <VehicleArticulatedNonlinear4DOF.html VehicleArticulatedNonlinear4DOF>
+%
+
+##### SOURCE END #####
+--></body></html>
