@@ -10,12 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="610.81641"
-   height="440.00134"
+   width="604.78632"
+   height="365.4902"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="fluxograma.png">
+   sodipodi:docname="fluxograma.svg">
   <defs
      id="defs4">
     <marker
@@ -259,11 +259,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9899495"
-     inkscape:cx="284.75323"
-     inkscape:cy="247.33371"
+     inkscape:zoom="1.4"
+     inkscape:cx="295.60288"
+     inkscape:cy="175.43529"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1366"
      inkscape:window-height="744"
@@ -282,7 +282,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -291,214 +291,189 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline"
-     transform="translate(-1082.7225,-607.77926)">
+     transform="translate(-1089.0158,-610.39197)">
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.52065861;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2985-1"
-       width="101.17506"
-       height="106.27258"
-       x="1406.8938"
-       y="826.61298" />
+       width="101.25217"
+       height="77.063988"
+       x="1406.8552"
+       y="800.5744" />
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.76426709;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2985-1-7"
-       width="233.46719"
-       height="99.232269"
-       x="1270.9116"
-       y="678.04565" />
+       width="233.56668"
+       height="75.046043"
+       x="1270.8618"
+       y="677.99591" />
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.56122583;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:2.24490354, 4.48980708;stroke-dashoffset:0"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:4, 8;stroke-dashoffset:0"
        id="rect2985-1-7-9"
-       width="277.43533"
-       height="439.44012"
-       x="1247.3878"
-       y="608.05988" />
+       width="277.48538"
+       height="364.4902"
+       x="1247.3628"
+       y="610.89197" />
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.47376937;stroke-opacity:1;display:inline"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
        id="rect2985-1-9-9-0"
        width="139.45341"
        height="63.840065"
        x="1553.8486"
-       y="696.54572" />
+       y="682.54572" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Text"
      style="display:inline"
-     transform="translate(-1082.7225,-607.77926)">
+     transform="translate(-1089.0158,-610.39197)">
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="1623.494"
-       y="737.81036"
+       y="723.81036"
        id="text3059-3"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="1623.494"
-         y="737.81036"
+         y="723.81036"
          id="tspan3065-2"
-         style="text-align:center;text-anchor:middle">Gráficos</tspan></text>
+         style="text-align:center;text-anchor:middle">Graphics</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="1386.9657"
-       y="706.79456"
+       y="708.79456"
        id="text3059-3-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="1390.7523"
-         y="706.79456"
-         id="tspan3065-2-6"
-         style="text-align:center;text-anchor:middle">Modelo </tspan><tspan
+         x="1386.9657"
+         y="708.79456"
+         style="text-align:center;text-anchor:middle"
+         id="tspan3950">Vehicle</tspan><tspan
          sodipodi:role="line"
          x="1386.9657"
-         y="736.53015"
+         y="738.53015"
          style="text-align:center;text-anchor:middle"
-         id="tspan3948">de</tspan><tspan
-         sodipodi:role="line"
-         x="1386.9657"
-         y="766.26575"
-         style="text-align:center;text-anchor:middle"
-         id="tspan3950">veículo</tspan></text>
+         id="tspan3058">model</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="1456.314"
-       y="856.57648"
+       y="830.57648"
        id="text3059-3-4-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="1460.1006"
-         y="856.57648"
-         id="tspan3065-2-6-7"
-         style="text-align:center;text-anchor:middle">Modelo </tspan><tspan
+         x="1456.314"
+         y="830.57648"
+         style="text-align:center;text-anchor:middle"
+         id="tspan3950-1">Tire</tspan><tspan
          sodipodi:role="line"
          x="1456.314"
-         y="886.31207"
+         y="860.31207"
          style="text-align:center;text-anchor:middle"
-         id="tspan3948-0">de</tspan><tspan
-         sodipodi:role="line"
-         x="1456.314"
-         y="916.04767"
-         style="text-align:center;text-anchor:middle"
-         id="tspan3950-1">pneu</tspan></text>
+         id="tspan3072">model</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
        x="1455.8324"
-       y="996.75952"
+       y="938.75952"
        id="text3059-3-4-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="1455.8324"
-         y="996.75952"
+         y="938.75952"
          style="font-size:16.65192986px;text-align:center;text-anchor:middle"
-         id="tspan3950-8">Parâmetros</tspan><tspan
+         id="tspan5714">Tire</tspan><tspan
          sodipodi:role="line"
          x="1455.8324"
-         y="1017.5745"
+         y="959.57446"
          style="font-size:16.65192986px;text-align:center;text-anchor:middle"
-         id="tspan5712">do</tspan><tspan
-         sodipodi:role="line"
-         x="1455.8324"
-         y="1038.3894"
-         style="font-size:16.65192986px;text-align:center;text-anchor:middle"
-         id="tspan5714">pneu</tspan></text>
+         id="tspan3079">parameters</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
        x="1331.321"
-       y="853.06018"
+       y="827.06018"
        id="text3059-3-4-0-5"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="1331.321"
-         y="853.06018"
+         y="827.06018"
          style="font-size:16.65192986px;text-align:center;text-anchor:middle"
-         id="tspan3950-8-5">Parâmetros</tspan><tspan
+         id="tspan5710">Vehicle</tspan><tspan
          sodipodi:role="line"
          x="1331.321"
-         y="873.87512"
+         y="847.87512"
          style="font-size:16.65192986px;text-align:center;text-anchor:middle"
-         id="tspan5708">do</tspan><tspan
-         sodipodi:role="line"
-         x="1331.321"
-         y="894.69"
-         style="font-size:16.65192986px;text-align:center;text-anchor:middle"
-         id="tspan5710">veículos</tspan></text>
+         id="tspan3065">parameters</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="1155.9243"
-       y="694.85474"
+       y="690.85474"
        id="text5696"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5698"
          x="1155.9243"
-         y="694.85474"
-         style="font-size:16.65192986px">Condições iniciais</tspan><tspan
+         y="690.85474"
+         style="font-size:16.65192986px">Initial conditions</tspan><tspan
          sodipodi:role="line"
          x="1155.9243"
-         y="715.66968"
+         y="711.66968"
          id="tspan5700"
          style="font-size:16.65192986px">+</tspan><tspan
          sodipodi:role="line"
          x="1155.9243"
-         y="736.48456"
-         id="tspan5702"
-         style="font-size:16.65192986px">Parâmetros</tspan><tspan
-         sodipodi:role="line"
-         x="1155.9243"
-         y="757.2995"
-         id="tspan5704"
-         style="font-size:16.65192986px">de</tspan><tspan
-         sodipodi:role="line"
-         x="1155.9243"
-         y="778.11438"
+         y="732.48456"
          id="tspan5706"
-         style="font-size:16.65192986px">integração</tspan></text>
+         style="font-size:16.65192986px">Integration</tspan><tspan
+         sodipodi:role="line"
+         x="1155.9243"
+         y="753.2995"
+         style="font-size:16.65192986px"
+         id="tspan3086">parameters</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:23.78846931px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="1273.1102"
-       y="635.90625"
+       x="1343.1102"
+       y="639.90625"
        id="text5716"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5718"
-         x="1273.1102"
-         y="635.90625">Modelo do sistema</tspan></text>
+         x="1343.1102"
+         y="639.90625">System</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Arrows"
-     transform="translate(-1082.7225,-607.77926)">
+     transform="translate(-1089.0158,-610.39197)">
     <path
        style="fill:none;stroke:#000000;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 1454.2052,826.45399 0,-45.45976"
+       d="m 1454.2052,800.45399 0,-45.45976"
        id="path5350-2-7"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 1224.0479,728.01432 44.0911,0"
+       d="m 1224.0479,714.01432 44.0911,0"
        id="path5350-2-76"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 1454.2052,977.06927 0,-40.71695"
+       d="m 1454.2052,919.06927 0,-40.71695"
        id="path5350-2-7-0"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 1330.0932,825.94223 0,-45.45977"
+       d="m 1330.0932,799.94223 0,-45.45977"
        id="path5350-2-7-07"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 1504.1745,728.01432 44.0911,0"
+       d="m 1504.1745,714.01432 44.0911,0"
        id="path5350-2-76-4"
        inkscape:connector-curvature="0" />
   </g>
