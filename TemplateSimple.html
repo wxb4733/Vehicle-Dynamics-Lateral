@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Template simples</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
+      --><title>Template Simple</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,11 +65,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Template simples</h1><!--introduction--><p>Exemplo de script para simula&#65533;&#65533;o de ve&#65533;culo simples, sem articula&#65533;&#65533;o.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Code start</a></li><li><a href="#2">Integration parameters</a></li><li><a href="#3">Tire parameters</a></li><li><a href="#4">Vehicle parameters</a></li><li><a href="#5">Integration</a></li><li><a href="#6">Post integration</a></li><li><a href="#7">Results</a></li><li><a href="#8">Results</a></li><li><a href="#12">See Also</a></li></ul></div><h2>Code start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+  </style></head><body><div class="content"><h1>Template Simple</h1><!--introduction--><p>Template script for the simulation of simple vehicle, without articulation.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Code start</a></li><li><a href="#2">Integration parameters</a></li><li><a href="#3">Tire parameters</a></li><li><a href="#4">Vehicle parameters</a></li><li><a href="#5">Integration</a></li><li><a href="#6">Post integration</a></li><li><a href="#7">Results</a></li><li><a href="#11">See Also</a></li></ul></div><h2>Code start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
 close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 clc                         <span class="comment">% Clear command window</span>
 
-import <span class="string">VehicleDynamics.*</span>   <span class="comment">% Import package Dinamica Veicular</span>
+import <span class="string">VehicleDynamicsLateral.*</span>   <span class="comment">% Import package VehicleDynamicsLateral</span>
 </pre><h2>Integration parameters<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Simulation time</span>
 T = 6;                      <span class="comment">% Total simulation time [s]</span>
 resol = 50;                 <span class="comment">% Resolution</span>
@@ -82,7 +82,7 @@ X0 = 0;                     <span class="comment">% Initial CG horizontal positi
 Y0 = 0;                     <span class="comment">% Initial CG vertical position [m]</span>
 V0 = 20;                    <span class="comment">% Initial CG velocity [m/s]</span>
 x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
-</pre><h2>Tire parameters<a name="3"></a></h2><p>Pneu escolhido: <a href="TirePacejka1989.html">TirePacejka1989.m</a>.</p><pre class="codeinput">a0 = 1.002806;
+</pre><h2>Tire parameters<a name="3"></a></h2><p>Chosen tire: <a href="TirePacejka1989.html">TirePacejka1989.m</a>.</p><pre class="codeinput">a0 = 1.002806;
 a1 = 2.014156;
 a2 = 710.5013;
 a3 = 5226.341;
@@ -97,18 +97,18 @@ a11 = 0;
 a12 = 0;
 a13 = 0;
 TireData = [a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13];
-TireModel = VehicleDynamics.TirePacejka1989(TireData);
-</pre><h2>Vehicle parameters<a name="4"></a></h2><p>Ve&#65533;culo escolhido: <a href="VeiculoSimplesNaoLinear3GDL.html">VeiculoSimplesNaoLinear3GDL.m</a>.</p><pre class="codeinput">mF0 = 700;                  <span class="comment">% Massa sobre o eixo dianteiro [kg]</span>
-mR0 = 600;                  <span class="comment">% Massa sobre o eixo traseiro [kg]</span>
-IT = 10000;                 <span class="comment">% Momento de in&#65533;rcia [kg*m2]</span>
-DELTA = 0;                  <span class="comment">% Ester&#65533;amento do eixo dianteiro [rad]</span>
-lT = 3.550;                 <span class="comment">% Dist&#65533;ncia entre os eixos[m]</span>
-nF = 2;                     <span class="comment">% N&#65533;mero de pneus no eixo dianteiro</span>
-nR = 2;                     <span class="comment">% N&#65533;mero de pneus no eixo traseiro</span>
-largT = 2;                  <span class="comment">% Largura [m]</span>
-muy = 0.8;                  <span class="comment">% Coeficiente de atrito de opera&#65533;&#65533;o</span>
+TireModel = VehicleDynamicsLateral.TirePacejka1989(TireData);
+</pre><h2>Vehicle parameters<a name="4"></a></h2><p>Chosen Vehicle: <a href="VehicleSimpleNonlinear3DOF.html">VehicleSimpleNonlinear3DOF.m</a>.</p><pre class="codeinput">mF0 = 700;                  <span class="comment">% mass over front axle [kg]</span>
+mR0 = 600;                  <span class="comment">% mass over rear axle [kg]</span>
+IT = 10000;                 <span class="comment">% moment of inertia [kg*m2]</span>
+DELTA = 0;                  <span class="comment">% front axle steering [rad]</span>
+lT = 3.550;                 <span class="comment">% distance between axles [m]</span>
+nF = 2;                     <span class="comment">% number of tires in the front axle</span>
+nR = 2;                     <span class="comment">% number of tires in the rear axle</span>
+largT = 2;                  <span class="comment">% width [m]</span>
+muy = 0.8;                  <span class="comment">% coefficient of operation friction</span>
 VehicleData = [mF0 mR0 IT DELTA lT nF nR largT muy];
-System = VehicleDynamics.VehicleSimpleNonlinear3DOF(VehicleData,TireModel);
+System = VehicleDynamicsLateral.VehicleSimpleNonlinear3DOF(VehicleData,TireModel);
 </pre><h2>Integration<a name="5"></a></h2><pre class="codeinput">[TOUT,XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN,x0);
 </pre><h2>Post integration<a name="6"></a></h2><pre class="codeinput"><span class="comment">% Retrieving states</span>
 dPSI = XOUT(:,1);           <span class="comment">% Yaw rate [rad/s]</span>
@@ -117,7 +117,7 @@ PSI = XOUT(:,3);            <span class="comment">% Yaw angle [rad]</span>
 XT = XOUT(:,4);             <span class="comment">% CG horizontal position [m]</span>
 YT = XOUT(:,5);             <span class="comment">% CG vertical position [m]</span>
 VEL = XOUT(:,6);            <span class="comment">% CG velocity [m/s]</span>
-</pre><h2>Results<a name="7"></a></h2><p>Details: <a href="Graficos.html">Graficos.m</a></p><pre class="codeinput">G = VehicleDynamics.Graphics(System);
+</pre><h2>Results<a name="7"></a></h2><p>Details: <a href="Graphics.html">Graphics.m</a></p><p>Coordinates over time</p><pre class="codeinput">G = VehicleDynamicsLateral.Graphics(System);
 
 f1 = figure(1);
 set(f1,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
@@ -155,12 +155,22 @@ ax4 = subplot(2,2,4);
     xlabel(ax4,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     ylabel(ax4,<span class="string">'$v$ [m/s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     title(ax4,<span class="string">'$v$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-</pre><img vspace="5" hspace="5" src="TemplateSimple_01.png" alt=""> <h2>Results<a name="8"></a></h2><p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+</pre><img vspace="5" hspace="5" src="TemplateSimple_01.png" alt=""> <p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+
+figFrame = gcf;
+<span class="comment">% Setting Matlab figure</span>
+set(figFrame,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
+set(figFrame,<span class="string">'Position'</span>,[0 0 16 7])
+<span class="comment">% Setting PDF</span>
+set(figFrame,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
+set(figFrame,<span class="string">'PaperPosition'</span>,[0 0 16 7])
+PaperPos = get(figFrame,<span class="string">'PaperPosition'</span>);
+set(figFrame,<span class="string">'PaperSize'</span>,PaperPos(3:4))
 </pre><img vspace="5" hspace="5" src="TemplateSimple_02.png" alt=""> <p>Animation</p><pre class="codeinput">G.Animation([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
-</pre><img vspace="5" hspace="5" src="TemplateSimple_03.png" alt=""> <p><img vspace="5" hspace="5" src="ilustracoes/AnimacaoSimples.gif" alt=""> </p><h2>See Also<a name="12"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateArticulated.html">TemplateArticulated</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="TemplateSimple_03.png" alt=""> <p><img vspace="5" hspace="5" src="illustrations/AnimationSimple.gif" alt=""> </p><h2>See Also<a name="11"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateArticulated.html">TemplateArticulated</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Template simples
-% Exemplo de script para simula��o de ve�culo simples, sem articula��o.
+%% Template Simple
+% Template script for the simulation of simple vehicle, without articulation.
 %
 %% Code start
 
@@ -168,7 +178,7 @@ clear all                   % Clear workspace
 close all                   % Closing figures
 clc                         % Clear command window
 
-import VehicleDynamics.*   % Import package Dinamica Veicular
+import VehicleDynamicsLateral.*   % Import package VehicleDynamicsLateral
 
 %% Integration parameters
 %
@@ -187,7 +197,7 @@ V0 = 20;                    % Initial CG velocity [m/s]
 x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
 
 %% Tire parameters
-% Pneu escolhido: <TirePacejka1989.html TirePacejka1989.m>.
+% Chosen tire: <TirePacejka1989.html TirePacejka1989.m>.
 %
 
 a0 = 1.002806;
@@ -205,22 +215,22 @@ a11 = 0;
 a12 = 0;
 a13 = 0;
 TireData = [a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13];
-TireModel = VehicleDynamics.TirePacejka1989(TireData);
+TireModel = VehicleDynamicsLateral.TirePacejka1989(TireData);
 
 %% Vehicle parameters
-% Ve�culo escolhido: <VeiculoSimplesNaoLinear3GDL.html VeiculoSimplesNaoLinear3GDL.m>.
+% Chosen Vehicle: <VehicleSimpleNonlinear3DOF.html VehicleSimpleNonlinear3DOF.m>.
 
-mF0 = 700;                  % Massa sobre o eixo dianteiro [kg]
-mR0 = 600;                  % Massa sobre o eixo traseiro [kg]
-IT = 10000;                 % Momento de in�rcia [kg*m2]
-DELTA = 0;                  % Ester�amento do eixo dianteiro [rad]
-lT = 3.550;                 % Dist�ncia entre os eixos[m]
-nF = 2;                     % N�mero de pneus no eixo dianteiro
-nR = 2;                     % N�mero de pneus no eixo traseiro
-largT = 2;                  % Largura [m]
-muy = 0.8;                  % Coeficiente de atrito de opera��o
+mF0 = 700;                  % mass over front axle [kg]
+mR0 = 600;                  % mass over rear axle [kg]
+IT = 10000;                 % moment of inertia [kg*m2]
+DELTA = 0;                  % front axle steering [rad]
+lT = 3.550;                 % distance between axles [m]
+nF = 2;                     % number of tires in the front axle
+nR = 2;                     % number of tires in the rear axle
+largT = 2;                  % width [m]
+muy = 0.8;                  % coefficient of operation friction
 VehicleData = [mF0 mR0 IT DELTA lT nF nR largT muy];
-System = VehicleDynamics.VehicleSimpleNonlinear3DOF(VehicleData,TireModel);
+System = VehicleDynamicsLateral.VehicleSimpleNonlinear3DOF(VehicleData,TireModel);
 
 %% Integration
 [TOUT,XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN,x0);
@@ -237,8 +247,12 @@ YT = XOUT(:,5);             % CG vertical position [m]
 VEL = XOUT(:,6);            % CG velocity [m/s]
 
 %% Results
-% Details: <Graficos.html Graficos.m>
-G = VehicleDynamics.Graphics(System);
+%
+% Details: <Graphics.html Graphics.m>
+%
+% Coordinates over time
+
+G = VehicleDynamicsLateral.Graphics(System);
 
 f1 = figure(1);
 set(f1,'Units','centimeters')
@@ -277,13 +291,21 @@ ax4 = subplot(2,2,4);
     ylabel(ax4,'$v$ [m/s]','Interpreter','Latex')
     title(ax4,'$v$ x $t$','Interpreter','Latex')
 
-%% Results
-
 %%
 % Trajectory
 %
 
 G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+
+figFrame = gcf;
+% Setting Matlab figure
+set(figFrame,'Units','centimeters')
+set(figFrame,'Position',[0 0 16 7])
+% Setting PDF
+set(figFrame,'PaperUnits','centimeters')
+set(figFrame,'PaperPosition',[0 0 16 7])
+PaperPos = get(figFrame,'PaperPosition');
+set(figFrame,'PaperSize',PaperPos(3:4))
 
 %%
 % Animation
@@ -293,7 +315,7 @@ G.Animation([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
 
 %%
 %
-% <<ilustracoes/AnimacaoSimples.gif>>
+% <<illustrations/AnimationSimple.gif>>
 %
 %% See Also
 %

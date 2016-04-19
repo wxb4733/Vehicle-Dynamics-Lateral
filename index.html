@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Vehicle Dynamics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="index.m"><style type="text/css">
+      --><title>Vehicle Dynamics - Lateral</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="index.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,26 +65,29 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Vehicle Dynamics</h1><!--introduction--><p>This repository is a library of functions destinated to vehicle dynamics simulation.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Instructions</a></li><li><a href="#2">Description</a></li><li><a href="#3">Templates</a></li><li><a href="#4">Tire model</a></li><li><a href="#5">Vehicle model</a></li><li><a href="#6">Graphics</a></li><li><a href="#7">See Also</a></li></ul></div><h2>Instructions<a name="1"></a></h2><p>Installation steps:</p><div><ul><li>Download the Vehicle-Dynamics package by clicking on "Download ZIP" in <a href="https://github.com/andresmendes/Vehicle-Dynamics">https://github.com/andresmendes/Vehicle-Dynamics</a>.</li><li>Save the package (folder "+DinamicaVeicular") in the MATLAB&reg; <i>path</i> or add your current path to the <i>paths list</i>. More details on <a href="http://www.mathworks.com/help/matlab/ref/path.html">help path</a>.</li><li>Import the entire package with the command:</li></ul></div><pre class="codeinput">import <span class="string">DinamicaVeicular.*</span>
-</pre><h2>Description<a name="2"></a></h2><p><img vspace="5" hspace="5" src="ilustracoes/fluxograma.svg" alt=""> </p><h2>Templates<a name="3"></a></h2><p>The templates simulate vehicle systems according to the flowchart above.</p><div><ul><li>Simple vehicle simulation: <a href="TemplateSimple.html">TemplateSimple.m</a></li><li>Articulated vehicle simulation: <a href="TemplateArticulated.html">TemplateArticulated.m</a></li></ul></div><h2>Tire model<a name="4"></a></h2><p>Relation between lateral force and slip angle.</p><p>Modelos de Tire:</p><div><ul><li><a href="TireLinear.html">Linear Tire</a></li><li><a href="TirePolynomial.html">Plynomial Tire</a></li><li><a href="TirePacejka1989.html">Pacejka Tire</a></li></ul></div><p>Academic:</p><div><ul><li><a href="TireComparison.html">TireComparison</a></li></ul></div><p>Outros: <a href="Tire.html">Tire (Abstract)</a></p><h2>Vehicle model<a name="5"></a></h2><p>Function with the state equations of the model.</p><p>Vehicle model:</p><div><ul><li><a href="VehicleSimpleLinear2DOF.html">Vehicle Simple Linear 2 DOF</a></li><li><a href="VehicleSimpleNonlinear3DOF.html">Vehicle Simple Nonlinear 3 DOF</a></li><li><a href="VehicleArticulatedLinear4DOF.html">Vehicle Articulated Linear 3 DOF</a> (Pendente)</li><li><a href="VehicleArticulatedNonlinear4DOF.html">Vehicle Articulated Nonlinear 4 DOF</a></li></ul></div><p>Outros: <a href="VehicleSimple.html">Vehicle Simple (Abstract)</a> | <a href="VehicleArticulated.html">Vehicle Articulated (Abstract)</a></p><h2>Graphics<a name="6"></a></h2><p>Functions for graphics generation: <a href="Graphics.html">Graphics</a>.</p><h2>See Also<a name="7"></a></h2><p><a href="https://github.com/andresmendes/Vehicle-Dynamics">https://github.com/andresmendes/Vehicle-Dynamics</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+  </style></head><body><div class="content"><h1>Vehicle Dynamics - Lateral</h1><!--introduction--><p>This repository provides a collection of functions destinated to the lateral dynamics simulations of ground vehicles.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Instructions</a></li><li><a href="#2">Getting started</a></li><li><a href="#3">Description</a></li><li><a href="#4">Templates</a></li><li><a href="#5">Tire model</a></li><li><a href="#6">Vehicle model</a></li><li><a href="#7">Graphics</a></li><li><a href="#8">Documentation</a></li><li><a href="#9">Contribution</a></li><li><a href="#10">See Also</a></li></ul></div><h2>Instructions<a name="1"></a></h2><p>Installation steps:</p><div><ul><li>Download the Vehicle-Dynamics package by clicking on "Download ZIP" in <a href="https://github.com/andresmendes/Vehicle-Dynamics-Lateral">https://github.com/andresmendes/Vehicle-Dynamics-Lateral</a>.</li><li>Save the package (folder "+VehicleDynamicsLateral") in the MATLAB&reg; <i>path</i> or add your current path to the <i>paths list</i>. More details in <a href="http://www.mathworks.com/help/matlab/ref/path.html">help path</a>.</li><li>Import the entire package with the command:</li></ul></div><pre class="codeinput">import <span class="string">VehicleDynamicsLateral.*</span>
+</pre><h2>Getting started<a name="2"></a></h2><p>Run and explore the files <a href="TemplateSimple.html">TemplateSimple.m</a> and <a href="TemplateArticulated.html">TemplateArticulated.m</a>.</p><h2>Description<a name="3"></a></h2><p><img vspace="5" hspace="5" src="illustrations/fluxograma.svg" alt=""> </p><h2>Templates<a name="4"></a></h2><p>The templates simulate vehicle systems according to the flowchart above.</p><div><ul><li>Simple vehicle simulation: <a href="TemplateSimple.html">TemplateSimple.m</a></li><li>Articulated vehicle simulation: <a href="TemplateArticulated.html">TemplateArticulated.m</a></li></ul></div><h2>Tire model<a name="5"></a></h2><p>Relation between lateral force and slip angle.</p><p>Tire models:</p><div><ul><li><a href="TireLinear.html">Linear Tire</a></li><li><a href="TirePolynomial.html">Polynomial Tire</a></li><li><a href="TirePacejka1989.html">Pacejka Tire</a></li></ul></div><p>Academic:</p><div><ul><li><a href="TireComparison.html">TireComparison</a></li></ul></div><p>Other: <a href="Tire.html">Tire (Abstract)</a></p><h2>Vehicle model<a name="6"></a></h2><p>Function with the state equations of the model.</p><p>Vehicle model:</p><div><ul><li><a href="VehicleSimpleLinear2DOF.html">Vehicle Simple Linear 2 DOF</a></li><li><a href="VehicleSimpleNonlinear3DOF.html">Vehicle Simple Nonlinear 3 DOF</a></li><li><a href="VehicleArticulatedLinear4DOF.html">Vehicle Articulated Linear 3 DOF</a> (Pendente)</li><li><a href="VehicleArticulatedNonlinear4DOF.html">Vehicle Articulated Nonlinear 4 DOF</a></li></ul></div><p>Other: <a href="VehicleSimple.html">Vehicle Simple (Abstract)</a> | <a href="VehicleArticulated.html">Vehicle Articulated (Abstract)</a></p><h2>Graphics<a name="7"></a></h2><p>Functions for graphics generation: <a href="Graphics.html">Graphics</a>.</p><h2>Documentation<a name="8"></a></h2><p>Documentation Generator: <a href="DocGen.html">DocGen</a>.</p><h2>Contribution<a name="9"></a></h2><p>Instructions for contribution can be found here:</p><h2>See Also<a name="10"></a></h2><p><a href="https://github.com/andresmendes/Vehicle-Dynamics-Lateral">https://github.com/andresmendes/Vehicle-Dynamics-Lateral</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Vehicle Dynamics
-% This repository is a library of functions destinated to vehicle dynamics simulation.
+%% Vehicle Dynamics - Lateral
+% This repository provides a collection of functions destinated to the lateral dynamics simulations of ground vehicles.
 %
 %% Instructions
 % Installation steps:
 %
-% * Download the Vehicle-Dynamics package by clicking on "Download ZIP" in <https://github.com/andresmendes/Vehicle-Dynamics https://github.com/andresmendes/Vehicle-Dynamics>.
-% * Save the package (folder "+DinamicaVeicular") in the MATLAB(R) _path_ or add your current path to the _paths list_. More details on <http://www.mathworks.com/help/matlab/ref/path.html  help path>.
+% * Download the Vehicle-Dynamics package by clicking on "Download ZIP" in <https://github.com/andresmendes/Vehicle-Dynamics-Lateral https://github.com/andresmendes/Vehicle-Dynamics-Lateral>.
+% * Save the package (folder "+VehicleDynamicsLateral") in the MATLAB(R) _path_ or add your current path to the _paths list_. More details in <http://www.mathworks.com/help/matlab/ref/path.html  help path>.
 % * Import the entire package with the command:
 %
 
-import DinamicaVeicular.*
+import VehicleDynamicsLateral.*
 
+%% Getting started
+%
+% Run and explore the files <TemplateSimple.html TemplateSimple.m> and <TemplateArticulated.html TemplateArticulated.m>.
+%
 %% Description
 %
-%
-% <<ilustracoes/fluxograma.svg>>
+% <<illustrations/fluxograma.svg>>
 %
 %% Templates
 % The templates simulate vehicle systems according to the flowchart above.
@@ -95,17 +98,17 @@ import DinamicaVeicular.*
 %% Tire model
 % Relation between lateral force and slip angle.
 %
-% Modelos de Tire:
+% Tire models:
 %
 % * <TireLinear.html Linear Tire>
-% * <TirePolynomial.html Plynomial Tire>
+% * <TirePolynomial.html Polynomial Tire>
 % * <TirePacejka1989.html Pacejka Tire>
 %
 % Academic:
 %
 % * <TireComparison.html TireComparison>
 %
-% Outros: <Tire.html Tire (Abstract)>
+% Other: <Tire.html Tire (Abstract)>
 %
 %% Vehicle model
 % Function with the state equations of the model.
@@ -117,14 +120,22 @@ import DinamicaVeicular.*
 % * <VehicleArticulatedLinear4DOF.html Vehicle Articulated Linear 3 DOF> (Pendente)
 % * <VehicleArticulatedNonlinear4DOF.html Vehicle Articulated Nonlinear 4 DOF>
 %
-% Outros: <VehicleSimple.html Vehicle Simple (Abstract)> | <VehicleArticulated.html Vehicle Articulated (Abstract)>
+% Other: <VehicleSimple.html Vehicle Simple (Abstract)> | <VehicleArticulated.html Vehicle Articulated (Abstract)>
 %
 %% Graphics
 % Functions for graphics generation: <Graphics.html Graphics>.
 %
+%% Documentation
+%
+% Documentation Generator: <DocGen.html DocGen>.
+%
+%% Contribution
+%
+% Instructions for contribution can be found here:
+%
 %% See Also
 %
-% <https://github.com/andresmendes/Vehicle-Dynamics https://github.com/andresmendes/Vehicle-Dynamics>
+% <https://github.com/andresmendes/Vehicle-Dynamics-Lateral https://github.com/andresmendes/Vehicle-Dynamics-Lateral>
 %
 
 ##### SOURCE END #####

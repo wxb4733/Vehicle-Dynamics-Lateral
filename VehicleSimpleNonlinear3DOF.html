@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Nonlinear 3 DOF vehicle model</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="VehicleSimpleNonlinear3DOF.m"><style type="text/css">
+      --><title>Nonlinear 3 DOF vehicle model</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="VehicleSimpleNonlinear3DOF.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,7 +67,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
   </style></head><body><div class="content"><h1>Nonlinear 3 DOF vehicle model</h1><!--introduction--><p>Bicycle model nonlinear with 3 degrees of freedom.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#7">Model</a></li><li><a href="#9">convert</a></li><li><a href="#11">Properties</a></li><li><a href="#13">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>dx = <i>VehicleModel</i>.Model(~,estados)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
 <tr> <td width="30%"><tt>estados</tt></td> <td width="70%">Estados do modelo: [dPSI ALPHAT PSI XT YT VEL]</td> </tr>
-</table> </p><h2>Description<a name="3"></a></h2><p>O centro de massa do ve&#65533;culo &#65533; dado pelo ponto <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> e os eixos dianteiro e traseiro s&#65533;o dados pelos pontos <img src="VehicleSimpleNonlinear3DOF_eq86924.png" alt="$F$"> e <img src="VehicleSimpleNonlinear3DOF_eq85930.png" alt="$R$">, respectivamente. A constante <img src="VehicleSimpleNonlinear3DOF_eq34276.png" alt="$a$"> mede a dist&#65533;ncia do ponto <img src="VehicleSimpleNonlinear3DOF_eq86924.png" alt="$F$"> ao <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> e <img src="VehicleSimpleNonlinear3DOF_eq28812.png" alt="$b$"> a dist&#65533;ncia do ponto <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> ao <img src="VehicleSimpleNonlinear3DOF_eq85930.png" alt="$R$">. Os &#65533;ngulos <img src="VehicleSimpleNonlinear3DOF_eq95504.png" alt="$\alpha_F$"> e <img src="VehicleSimpleNonlinear3DOF_eq04922.png" alt="$\alpha_R$"> s&#65533;o os &#65533;ngulos de deriva nos eixos dianteiro e traseiro. <img src="VehicleSimpleNonlinear3DOF_eq58160.png" alt="$\alpha_T$"> is the vehicle side slip angle and <img src="VehicleSimpleNonlinear3DOF_eq46646.png" alt="$\psi$"> is the vehicle yaw angle. Por fim, <img src="VehicleSimpleNonlinear3DOF_eq71031.png" alt="$\delta$"> &#65533; o &#65533;ngulo de ester&#65533;amento.</p><p><img vspace="5" hspace="5" src="ilustracoes/modeloSimples.svg" alt=""> </p><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> VehicleSimpleNonlinear3DOF &lt; VehicleDynamics.VehicleSimple
+</table> </p><h2>Description<a name="3"></a></h2><p>O centro de massa do ve&#65533;culo &#65533; dado pelo ponto <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> e os eixos dianteiro e traseiro s&#65533;o dados pelos pontos <img src="VehicleSimpleNonlinear3DOF_eq86924.png" alt="$F$"> e <img src="VehicleSimpleNonlinear3DOF_eq85930.png" alt="$R$">, respectivamente. A constante <img src="VehicleSimpleNonlinear3DOF_eq34276.png" alt="$a$"> mede a dist&#65533;ncia do ponto <img src="VehicleSimpleNonlinear3DOF_eq86924.png" alt="$F$"> ao <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> e <img src="VehicleSimpleNonlinear3DOF_eq28812.png" alt="$b$"> a dist&#65533;ncia do ponto <img src="VehicleSimpleNonlinear3DOF_eq57315.png" alt="$T$"> ao <img src="VehicleSimpleNonlinear3DOF_eq85930.png" alt="$R$">. Os &#65533;ngulos <img src="VehicleSimpleNonlinear3DOF_eq95504.png" alt="$\alpha_F$"> e <img src="VehicleSimpleNonlinear3DOF_eq04922.png" alt="$\alpha_R$"> s&#65533;o os &#65533;ngulos de deriva nos eixos dianteiro e traseiro. <img src="VehicleSimpleNonlinear3DOF_eq58160.png" alt="$\alpha_T$"> is the vehicle side slip angle and <img src="VehicleSimpleNonlinear3DOF_eq46646.png" alt="$\psi$"> is the vehicle yaw angle. Por fim, <img src="VehicleSimpleNonlinear3DOF_eq71031.png" alt="$\delta$"> &#65533; o &#65533;ngulo de ester&#65533;amento.</p><p><img vspace="5" hspace="5" src="illustrations/modeloSimples.svg" alt=""> </p><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> VehicleSimpleNonlinear3DOF &lt; VehicleDynamicsLateral.VehicleSimple
 </pre><pre class="codeinput">	methods
 </pre><pre class="codeinput">        <span class="comment">% Constructor</span>
         <span class="keyword">function</span> self = VehicleSimpleNonlinear3DOF(varargin)
@@ -85,7 +85,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 entradaVetor = [mF0 mR0 IT DELTA lT nF nR largT muy];
                 <span class="comment">% Definindo os par&#65533;metros da classe</span>
                 self.params = self.convert(entradaVetor);
-                self.tire = VehicleDynamics.tirePacejka;
+                self.tire = VehicleDynamicsLateral.tirePacejka;
             <span class="keyword">else</span>
                 self.params = self.convert(varargin{1});
                 self.tire = varargin{2};
@@ -180,12 +180,12 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %% Description
 % O centro de massa do ve�culo � dado pelo ponto $T$ e os eixos dianteiro e traseiro s�o dados pelos pontos $F$ e $R$, respectivamente. A constante $a$ mede a dist�ncia do ponto $F$ ao $T$ e $b$ a dist�ncia do ponto $T$ ao $R$. Os �ngulos $\alpha_F$ e $\alpha_R$ s�o os �ngulos de deriva nos eixos dianteiro e traseiro. $\alpha_T$ is the vehicle side slip angle and $\psi$ is the vehicle yaw angle. Por fim, $\delta$ � o �ngulo de ester�amento.
 %
-% <<ilustracoes/modeloSimples.svg>>
+% <<illustrations/modeloSimples.svg>>
 %
 %% Code
 %
 
-classdef VehicleSimpleNonlinear3DOF < VehicleDynamics.VehicleSimple
+classdef VehicleSimpleNonlinear3DOF < VehicleDynamicsLateral.VehicleSimple
 	methods
         % Constructor
         function self = VehicleSimpleNonlinear3DOF(varargin)
@@ -203,7 +203,7 @@ classdef VehicleSimpleNonlinear3DOF < VehicleDynamics.VehicleSimple
                 entradaVetor = [mF0 mR0 IT DELTA lT nF nR largT muy];
                 % Definindo os par�metros da classe
                 self.params = self.convert(entradaVetor);
-                self.tire = VehicleDynamics.tirePacejka;
+                self.tire = VehicleDynamicsLateral.tirePacejka;
             else
                 self.params = self.convert(varargin{1});
                 self.tire = varargin{2};

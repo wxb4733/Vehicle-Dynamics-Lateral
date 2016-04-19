@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Nonlinear 4 DOF articulated vehicle model</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="VehicleArticulatedNonlinear4DOF.m"><style type="text/css">
+      --><title>Nonlinear 4 DOF articulated vehicle model</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="VehicleArticulatedNonlinear4DOF.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,7 +67,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
   </style></head><body><div class="content"><h1>Nonlinear 4 DOF articulated vehicle model</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#7">Model</a></li><li><a href="#8">Matriz de massa</a></li><li><a href="#10">convert</a></li><li><a href="#12">Properties</a></li><li><a href="#14">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>dx = <i>VehicleModel</i>.Model(~,estados)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
 <tr> <td width="30%"><tt>estados</tt></td> <td width="70%">Estados do modelo: [dPSI ALPHAT dPHI VEL PHI PSI XT YT]</td> </tr>
-</table> </p><h2>Description<a name="3"></a></h2><p>O &#65533;ngulo <img src="VehicleArticulatedNonlinear4DOF_eq46646.png" alt="$\psi$"> define a orienta&#65533;&#65533;o do caminh&#65533;o-trator em rela&#65533;&#65533;o ao referencial inercial. O estado <img src="VehicleArticulatedNonlinear4DOF_eq26509.png" alt="$\phi$"> &#65533; o &#65533;ngulo formado entre o caminh&#65533;o-trator e o semirreboque. O &#65533;ngulo <img src="VehicleArticulatedNonlinear4DOF_eq58160.png" alt="$\alpha_T$"> &#65533; o &#65533;ngulo de deriva do m&#65533;dulo dianteiro e &#65533; formado pelo vetor velocidade do centro de massa e a linha longitudinal do caminh&#65533;o-trator. Por fim, <img src="VehicleArticulatedNonlinear4DOF_eq77996.png" alt="$v$"> &#65533; o m&#65533;dulo do vetor velocidade do centro de massa do caminh&#65533;o-trator. Os pontos <img src="VehicleArticulatedNonlinear4DOF_eq57315.png" alt="$T$"> e <img src="VehicleArticulatedNonlinear4DOF_eq68961.png" alt="$S$"> s&#65533;o coincidentes com os centros de massa do caminh&#65533;o-trator e semirreboque, respectivamente. Os pontos F e R s&#65533;o coincidentes com os eixos dianteiro e traseiro do caminh&#65533;o-trator, respectivamente. M &#65533; o ponto que representa o eixo do semirreboque e A &#65533; o ponto de articula&#65533;&#65533;o ente as duas unidades. As grandezas a, b e c da unidade motora s&#65533;o as dist&#65533;ncias entre os pontos F-T, T-R e R-A, respectivamente. Na unidade movida, d e e definem as dist&#65533;ncias entre os pontos A-S e S-M, respectivamente.</p><p><img vspace="5" hspace="5" src="ilustracoes/modeloArticulado.svg" alt=""> </p><p>Este modelo &#65533; escrito na forma:</p><p><img src="VehicleArticulatedNonlinear4DOF_eq97379.png" alt="$$ M(x) \dot{x} = f(x)$$"></p><p>Onde <img src="VehicleArticulatedNonlinear4DOF_eq43551.png" alt="$x$"> &#65533; o vetor de estados, <img src="VehicleArticulatedNonlinear4DOF_eq58327.png" alt="$M(x)$"> &#65533; a matriz de massa do sistema e <img src="VehicleArticulatedNonlinear4DOF_eq37171.png" alt="$f(x)$"> &#65533; uma fun&#65533;&#65533;o vetorial n&#65533;o linear. Logo, &#65533; necess&#65533;ria uma fun&#65533;&#65533;o que permita a integra&#65533;&#65533;o do sistema com a matriz de massa escrita explicitamente. Uma op&#65533;&#65533;o &#65533; utilizar a fun&#65533;&#65533;o <i>ode45</i>. Details: <a href="http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22">ode45 (Mass matrix)</a></p><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> VehicleArticulatedNonlinear4DOF &lt; VehicleDynamics.VehicleArticulated
+</table> </p><h2>Description<a name="3"></a></h2><p>O &#65533;ngulo <img src="VehicleArticulatedNonlinear4DOF_eq46646.png" alt="$\psi$"> define a orienta&#65533;&#65533;o do caminh&#65533;o-trator em rela&#65533;&#65533;o ao referencial inercial. O estado <img src="VehicleArticulatedNonlinear4DOF_eq26509.png" alt="$\phi$"> &#65533; o &#65533;ngulo formado entre o caminh&#65533;o-trator e o semirreboque. O &#65533;ngulo <img src="VehicleArticulatedNonlinear4DOF_eq58160.png" alt="$\alpha_T$"> &#65533; o &#65533;ngulo de deriva do m&#65533;dulo dianteiro e &#65533; formado pelo vetor velocidade do centro de massa e a linha longitudinal do caminh&#65533;o-trator. Por fim, <img src="VehicleArticulatedNonlinear4DOF_eq77996.png" alt="$v$"> &#65533; o m&#65533;dulo do vetor velocidade do centro de massa do caminh&#65533;o-trator. Os pontos <img src="VehicleArticulatedNonlinear4DOF_eq57315.png" alt="$T$"> e <img src="VehicleArticulatedNonlinear4DOF_eq68961.png" alt="$S$"> s&#65533;o coincidentes com os centros de massa do caminh&#65533;o-trator e semirreboque, respectivamente. Os pontos F e R s&#65533;o coincidentes com os eixos dianteiro e traseiro do caminh&#65533;o-trator, respectivamente. M &#65533; o ponto que representa o eixo do semirreboque e A &#65533; o ponto de articula&#65533;&#65533;o ente as duas unidades. As grandezas a, b e c da unidade motora s&#65533;o as dist&#65533;ncias entre os pontos F-T, T-R e R-A, respectivamente. Na unidade movida, d e e definem as dist&#65533;ncias entre os pontos A-S e S-M, respectivamente.</p><p><img vspace="5" hspace="5" src="illustrations/modeloArticulado.svg" alt=""> </p><p>Este modelo &#65533; escrito na forma:</p><p><img src="VehicleArticulatedNonlinear4DOF_eq97379.png" alt="$$ M(x) \dot{x} = f(x)$$"></p><p>Onde <img src="VehicleArticulatedNonlinear4DOF_eq43551.png" alt="$x$"> &#65533; o vetor de estados, <img src="VehicleArticulatedNonlinear4DOF_eq58327.png" alt="$M(x)$"> &#65533; a matriz de massa do sistema e <img src="VehicleArticulatedNonlinear4DOF_eq37171.png" alt="$f(x)$"> &#65533; uma fun&#65533;&#65533;o vetorial n&#65533;o linear. Logo, &#65533; necess&#65533;ria uma fun&#65533;&#65533;o que permita a integra&#65533;&#65533;o do sistema com a matriz de massa escrita explicitamente. Uma op&#65533;&#65533;o &#65533; utilizar a fun&#65533;&#65533;o <i>ode45</i>. Details: <a href="http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22">ode45 (Mass matrix)</a></p><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> VehicleArticulatedNonlinear4DOF &lt; VehicleDynamicsLateral.VehicleArticulated
 </pre><pre class="codeinput">	methods
 </pre><pre class="codeinput">        <span class="comment">% Constructor</span>
         <span class="keyword">function</span> self = VehicleArticulatedNonlinear4DOF(varargin)
@@ -93,7 +93,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 entradaVetor = [mF0 mR0 mF mR mM IT IS DELTA c lT lS nF nR nM widthT widthS muy];
                 <span class="comment">% Definindo os par&#65533;metros da classe</span>
                 self.params = self.convert(entradaVetor);
-                self.tire = VehicleDynamics.TirePacejka1989;
+                self.tire = VehicleDynamicsLateral.TirePacejka1989;
             <span class="keyword">else</span>
                 self.params = self.convert(varargin{1});
                 self.tire = varargin{2};
@@ -278,7 +278,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %% Description
 % O �ngulo $\psi$ define a orienta��o do caminh�o-trator em rela��o ao referencial inercial. O estado $\phi$ � o �ngulo formado entre o caminh�o-trator e o semirreboque. O �ngulo $\alpha_T$ � o �ngulo de deriva do m�dulo dianteiro e � formado pelo vetor velocidade do centro de massa e a linha longitudinal do caminh�o-trator. Por fim, $v$ � o m�dulo do vetor velocidade do centro de massa do caminh�o-trator. Os pontos $T$ e $S$ s�o coincidentes com os centros de massa do caminh�o-trator e semirreboque, respectivamente. Os pontos F e R s�o coincidentes com os eixos dianteiro e traseiro do caminh�o-trator, respectivamente. M � o ponto que representa o eixo do semirreboque e A � o ponto de articula��o ente as duas unidades. As grandezas a, b e c da unidade motora s�o as dist�ncias entre os pontos F-T, T-R e R-A, respectivamente. Na unidade movida, d e e definem as dist�ncias entre os pontos A-S e S-M, respectivamente.
 %
-% <<ilustracoes/modeloArticulado.svg>>
+% <<illustrations/modeloArticulado.svg>>
 %
 % Este modelo � escrito na forma:
 %
@@ -289,7 +289,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %% Code
 %
 
-classdef VehicleArticulatedNonlinear4DOF < VehicleDynamics.VehicleArticulated
+classdef VehicleArticulatedNonlinear4DOF < VehicleDynamicsLateral.VehicleArticulated
 	methods
         % Constructor
         function self = VehicleArticulatedNonlinear4DOF(varargin)
@@ -315,7 +315,7 @@ classdef VehicleArticulatedNonlinear4DOF < VehicleDynamics.VehicleArticulated
                 entradaVetor = [mF0 mR0 mF mR mM IT IS DELTA c lT lS nF nR nM widthT widthS muy];
                 % Definindo os par�metros da classe
                 self.params = self.convert(entradaVetor);
-                self.tire = VehicleDynamics.TirePacejka1989;
+                self.tire = VehicleDynamicsLateral.TirePacejka1989;
             else
                 self.params = self.convert(varargin{1});
                 self.tire = varargin{2};

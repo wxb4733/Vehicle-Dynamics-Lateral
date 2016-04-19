@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Graphics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="Graphics.m"><style type="text/css">
+      --><title>Graphics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="Graphics.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -69,7 +69,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </pre><pre class="codeinput">	methods
 </pre><pre class="codeinput">        <span class="comment">% Constructor</span>
         <span class="keyword">function</span> self = Graphics(varargin)
-            v = VehicleDynamics.VehicleArticulatedNonlinear4DOF;
+            v = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
             <span class="keyword">if</span> nargin == 0
                 self.vehicle = v;<span class="comment">%.params;</span>
             <span class="keyword">else</span>
@@ -81,7 +81,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <tr> <td width="30%"><tt>TOUT</tt></td> <td width="70%">Column vector of time points.</td> </tr>
 <tr> <td width="30%"><tt>saveit</tt></td> <td width="70%">Flag for saving the animation in a gif file. If savit = 0 the animation will not be saved. If savit = 1 a file Animacao.gif is generated.</td> </tr>
 </table> </p><p><b>Description</b></p><p>TEXT</p><pre class="codeinput">        <span class="keyword">function</span> Animation(self,XOUT,TOUT,saveit)
-            <span class="comment">% Verificando quantidade de colunas para saber se &#65533; ve&#65533;culo simples ou articulado</span>
+            <span class="comment">% Verifying number of columns of the state output matrix</span>
             <span class="comment">% col = 6 -&gt; simples</span>
             <span class="comment">% col = 8 -&gt; articulado</span>
             [col] = size(XOUT,2);
@@ -97,39 +97,35 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             <span class="comment">% Distances</span>
             a = self.vehicle.distFT;        <span class="comment">% Distance FT [m]</span>
             b = self.vehicle.distTR;        <span class="comment">% Distance TR [m]</span>
-            lT = self.vehicle.width / 2;  <span class="comment">% Metade da width do vehicle [m]</span>
+            lT = self.vehicle.width / 2;    <span class="comment">% Half width of the vehicle [m]</span>
 
-            <span class="comment">% &#65533;ngulo de deriva na dianteira [rad]</span>
+            <span class="comment">% Slip angle @ front axle [rad]</span>
             ALPHAF = atan2((a*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
-            <span class="comment">% &#65533;ngulo de deriva na traseira [rad]</span>
+            <span class="comment">% OBS: No steering angle because it measures the angle between velocity vector and longitudinal axle of the vehicle</span>
+            <span class="comment">% Slip angle @ rear axle [rad]</span>
             ALPHAR = atan2((-b*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
-            <span class="comment">% OBS: Calculando os &#65533;ngulos de deriva com "atan2", quando o valor chega a</span>
-            <span class="comment">% 180 graus fica estranho o vector.</span>
+            <span class="comment">% OBS: When using atan2 and the value reaches 180 degrees the vector becomes strange</span>
 
-            <span class="comment">% M&#65533;dulo da velocidade no eixo dianteiro [m/s]</span>
+            <span class="comment">% Velocity @ front axle [m/s]</span>
             VF = sqrt((VT.*cos(ALPHAT)).^2 + (a*dPSI + VT.*sin(ALPHAT)).^2);
-            <span class="comment">% M&#65533;dulo da velocidade no eixo traseiro [m/s]</span>
+            <span class="comment">% Velocity @ rear axle [m/s]</span>
             VR = sqrt((VT.*cos(ALPHAT)).^2 + (-b*dPSI + VT.*sin(ALPHAT)).^2);
 
-            <span class="comment">% Posi&#65533;&#65533;o relativa dos cantos e eixos</span>
-            <span class="comment">% Determina a posi&#65533;&#65533;o dos cantos e eixos do ve&#65533;culo com rela&#65533;&#65533;o ao centro</span>
-            <span class="comment">% de massa.</span>
+            <span class="comment">% Position of the corners and axles relative to the CG</span>
 
-            <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a T na base (T t1 t2 t3)</span>
-            rt1t = [a;lT];                  <span class="comment">% dianteira esquerda</span>
-            rt2t = [a;-lT];                 <span class="comment">% dianteira direita</span>
-            rt3t = [-b;-lT];                <span class="comment">% traseira direita</span>
-            rt4t = [-b;lT];                 <span class="comment">% traseira esquerda</span>
+            <span class="comment">% Position vectors 1, 2, 3 e 4 relative to T base (T t1 t2 t3)</span>
+            rt1t = [a;lT];                  <span class="comment">% Front left</span>
+            rt2t = [a;-lT];                 <span class="comment">% Front right</span>
+            rt3t = [-b;-lT];                <span class="comment">% Rear right</span>
+            rt4t = [-b;lT];                 <span class="comment">% Rear left</span>
 
-            eif = [a;0];                    <span class="comment">% Posicao do eixo dianteiro</span>
-            eir = [-b;0];                   <span class="comment">% Posicao do eixo trasiero</span>
+            eif = [a;0];                    <span class="comment">% Front axle</span>
+            eir = [-b;0];                   <span class="comment">% Rear axle</span>
 
-            <span class="comment">% Evolu&#65533;&#65533;o da posi&#65533;&#65533;o absoluta dos cantos e eixos</span>
-            <span class="comment">% Determina a movimenta&#65533;&#65533;o dos pontos devido a mudan&#65533;a de orienta&#65533;&#65533;o do</span>
-            <span class="comment">% ve&#65533;culo.</span>
+            <span class="comment">% Absolute position of corners and axles</span>
+            <span class="comment">% Movement of the points from change of orientation.</span>
 
-            <span class="comment">% Pre alocando as matrizes</span>
-
+            <span class="comment">% Preallocating matrix</span>
             rt1i = zeros(length(TOUT),2);
             rt2i = zeros(length(TOUT),2);
             rt3i = zeros(length(TOUT),2);
@@ -138,42 +134,39 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             eff = zeros(length(TOUT),2);
             err = zeros(length(TOUT),2);
 
-            <span class="comment">% In&#65533;cio do loop</span>
+            <span class="comment">% Loop start</span>
             <span class="keyword">for</span> j=1:length(TOUT)
-                <span class="comment">% Matriz de rota&#65533;&#65533;o da base (T t1 t2 t3) para (o i j k)</span>
+                <span class="comment">% Rotation matrix base (T t1 t2 t3) to (o i j k)</span>
                 RTI=[cos(PSI(j)) -sin(PSI(j));sin(PSI(j)) cos(PSI(j))];
-                <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a origem do ref inercial na</span>
+                <span class="comment">% Position vectors 1, 2, 3 e 4 relative to origin of the inertial reference base (T t1 t2 t3)</span>
                 rt1i(j,1:2) = (RTI*rt1t)';
-                <span class="comment">% base (T t1 t2 t3)</span>
                 rt2i(j,1:2) = (RTI*rt2t)';
                 rt3i(j,1:2) = (RTI*rt3t)';
                 rt4i(j,1:2) = (RTI*rt4t)';
-                <span class="comment">% Posicionando o eixo dianteiro e o traseiro</span>
-                eff(j,1:2) = (RTI*eif);     <span class="comment">% Eixo dianteiro</span>
-                err(j,1:2) = (RTI*eir);     <span class="comment">% Eixo trasiro</span>
+                <span class="comment">% Position of front and rear axle</span>
+                eff(j,1:2) = (RTI*eif);     <span class="comment">% Front</span>
+                err(j,1:2) = (RTI*eir);     <span class="comment">% Rear</span>
             <span class="keyword">end</span>
 
-            <span class="comment">% Posi&#65533;&#65533;o absoluta dos cantos e eixos</span>
-            <span class="comment">% A evolu&#65533;&#65533;o da posi&#65533;&#65533;o absoluta dos pontos ao longo do tempo.</span>
+            <span class="comment">% Absolute position of corners and axles</span>
+            <span class="comment">% Absolute position over time</span>
 
-            <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a o na base (o i j k)</span>
+            <span class="comment">% Position vectors 1, 2, 3 e 4 relative to o base (o i j k)</span>
             rc1t=[XT YT]+rt1i;
             rc2t=[XT YT]+rt2i;
             rc3t=[XT YT]+rt3i;
             rc4t=[XT YT]+rt4i;
 
-            <span class="comment">% Posicionamento absoluto do eixo dianteiro e trasiero</span>
+            <span class="comment">% Absolute position of the front and rear axle</span>
             ef = [XT YT]+eff;
             er = [XT YT]+err;
 
-            <span class="comment">% Ajuste do tempo</span>
-            <span class="comment">% A exibi&#65533;&#65533;o deve ser ajustada pois a o n&#65533;mero de frames n&#65533;o &#65533; a mesma que</span>
-            <span class="comment">% a resolu&#65533;&#65533;o do integrador (TSPAN).</span>
-            <span class="comment">%</span>
+            <span class="comment">% Time adjustment</span>
+            <span class="comment">% Exhibition has to be adjusted the number of frames is different from the resolution of the integrator (TSPAN)</span>
 
             TEMPO = 0:0.05:TOUT(end);
 
-            <span class="comment">% Pre alocando as matrizes</span>
+            <span class="comment">% Preallocating matrix</span>
             rc1 = zeros(length(TEMPO),2);
             rc2 = zeros(length(TEMPO),2);
             rc3 = zeros(length(TEMPO),2);
@@ -200,7 +193,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             rn4 = zeros(length(TEMPO),2);
 
             <span class="keyword">for</span> i=1:length(TEMPO)
-                <span class="comment">% Posi&#65533;&#65533;o dos cantos e eixo</span>
+                <span class="comment">% Position of corners and axles</span>
                 rc1(i,1:2) = interp1(TOUT,rc1t,TEMPO(i));
                 rc2(i,1:2) = interp1(TOUT,rc2t,TEMPO(i));
                 rc3(i,1:2) = interp1(TOUT,rc3t,TEMPO(i));
@@ -209,26 +202,25 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 efrente(i,1:2) = interp1(TOUT,ef,TEMPO(i));
                 etras(i,1:2) = interp1(TOUT,er,TEMPO(i));
 
-                <span class="comment">% Posi&#65533;&#65533;o do centro de massa</span>
+                <span class="comment">% Position of CG</span>
                 xxx(i,1:2) = interp1(TOUT,XT,TEMPO(i));
                 yyy(i,1:2) = interp1(TOUT,YT,TEMPO(i));
 
-                <span class="comment">% Estados</span>
+                <span class="comment">% States</span>
                 alphat(i,1:2) = interp1(TOUT,ALPHAT,TEMPO(i));
                 psii(i,1:2) = interp1(TOUT,PSI,TEMPO(i));
 
-                <span class="comment">% &#65533;ngulos de deriva</span>
+                <span class="comment">% Slip angles</span>
                 alphaf(i,1:2) = interp1(TOUT,ALPHAF,TEMPO(i));
                 alphar(i,1:2) = interp1(TOUT,ALPHAR,TEMPO(i));
 
-                <span class="comment">% Velocidade</span>
+                <span class="comment">% Velocity</span>
                 velf(i,1:2) = interp1(TOUT,VF,TEMPO(i));
                 velr(i,1:2) = interp1(TOUT,VR,TEMPO(i));
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             <span class="keyword">end</span>
 
-            <span class="comment">% Definindo a figura</span>
-            <span class="comment">% Gerando a figura e definindo algumas propriedades</span>
+            <span class="comment">% Defining figure</span>
             f=figure(666);
             set(f,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
             set(f,<span class="string">'Position'</span>,[1 1 24 14])
@@ -239,52 +231,46 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             set(ax,<span class="string">'XLimMode'</span>,<span class="string">'manual'</span>)
             set(ax,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
             set(ax,<span class="string">'YLimMode'</span>,<span class="string">'manual'</span>)
+            <span class="comment">% Description</span>
+            title(<span class="string">'Trajectory'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+            xlabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>);
+            ylabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>);
 
-            <span class="comment">% Legendas</span>
-            title(<span class="string">'Trajet\''oria'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-            xlabel(<span class="string">'Dist\^ancia [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>);
-            ylabel(<span class="string">'Dist\^ncia [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>);
+            <span class="comment">% First frame</span>
 
-            <span class="comment">% Primeiro frame</span>
-            <span class="comment">%</span>
-            <span class="comment">%</span>
-
-            <span class="comment">% Vectores velocidade</span>
-            <span class="comment">% Script "vector.m"</span>
-            <span class="comment">% Escolhi n&#65533;o exibir o vector velocidade do centro de massa pq fica muito poluido</span>
-            <span class="comment">%vector([xxx(1) yyy(1)],(alphat(1)+psii(1)),velt(1),'k');</span>
+            <span class="comment">% Velocity vectors - Script "vector.m"</span>
             self.Vector(efrente(1,1:2),(alphaf(1)+psii(1)),velf(1),<span class="string">'r'</span>);
             self.Vector(etras(1,1:2),(alphar(1)+psii(1)),velr(1),<span class="string">'g'</span>);
 
-            <span class="comment">% Coordenadas dos cantos para o primeiro frame</span>
+            <span class="comment">% Corner coordinates for the first frame</span>
             xc = [rc1(1,1) rc2(1,1) rc3(1,1) rc4(1,1)];
             yc = [rc1(1,2) rc2(1,2) rc3(1,2) rc4(1,2)];
 
-            <span class="comment">% Exibindo o ve&#65533;culo</span>
+            <span class="comment">% The vehicle</span>
             fill(xc,yc,<span class="string">'r'</span>)
 
             <span class="comment">% Adding semitrailer</span>
             <span class="keyword">if</span> col == 8
-                PHI = XOUT(:,7);        <span class="comment">% Orienta&#65533;&#65533;o relativa do semirreboque [rad]</span>
-                dPHI = XOUT(:,8);       <span class="comment">% Velocidade angular relativa entre as unidades [rad/s]</span>
+                PHI = XOUT(:,7);            <span class="comment">% Relative yaw angle of the semitrailer [rad]</span>
+                dPHI = XOUT(:,8);           <span class="comment">% Relative yaw rate between the two units [rad/s]</span>
 
-                c = self.vehicle.distRA;        <span class="comment">% distancia da articula&#65533;&#65533;o ao centro de massa do caminh&#65533;o-trator [m]</span>
-                d = self.vehicle.distAS;        <span class="comment">% distancia do eixo traseiro ao centro de massa do caminh&#65533;o-trator [m]</span>
-                e = self.vehicle.distSM;        <span class="comment">% distancia da articula&#65533;&#65533;o ao centro de massa do caminh&#65533;o-trator [m]</span>
-                lS = self.vehicle.widthSemi / 2;              <span class="comment">% Metade da width do vehicle [m]</span>
+                c = self.vehicle.distRA;    <span class="comment">% Distance from  [m]</span>
+                d = self.vehicle.distAS;    <span class="comment">% Distance from  [m]</span>
+                e = self.vehicle.distSM;    <span class="comment">% Distance from  [m]</span>
+                lS = self.vehicle.widthSemi / 2; <span class="comment">% Half width of the vehicle [m]</span>
 
-                <span class="comment">% &#65533;ngulo de deriva no eixo do semirreboque [rad]</span>
+                <span class="comment">% Slip angle semitrailer axle [rad]</span>
                 ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)),(VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)));
-                <span class="comment">% M&#65533;dulo da velocidade no eixo do semirreboque [m/s]</span>
+                <span class="comment">% Velocity semitrailer axle [m/s]</span>
                 VM = sqrt((VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)).^2 + ((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)).^2);
                 RS = [XT-(b+c)*cos(PSI)-d*cos(PSI-PHI) YT-(b+c)*sin(PSI)-d*sin(PSI-PHI)];
-                <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a S na base (S s1 s2 s3)</span>
-                rs1s = [d;lS];           <span class="comment">% dianteira esquerda</span>
-                rs2s = [d;-lS];          <span class="comment">% dianteira direita</span>
-                rs3s = [-e;-lS];         <span class="comment">% traseira direita</span>
-                rs4s = [-e;lS];          <span class="comment">% traseira esquerda</span>
+                <span class="comment">% Position vectors 1, 2, 3 e 4 relative to S base (S s1 s2 s3)</span>
+                rs1s = [d;lS];              <span class="comment">% Front left</span>
+                rs2s = [d;-lS];             <span class="comment">% Front right</span>
+                rs3s = [-e;-lS];            <span class="comment">% Rear right</span>
+                rs4s = [-e;lS];             <span class="comment">% Rear left</span>
 
-                eim = [-e;0];           <span class="comment">% Posicao do eixo do semirreboque</span>
+                eim = [-e;0];               <span class="comment">% Position of semitrailer axle</span>
 
                 rn1i = zeros(length(TOUT),2);
                 rn2i = zeros(length(TOUT),2);
@@ -294,19 +280,19 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 emm = zeros(length(TOUT),2);
 
                 <span class="keyword">for</span> j=1:length(TOUT)
-                    <span class="comment">% Matriz de rota&#65533;&#65533;o da base (S s1 s2 s3) para (o i j k)</span>
+                    <span class="comment">% Rotation matrix base (S s1 s2 s3) to (o i j k)</span>
                     RSI=[cos(PSI(j)-PHI(j)) -sin(PSI(j)-PHI(j));sin(PSI(j)-PHI(j)) cos(PSI(j)-PHI(j))];
-                    <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a O na base (c c1 c2 c3)</span>
+                    <span class="comment">% Position vectors 1, 2, 3 e 4 relative to O base (c c1 c2 c3)</span>
                     rn1i(j,1:2) = (RSI*rs1s)';
                     rn2i(j,1:2) = (RSI*rs2s)';
                     rn3i(j,1:2) = (RSI*rs3s)';
                     rn4i(j,1:2) = (RSI*rs4s)';
 
-                    <span class="comment">% Posicionando o eixo dianteiro e o traseiro</span>
-                    emm(j,1:2) = (RSI*eim);     <span class="comment">% Eixo trasiro</span>
+                    <span class="comment">% Position of semitrailer axle</span>
+                    emm(j,1:2) = (RSI*eim);
                 <span class="keyword">end</span>
 
-                <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a o na base (o i j k)</span>
+                <span class="comment">% Position vectors 1, 2, 3 e 4 relative to o base (o i j k)</span>
                 rn1t=RS+rn1i;
                 rn2t=RS+rn2i;
                 rn3t=RS+rn3i;
@@ -323,7 +309,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                     phii(i,1:2) = interp1(TOUT,PHI,TEMPO(i));
                     alpham(i,1:2) = interp1(TOUT,ALPHAM,TEMPO(i));
                     velm(i,1:2) = interp1(TOUT,VM,TEMPO(i));
-                    <span class="comment">% Semirreboque</span>
+                    <span class="comment">% Semitrailer</span>
                     rn1(i,1:2) = interp1(TOUT,rn1t,TEMPO(i));
                     rn2(i,1:2) = interp1(TOUT,rn2t,TEMPO(i));
                     rn3(i,1:2) = interp1(TOUT,rn3t,TEMPO(i));
@@ -338,40 +324,30 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 fill(xn,yn,<span class="string">'g'</span>)
             <span class="keyword">end</span>
 
-
             <span class="keyword">if</span> saveit == 1
-                <span class="comment">% Inicializando o gif</span>
+                <span class="comment">% Initializing gif</span>
                 frame = getframe(666);
                 im = frame2im(frame);
                 [A,map] = rgb2ind(im,256,<span class="string">'nodither'</span>);
-                imwrite(A,map,<span class="string">'Animacao.gif'</span>,<span class="string">'LoopCount'</span>,Inf,<span class="string">'DelayTime'</span>,0.05);
+                imwrite(A,map,<span class="string">'Animation.gif'</span>,<span class="string">'LoopCount'</span>,Inf,<span class="string">'DelayTime'</span>,0.05);
             <span class="keyword">end</span>
 
-            <span class="comment">% Frames restantes</span>
+            <span class="comment">% Remaining frames</span>
             <span class="comment">%</span>
             <span class="keyword">for</span> j = 1:length(TEMPO)
-                <span class="comment">% Trajet&#65533;ria do centro de massa</span>
-
-                <span class="comment">% Centro de massa (Comentado porque n&#65533;o sei se vou usar)</span>
-                <span class="comment">% plot(XT,YT,'r')</span>
-                <span class="comment">% plot(RS(:,1),RS(:,2),'g')</span>
-
-                <span class="comment">% Eixos</span>
+                <span class="comment">% Axles</span>
                 plot(efrente(:,1),efrente(:,2),<span class="string">'r'</span>)
                 plot(etras(:,1),etras(:,2),<span class="string">'g'</span>)
 
-                <span class="comment">% Coordenadas dos cantos para os frames</span>
+                <span class="comment">% Coordinates of the corners</span>
                 xc = [rc1(j,1) rc2(j,1) rc3(j,1) rc4(j,1)];
                 yc = [rc1(j,2) rc2(j,2) rc3(j,2) rc4(j,2)];
 
-
-                <span class="comment">% Exibindo o ve&#65533;culo</span>
+                <span class="comment">% Vehicle</span>
                 fill(xc,yc,<span class="string">'r'</span>)
 
-                <span class="comment">% Vectores velocidade</span>
-                <span class="comment">% Com cores diferentes</span>
-                <span class="comment">% Escolhi n&#65533;o exibir o vector velocidade do centro de massa pq fica muito poluido</span>
-                <span class="comment">%vector([xxx(j) yyy(j)],(alphat(j)+psii(j)),velt(j),'k');</span>
+                <span class="comment">% Velocity vectors</span>
+                <span class="comment">% Different colors</span>
                 self.Vector(efrente(j,1:2),(alphaf(j)+psii(j)),velf(j),<span class="string">'r'</span>);
                 self.Vector(etras(j,1:2),(alphar(j)+psii(j)),velr(j),<span class="string">'g'</span>);
 
@@ -384,41 +360,36 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 <span class="keyword">end</span>
 
                 <span class="keyword">if</span> saveit == 1
-                    <span class="comment">% Adicionando o frame atual ao gif iniciado</span>
+                    <span class="comment">% Adding the current frame to the initialized gif</span>
                     frame = getframe(666);
                     im = frame2im(frame);
                     [A,map] = rgb2ind(im,256,<span class="string">'nodither'</span>);
-                    imwrite(A,map,<span class="string">'Animacao.gif'</span>,<span class="string">'WriteMode'</span>,<span class="string">'append'</span>,<span class="string">'DelayTime'</span>,0.05);
+                    imwrite(A,map,<span class="string">'Animation.gif'</span>,<span class="string">'WriteMode'</span>,<span class="string">'append'</span>,<span class="string">'DelayTime'</span>,0.05);
                 <span class="keyword">end</span>
-                <span class="comment">% Pausa a exibi&#65533;&#65533;o - ATEN&#65533;&#65533;O: Tem que ser o mesmo valor usado no ajuste</span>
-                <span class="comment">% do tempo</span>
 
-                pause(0.05)
+                pause(0.05)                 <span class="comment">% OBS: It has to be the same value of the time adjustment</span>
 
-                cla(ax); <span class="comment">% Limpando o axes</span>
+                cla(ax);                    <span class="comment">% Clearing axes</span>
             <span class="keyword">end</span>
 
-            <span class="comment">% &#65533;ltimo frame</span>
-            <span class="comment">% A &#65533;ltima imagem que a figura vai exibir quando a anima&#65533;&#65533;o acabar</span>
-            <span class="comment">%</span>
+            <span class="comment">% Last frame</span>
+            <span class="comment">% Last image seen when the animation is over</span>
 
-            <span class="comment">% Eixos</span>
+            <span class="comment">% Axles</span>
             plot(efrente(:,1),efrente(:,2),<span class="string">'r'</span>)
             plot(etras(:,1),etras(:,2),<span class="string">'g'</span>)
 
-            <span class="comment">% Coordenadas dos cantos para o &#65533;ltimo frame</span>
+            <span class="comment">% Coordinates of the corners of the last frame</span>
             xc = [rc1(end,1) rc2(end,1) rc3(end,1) rc4(end,1)];
             yc = [rc1(end,2) rc2(end,2) rc3(end,2) rc4(end,2)];
 
-            <span class="comment">% Exibindo o ve&#65533;culo</span>
+            <span class="comment">% Vehicle</span>
             fill(xc,yc,<span class="string">'r'</span>)
 
-            <span class="comment">% Escolhi n&#65533;o exibir o vector velocidade do centro de massa pq fica muito poluido</span>
-            <span class="comment">%vector([xxx(end) yyy(end)],(alphat(end)+psii(end)),velt(end),'k');</span>
             self.Vector(efrente(end,1:2),(alphaf(end)+psii(end)),velf(end),<span class="string">'r'</span>);
             self.Vector(etras(end,1:2),(alphar(end)+psii(end)),velr(end),<span class="string">'g'</span>);
 
-            <span class="comment">% Incluindo o semirreboque</span>
+            <span class="comment">% Adding the semitrailer</span>
             <span class="keyword">if</span> col == 8
                 plot(emsemi(:,1),emsemi(:,2),<span class="string">'b'</span>)
                 xn = [rn1(end,1) rn2(end,1) rn3(end,1) rn4(end,1)];
@@ -430,9 +401,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </pre><h2>Frame<a name="5"></a></h2><p>Plots the sequence of frames of the vehicle manoever.</p><p><b>Sintax</b></p><p><tt><i>GraphicsClass</i>.Frame(XOUT,TOUT,saveit)</tt></p><p><b>Arguments</b></p><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
 <tr> <td width="30%"><tt>XOUT</tt></td> <td width="70%">Solution array. Each column corresponds to the solution of each state variable of the vehicle. The columns must respect the following variable order: [XT YT PSI dPSI VT ALPHAT (PHI dPHI)] </td> </tr>
 <tr> <td width="30%"><tt>TOUT</tt></td> <td width="70%">Column vector of time points.</td> </tr>
-<tr> <td width="30%"><tt>saveit</tt></td> <td width="70%">Flag for saving the trajectory image in a pdf file. If savit = 0 the image will not be saved. If savit = 1 a file Trajetoria.pdf is generated.</td> </tr>
-</table> </p><p><b>Description</b></p><p>TEXTO</p><pre class="codeinput">        <span class="keyword">function</span> Frame(self,XOUT,TOUT,saveit)
-            <span class="comment">% Verificando quantidade de colunas para saber se &#65533; ve&#65533;culo simples ou articulado</span>
+<tr> <td width="30%"><tt>saveit</tt></td> <td width="70%">Flag for saving the trajectory image in a pdf file. If savit = 0 the image will not be saved. If savit = 1 a file Trajectory.pdf is generated.</td> </tr>
+</table> </p><p><b>Description</b></p><pre class="codeinput">        <span class="keyword">function</span> Frame(self,XOUT,TOUT,saveit)
+            <span class="comment">% Verifying number of columns of the state output matrix</span>
             <span class="comment">% col = 6 -&gt; simples</span>
             <span class="comment">% col = 8 -&gt; articulado</span>
             [col] = size(XOUT,2);
@@ -448,34 +419,31 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             <span class="comment">% Distances</span>
             a = self.vehicle.distFT;        <span class="comment">% Distance FT [m]</span>
             b = self.vehicle.distTR;        <span class="comment">% Distance TR [m]</span>
-            lT = self.vehicle.width / 2;  <span class="comment">% Metade da width do vehicle [m]</span>
+            lT = self.vehicle.width / 2;    <span class="comment">% Half width of the vehicle [m]</span>
 
-            <span class="comment">% Slip angles</span>
-            ALPHAF = atan2((a*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));   <span class="comment">% Front [rad]</span>
-            <span class="comment">% OBS: N&#65533;o tem o delta pq &#65533; pra medir o &#65533;ngulo entre o vector velocidade do eixo dianteiro e o plano longitudinal do ve&#65533;culo</span>
-            ALPHAR = atan2((-b*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));  <span class="comment">% Rear [rad]</span>
+            <span class="comment">% Slip angle @ front axle [rad]</span>
+            ALPHAF = atan2((a*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
+            <span class="comment">% OBS: No steering angle because it measures the angle between velocity vector and longitudinal axle of the vehicle</span>
+            <span class="comment">% Slip angle @ rear axle [rad]</span>
+            ALPHAR = atan2((-b*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
+            <span class="comment">% OBS: When using atan2 and the value reaches 180 degrees the vector becomes strange</span>
 
-            <span class="comment">%</span>
-            <span class="comment">% OBS: Calculando os &#65533;ngulos de deriva com "atan2", quando o valor chega a</span>
-            <span class="comment">% 180 graus fica estranho o vector.</span>
-            <span class="comment">%</span>
             <span class="comment">% Velocity</span>
-            VF = sqrt((VT.*cos(ALPHAT)).^2 + (a*dPSI + VT.*sin(ALPHAT)).^2);    <span class="comment">% Front [m/s]</span>
-            VR = sqrt((VT.*cos(ALPHAT)).^2 + (-b*dPSI + VT.*sin(ALPHAT)).^2);   <span class="comment">% Rear [m/s]</span>
+            VF = sqrt((VT.*cos(ALPHAT)).^2 + (a*dPSI + VT.*sin(ALPHAT)).^2);
+            VR = sqrt((VT.*cos(ALPHAT)).^2 + (-b*dPSI + VT.*sin(ALPHAT)).^2);
 
-            <span class="comment">% Posi&#65533;&#65533;o relativa dos cantos e eixos</span>
-            <span class="comment">% Determina a posi&#65533;&#65533;o dos cantos e eixos do ve&#65533;culo com rela&#65533;&#65533;o ao centro</span>
-            <span class="comment">% de massa.</span>
-            <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a T na base (T t1 t2 t3)</span>
-            rt1t = [a;lT];           <span class="comment">% dianteira esquerda</span>
-            rt2t = [a;-lT];          <span class="comment">% dianteira direita</span>
-            rt3t = [-b;-lT];         <span class="comment">% traseira direita</span>
-            rt4t = [-b;lT];          <span class="comment">% traseira esquerda</span>
+            <span class="comment">% Position of the corners and axles relative to the CG</span>
 
-            eif = [a;0];            <span class="comment">% Posicao do eixo dianteiro</span>
-            eir = [-b;0];           <span class="comment">% Posicao do eixo trasiero</span>
+            <span class="comment">% Position vectors 1, 2, 3 e 4 relative to T base (T t1 t2 t3)</span>
+            rt1t = [a;lT];                  <span class="comment">% Front left</span>
+            rt2t = [a;-lT];                 <span class="comment">% Front right</span>
+            rt3t = [-b;-lT];                <span class="comment">% Rear right</span>
+            rt4t = [-b;lT];                 <span class="comment">% Rear left</span>
 
-            <span class="comment">% Pre alocando</span>
+            eif = [a;0];                    <span class="comment">% Front axle</span>
+            eir = [-b;0];                   <span class="comment">% Rear axle</span>
+
+            <span class="comment">% Preallocating matrix</span>
             rt1i = zeros(length(TOUT),2);
             rt2i = zeros(length(TOUT),2);
             rt3i = zeros(length(TOUT),2);
@@ -484,42 +452,39 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             eff = zeros(length(TOUT),2);
             err = zeros(length(TOUT),2);
 
-            <span class="comment">% Evolu&#65533;&#65533;o da posi&#65533;&#65533;o absoluta dos cantos e eixos</span>
-            <span class="comment">% Determina a movimenta&#65533;&#65533;o dos pontos devido a mudan&#65533;a de orienta&#65533;&#65533;o do</span>
-            <span class="comment">% ve&#65533;culo.</span>
             <span class="keyword">for</span> j=1:length(TOUT)
-                <span class="comment">% Matriz de rota&#65533;&#65533;o da base (T t1 t2 t3) para (o i j k)</span>
+                <span class="comment">% Rotation matrix base (T t1 t2 t3) to (o i j k)</span>
                 RTI=[cos(PSI(j)) -sin(PSI(j));sin(PSI(j)) cos(PSI(j))];
-                <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a origem do ref inercial na</span>
-                <span class="comment">% base (T t1 t2 t3)</span>
+                <span class="comment">% Position vectors 1, 2, 3 e 4 relative to origin of the inertial reference base (T t1 t2 t3)</span>
                 rt1i(j,1:2) = (RTI*rt1t)';
                 rt2i(j,1:2) = (RTI*rt2t)';
                 rt3i(j,1:2) = (RTI*rt3t)';
                 rt4i(j,1:2) = (RTI*rt4t)';
-                <span class="comment">% Posicionando o eixo dianteiro e o traseiro</span>
-                eff(j,1:2) = (RTI*eif);     <span class="comment">% Eixo dianteiro</span>
-                err(j,1:2) = (RTI*eir);     <span class="comment">% Eixo trasiro</span>
+                <span class="comment">% Position of front and rear axle</span>
+                eff(j,1:2) = (RTI*eif);     <span class="comment">% Front</span>
+                err(j,1:2) = (RTI*eir);     <span class="comment">% Rear</span>
             <span class="keyword">end</span>
 
-            <span class="comment">% Posi&#65533;&#65533;o absoluta dos cantos e eixos</span>
-            <span class="comment">% A evolu&#65533;&#65533;o da posi&#65533;&#65533;o absoluta dos pontos ao longo do tempo.</span>
-            <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a o na base (o i j k)</span>
+            <span class="comment">% Absolute position of corners and axles</span>
+            <span class="comment">% Absolute position over time</span>
+
+            <span class="comment">% Position vectors 1, 2, 3 e 4 relative to o base (o i j k)</span>
             rc1t=[XT YT]+rt1i;
             rc2t=[XT YT]+rt2i;
             rc3t=[XT YT]+rt3i;
             rc4t=[XT YT]+rt4i;
-            <span class="comment">% Posicionamento absoluto do eixo dianteiro e trasiero</span>
+
+            <span class="comment">% Absolute position of the front and rear axle</span>
             ef = [XT YT]+eff;
             er = [XT YT]+err;
 
-            <span class="comment">% Ajuste do tempo</span>
-            <span class="comment">% A exibi&#65533;&#65533;o deve ser ajustada pois a o n&#65533;mero de frames n&#65533;o &#65533; a mesma que</span>
-            <span class="comment">% a resolu&#65533;&#65533;o do integrador (TSPAN).</span>
-            <span class="comment">%</span>
-            <span class="comment">% A vari&#65533;vel tempo define em que instantes o ve&#65533;culo vai ser plotado</span>
+            <span class="comment">% Time adjustment</span>
+            <span class="comment">% Exhibition has to be adjusted the number of frames is different from the resolution of the integrator (TSPAN)</span>
+
+            <span class="comment">% The variable defines the instants the vehicle will be ploted</span>
             TEMPO = 0:1:TOUT(end);
 
-            <span class="comment">% Pre alocando as matrizes</span>
+            <span class="comment">% Preallocating matrix</span>
             rc1 = zeros(length(TEMPO),2);
             rc2 = zeros(length(TEMPO),2);
             rc3 = zeros(length(TEMPO),2);
@@ -541,29 +506,30 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             velt = zeros(length(TEMPO),2);
 
             <span class="keyword">for</span> i=1:length(TEMPO)
-                <span class="comment">% Posi&#65533;&#65533;o dos cantos e eixo</span>
+                <span class="comment">% Position of corners and axles</span>
                 rc1(i,1:2) = interp1(TOUT,rc1t,TEMPO(i));
                 rc2(i,1:2) = interp1(TOUT,rc2t,TEMPO(i));
                 rc3(i,1:2) = interp1(TOUT,rc3t,TEMPO(i));
                 rc4(i,1:2) = interp1(TOUT,rc4t,TEMPO(i));
-                <span class="comment">% Posi&#65533;&#65533;o do centro de massa</span>
+
                 xxx(i,1:2) = interp1(TOUT,XT,TEMPO(i));
                 yyy(i,1:2) = interp1(TOUT,YT,TEMPO(i));
-                <span class="comment">% Estados</span>
+
+                <span class="comment">% States</span>
                 alphat(i,1:2) = interp1(TOUT,ALPHAT,TEMPO(i));
                 psii(i,1:2) = interp1(TOUT,PSI,TEMPO(i));
-                <span class="comment">% &#65533;ngulos de deriva</span>
+
+                <span class="comment">% Slip angles</span>
                 alphaf(i,1:2) = interp1(TOUT,ALPHAF,TEMPO(i));
                 alphar(i,1:2) = interp1(TOUT,ALPHAR,TEMPO(i));
-                <span class="comment">% Velocidade</span>
+
+                <span class="comment">% Velocity</span>
                 velf(i,1:2) = interp1(TOUT,VF,TEMPO(i));
                 velr(i,1:2) = interp1(TOUT,VR,TEMPO(i));
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             <span class="keyword">end</span>
 
-            <span class="comment">% Definindo a figura</span>
-            <span class="comment">% Gerando a figura e definindo algumas propriedades</span>
-            <span class="comment">%</span>
+            <span class="comment">% Defining figure</span>
             f999 = figure(999);
             set(f999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
             set(f999,<span class="string">'Position'</span>,[1 1 24 14])
@@ -579,50 +545,48 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             set(ax999,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
             set(ax999,<span class="string">'YLimMode'</span>,<span class="string">'manual'</span>)
 
-            xlabel(<span class="string">'Dist\^ancia [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-            ylabel(<span class="string">'Dist\^ancia [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+            xlabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+            ylabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
 
-            TEMPOplot = 0:0.05:TOUT(end); <span class="comment">% Tempo para os plot da curva de trajet&#65533;ria</span>
+            TEMPOplot = 0:0.05:TOUT(end); <span class="comment">% Time for the plots</span>
             <span class="keyword">for</span> i=1:length(TEMPOplot)
                 efrente(i,1:2) = interp1(TOUT,ef,TEMPOplot(i));
                 etras(i,1:2) = interp1(TOUT,er,TEMPOplot(i));
             <span class="keyword">end</span>
 
-            <span class="comment">% plot(efrente(:,1),efrente(:,2),'r')</span>
-            <span class="comment">% plot(etras(:,1),etras(:,2),'g')</span>
             plot(ef(:,1),ef(:,2),<span class="string">'r'</span>)
             plot(er(:,1),er(:,2),<span class="string">'g'</span>)
 
             <span class="keyword">for</span> j = 1:length(TEMPO)
-                <span class="comment">% Coordenadas dos cantos para os frames</span>
+                <span class="comment">% Coordinates of the corners</span>
                 xc = [rc1(j,1) rc2(j,1) rc3(j,1) rc4(j,1)];
                 yc = [rc1(j,2) rc2(j,2) rc3(j,2) rc4(j,2)];
-                <span class="comment">% Exibindo o ve&#65533;culo</span>
+                <span class="comment">% Vehicle</span>
                 fill(xc,yc,<span class="string">'r'</span>);
             <span class="keyword">end</span>
 
             <span class="comment">% Adding semitrailer</span>
             <span class="keyword">if</span> col == 8
-                PHI = XOUT(:,7);        <span class="comment">% Orienta&#65533;&#65533;o relativa do semirreboque [rad]</span>
-                dPHI = XOUT(:,8);       <span class="comment">% Velocidade angular relativa entre as unidades [rad/s]</span>
+                PHI = XOUT(:,7);            <span class="comment">% Relative yaw angle of the semitrailer [rad]</span>
+                dPHI = XOUT(:,8);           <span class="comment">% Relative yaw rate between the two units [rad/s]</span>
 
-                c = self.vehicle.distRA;        <span class="comment">% distancia da articula&#65533;&#65533;o ao centro de massa do caminh&#65533;o-trator [m]</span>
-                d = self.vehicle.distAS;        <span class="comment">% distancia do eixo traseiro ao centro de massa do caminh&#65533;o-trator [m]</span>
-                e = self.vehicle.distSM;        <span class="comment">% distancia da articula&#65533;&#65533;o ao centro de massa do caminh&#65533;o-trator [m]</span>
-                lS = self.vehicle.widthSemi / 2;              <span class="comment">% Metade da width do vehicle [m]</span>
-                <span class="comment">% &#65533;ngulo de deriva no eixo do semirreboque [rad]</span>
+                c = self.vehicle.distRA;    <span class="comment">% Distance from  [m]</span>
+                d = self.vehicle.distAS;    <span class="comment">% Distance from  [m]</span>
+                e = self.vehicle.distSM;    <span class="comment">% Distance from  [m]</span>
+                lS = self.vehicle.widthSemi / 2; <span class="comment">% Half width of the vehicle [m]</span>
+                <span class="comment">% Slip angle semitrailer axle [rad]</span>
                 ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)),(VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)));
-                <span class="comment">% M&#65533;dulo da velocidade no eixo do semirreboque [m/s]</span>
+                <span class="comment">% Velocity semitrailer axle [m/s]</span>
                 VM = sqrt((VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)).^2 + ((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)).^2);
-                <span class="comment">% Posi&#65533;&#65533;o do centro de massa do semirreboque</span>
+                <span class="comment">% CG position</span>
                 RS = [XT-(b+c)*cos(PSI)-d*cos(PSI-PHI) YT-(b+c)*sin(PSI)-d*sin(PSI-PHI)];
-                <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a S na base (S s1 s2 s3)</span>
-                rs1s = [d;lS];           <span class="comment">% dianteira esquerda</span>
-                rs2s = [d;-lS];          <span class="comment">% dianteira direita</span>
-                rs3s = [-e;-lS];         <span class="comment">% traseira direita</span>
-                rs4s = [-e;lS];          <span class="comment">% traseira esquerda</span>
-                eim = [-e;0];           <span class="comment">% Posicao do eixo do semirreboque</span>
-                <span class="comment">% Pre alocando</span>
+                <span class="comment">% Position vectors 1, 2, 3 e 4 relative to S base (S s1 s2 s3)</span>
+                rs1s = [d;lS];              <span class="comment">% Front left</span>
+                rs2s = [d;-lS];             <span class="comment">% Front right</span>
+                rs3s = [-e;-lS];            <span class="comment">% Rear right</span>
+                rs4s = [-e;lS];             <span class="comment">% Rear left</span>
+                eim = [-e;0];               <span class="comment">% Position of semitrailer axle</span>
+
                 rn1i = zeros(length(TOUT),2);
                 rn2i = zeros(length(TOUT),2);
                 rn3i = zeros(length(TOUT),2);
@@ -630,17 +594,19 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 emm = zeros(length(TOUT),2);
 
                 <span class="keyword">for</span> j=1:length(TOUT)
-                    <span class="comment">% Matriz de rota&#65533;&#65533;o da base (S s1 s2 s3) para (o i j k)</span>
+                    <span class="comment">% Rotation matrix base (S s1 s2 s3) to (o i j k)</span>
                     RSI=[cos(PSI(j)-PHI(j)) -sin(PSI(j)-PHI(j));sin(PSI(j)-PHI(j)) cos(PSI(j)-PHI(j))];
-                    <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a O na base (c c1 c2 c3)</span>
+                    <span class="comment">% Position vectors 1, 2, 3 e 4 relative to O base (c c1 c2 c3)</span>
                     rn1i(j,1:2) = (RSI*rs1s)';
                     rn2i(j,1:2) = (RSI*rs2s)';
                     rn3i(j,1:2) = (RSI*rs3s)';
                     rn4i(j,1:2) = (RSI*rs4s)';
-                    <span class="comment">% Posicionando o eixo dianteiro e o traseiro</span>
-                    emm(j,1:2) = (RSI*eim);     <span class="comment">% Eixo trasiro</span>
+
+                    <span class="comment">% Position of semitrailer axle</span>
+                    emm(j,1:2) = (RSI*eim);
                 <span class="keyword">end</span>
-                <span class="comment">% Vectores posi&#65533;&#65533;o 1, 2, 3 e 4 em rela&#65533;&#65533;o a o na base (o i j k)</span>
+
+                <span class="comment">% Position vectors 1, 2, 3 e 4 relative to o base (o i j k)</span>
                 rn1t=RS+rn1i;
                 rn2t=RS+rn2i;
                 rn3t=RS+rn3i;
@@ -671,7 +637,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                     emsemi(i,1:2) = interp1(TOUT,em,TEMPOplot(i));
                 <span class="keyword">end</span>
                 plot(em(:,1),em(:,2),<span class="string">'b'</span>)
-                <span class="comment">% plot(emsemi(:,1),emsemi(:,2),'b')</span>
 
                 <span class="keyword">for</span> j = 1:length(TEMPO)
                     xn = [rn1(j,1) rn2(j,1) rn3(j,1) rn4(j,1)];
@@ -681,49 +646,47 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             <span class="keyword">end</span>
 
             <span class="keyword">if</span> saveit == 1
-                print(f999,<span class="string">'-dpdf'</span>,<span class="string">'Trajetoria.pdf'</span>)
+                print(f999,<span class="string">'-dpdf'</span>,<span class="string">'Trajectory.pdf'</span>)
             <span class="keyword">end</span>
         <span class="keyword">end</span>
 </pre><pre class="codeinput">    <span class="keyword">end</span>
 
     methods(Static)
 </pre><h2>Vector<a name="8"></a></h2><p>Plots a vector arrow.</p><p><b>Sintax</b></p><p><tt><i>GraphicsClass</i>.Vector(inicio,angulo,modulo,cor)</tt></p><p><b>Arguments</b></p><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
-<tr> <td width="30%"><tt>inicio</tt></td> <td width="70%">Coordenada do �nicio da flecha.</td> </tr>
-<tr> <td width="30%"><tt>angulo</tt></td> <td width="70%">�ngulo da orienta��o da flecha.</td> </tr>
-<tr> <td width="30%"><tt>M�dulo</tt></td> <td width="70%">Comprimento da flecha.</td> </tr>
-<tr> <td width="30%"><tt>cor</tt></td> <td width="70%">Cor da flecha.</td> </tr>
-</table> </p><p><b>Description</b></p><p>TEXTO</p><pre class="codeinput">        <span class="keyword">function</span> Vector(inicio,angulo,modulo,cor)
-            coord1 = inicio;                                    <span class="comment">% inicio do vector</span>
-            theta = angulo;
-            modulo = 0.7*modulo;                                <span class="comment">% modulo do vector</span>
-            coord2 = modulo*[cos(theta) sin(theta)] + coord1;   <span class="comment">% fim do vector</span>
+<tr> <td width="30%"><tt>startCoord</tt></td> <td width="70%"> Vector start coordinate.</td> </tr>
+<tr> <td width="30%"><tt>angle</tt></td> <td width="70%"> Orientation angle of the arrow.</td> </tr>
+<tr> <td width="30%"><tt>modulo</tt></td> <td width="70%">Size of the arrow.</td> </tr>
+<tr> <td width="30%"><tt>color</tt></td> <td width="70%">Color of the arrow.</td> </tr>
+</table> </p><p><b>Description</b></p><p>TEXTO</p><pre class="codeinput">        <span class="keyword">function</span> Vector(startCoord,angle,modulo,color)
+            coord1 = startCoord;                                <span class="comment">% Vector start coordinate</span>
+            theta = angle;
+            modulo = 0.7*modulo;                                <span class="comment">% Size of the vector</span>
+            coord2 = modulo*[cos(theta) sin(theta)] + coord1;   <span class="comment">% Vector end coordinate</span>
 
-            <span class="comment">%theta = atan2((coord1(1)-coord2(1)),(coord1(2)-coord2(2))); % angulo de orienta&#65533;&#65533;o do triangulo</span>
-            esc = 1; <span class="comment">% Escala</span>
-            l = 0.5; <span class="comment">% width relativa em rela&#65533;&#65533;o ao comprimento do triangulo (0-1)</span>
+            <span class="comment">%theta = atan2((coord1(1)-coord2(1)),(coord1(2)-coord2(2))); % Orientatin angle of the triangle</span>
+            esc = 1; <span class="comment">% Scale</span>
+            l = 0.5; <span class="comment">% width relative to the triangle length (0-1)</span>
 
-            <span class="comment">% Forma e orienta&#65533;&#65533;o do triangulo</span>
-            c1 = esc*l*[-sin(theta) +cos(theta)];   <span class="comment">% canto 1 - inferior esquerdo</span>
-            c2 = esc*l*[+sin(theta) -cos(theta)];   <span class="comment">% canto 2 - inferior direito</span>
-            c3 = esc*[+cos(theta) +sin(theta)];     <span class="comment">% canto 3 - superior central</span>
+            <span class="comment">% Shape and orientation of the triangle</span>
+            c1 = esc*l*[-sin(theta) +cos(theta)];   <span class="comment">% corner 1 - bottom left</span>
+            c2 = esc*l*[+sin(theta) -cos(theta)];   <span class="comment">% corner 2 - bottom right</span>
+            c3 = esc*[+cos(theta) +sin(theta)];     <span class="comment">% corner 3 - top central</span>
 
-            <span class="comment">% Escala e posicionamento</span>
+            <span class="comment">% Scale and positioning</span>
             x = [c1(1)+coord2(1) c2(1)+coord2(1) c3(1)+coord2(1)];
             y = [c1(2)+coord2(2) c2(2)+coord2(2) c3(2)+coord2(2)];
 
-            <span class="comment">% figure(1)</span>
-            <span class="comment">% axis equal</span>
             hold <span class="string">on</span>
-            fill(x,y,cor)
-            p = plot([coord1(1) coord2(1)],[coord1(2) coord2(2)],cor);
+            fill(x,y,color)
+            p = plot([coord1(1) coord2(1)],[coord1(2) coord2(2)],color);
             set(p,<span class="string">'LineWidth'</span>,2)
-            <span class="comment">% Id&#65533;ia de colocar um marcador no in&#65533;cio do vector</span>
+            <span class="comment">% Idea of using a marker at the begining of the vector</span>
             <span class="comment">% m = plot(coord1(1),coord1(2),strcat('*',cor));</span>
             <span class="comment">% set(m,'MarkerSize',10)</span>
         <span class="keyword">end</span>
-</pre><h2>changeMarker<a name="9"></a></h2><p>A fun&#65533;&#65533;o changeMarker altera o n&#65533;mero de marcadores num plot.</p><p><b>Sintax</b></p><p><tt><i>GraphicsClass</i>.changeMarker(p,n)</tt></p><p><b>Arguments</b></p><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
+</pre><h2>changeMarker<a name="9"></a></h2><p>The function changeMarker changes the number of marker in a plot.</p><p><b>Sintax</b></p><p><tt><i>GraphicsClass</i>.changeMarker(p,n)</tt></p><p><b>Arguments</b></p><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
 <tr> <td width="30%"><tt>p</tt></td> <td width="70%">Handle do plot.</td> </tr>
-<tr> <td width="30%"><tt>n</tt></td> <td width="70%">N�mero de marcadores que devem ser exibidos.</td> </tr>
+<tr> <td width="30%"><tt>n</tt></td> <td width="70%">Number of markers to be included.</td> </tr>
 </table> </p><p><b>Description</b></p><p>TEXTO</p><pre class="codeinput">        <span class="keyword">function</span> changeMarker(p,n)
             <span class="comment">% p - handle of plot</span>
             <span class="comment">% n - number of markers</span>
@@ -745,18 +708,18 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
             step = floor((size_XData)/(n-1));
 
-            <span class="comment">% Fazendo o plot dos marcadores</span>
+            <span class="comment">% Ploting the markers</span>
             p_marker = plot(vec_XData(1:step:end),vec_YData(1:step:end));
             set(p_marker,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Marker'</span>,marker_type,<span class="string">'MarkerSize'</span>,marker_size,<span class="keyword">...</span>
             	<span class="string">'MarkerEdgeColor'</span>,marker_EdgeColor,<span class="string">'MarkerFaceColor'</span>,marker_FaceColor)
 
-            <span class="comment">% Removendo o marcador do plot original</span>
+            <span class="comment">% Removing the markers from the original plot</span>
             set(p,<span class="string">'Marker'</span>,<span class="string">'none'</span>)
-            <span class="comment">% Remover a visibilidade do handle do original e do marcador</span>
+            <span class="comment">% Hiding the original plot</span>
             set(p,<span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>)
             set(p_marker,<span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>)
 
-            <span class="comment">% Dummy para legenda</span>
+            <span class="comment">% Dummy for legend</span>
             p_dummy = plot(vec_XData(1),vec_YData(1));
             set(p_dummy,<span class="string">'Color'</span>,line_color,<span class="string">'LineStyle'</span>,line_Style,<span class="string">'LineWidth'</span>,line_LineWidth,<span class="keyword">...</span>
             	<span class="string">'Marker'</span>,marker_type,<span class="string">'MarkerSize'</span>,marker_size,<span class="keyword">...</span>
@@ -779,7 +742,7 @@ classdef Graphics
 	methods
         % Constructor
         function self = Graphics(varargin)
-            v = VehicleDynamics.VehicleArticulatedNonlinear4DOF;
+            v = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
             if nargin == 0
                 self.vehicle = v;%.params;
             else
@@ -809,7 +772,7 @@ classdef Graphics
         % TEXT
 
         function Animation(self,XOUT,TOUT,saveit)
-            % Verificando quantidade de colunas para saber se � ve�culo simples ou articulado
+            % Verifying number of columns of the state output matrix
             % col = 6 -> simples
             % col = 8 -> articulado
             [col] = size(XOUT,2);
@@ -825,39 +788,35 @@ classdef Graphics
             % Distances
             a = self.vehicle.distFT;        % Distance FT [m]
             b = self.vehicle.distTR;        % Distance TR [m]
-            lT = self.vehicle.width / 2;  % Metade da width do vehicle [m]
+            lT = self.vehicle.width / 2;    % Half width of the vehicle [m]
 
-            % �ngulo de deriva na dianteira [rad]
+            % Slip angle @ front axle [rad]
             ALPHAF = atan2((a*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
-            % �ngulo de deriva na traseira [rad]
+            % OBS: No steering angle because it measures the angle between velocity vector and longitudinal axle of the vehicle
+            % Slip angle @ rear axle [rad]
             ALPHAR = atan2((-b*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
-            % OBS: Calculando os �ngulos de deriva com "atan2", quando o valor chega a
-            % 180 graus fica estranho o vector.
+            % OBS: When using atan2 and the value reaches 180 degrees the vector becomes strange
 
-            % M�dulo da velocidade no eixo dianteiro [m/s]
+            % Velocity @ front axle [m/s]
             VF = sqrt((VT.*cos(ALPHAT)).^2 + (a*dPSI + VT.*sin(ALPHAT)).^2);
-            % M�dulo da velocidade no eixo traseiro [m/s]
+            % Velocity @ rear axle [m/s]
             VR = sqrt((VT.*cos(ALPHAT)).^2 + (-b*dPSI + VT.*sin(ALPHAT)).^2);
 
-            % Posi��o relativa dos cantos e eixos
-            % Determina a posi��o dos cantos e eixos do ve�culo com rela��o ao centro
-            % de massa.
+            % Position of the corners and axles relative to the CG
 
-            % Vectores posi��o 1, 2, 3 e 4 em rela��o a T na base (T t1 t2 t3)
-            rt1t = [a;lT];                  % dianteira esquerda
-            rt2t = [a;-lT];                 % dianteira direita
-            rt3t = [-b;-lT];                % traseira direita
-            rt4t = [-b;lT];                 % traseira esquerda
+            % Position vectors 1, 2, 3 e 4 relative to T base (T t1 t2 t3)
+            rt1t = [a;lT];                  % Front left
+            rt2t = [a;-lT];                 % Front right
+            rt3t = [-b;-lT];                % Rear right
+            rt4t = [-b;lT];                 % Rear left
 
-            eif = [a;0];                    % Posicao do eixo dianteiro
-            eir = [-b;0];                   % Posicao do eixo trasiero
+            eif = [a;0];                    % Front axle
+            eir = [-b;0];                   % Rear axle
 
-            % Evolu��o da posi��o absoluta dos cantos e eixos
-            % Determina a movimenta��o dos pontos devido a mudan�a de orienta��o do
-            % ve�culo.
+            % Absolute position of corners and axles
+            % Movement of the points from change of orientation.
 
-            % Pre alocando as matrizes
-
+            % Preallocating matrix
             rt1i = zeros(length(TOUT),2);
             rt2i = zeros(length(TOUT),2);
             rt3i = zeros(length(TOUT),2);
@@ -866,42 +825,39 @@ classdef Graphics
             eff = zeros(length(TOUT),2);
             err = zeros(length(TOUT),2);
 
-            % In�cio do loop
+            % Loop start
             for j=1:length(TOUT)
-                % Matriz de rota��o da base (T t1 t2 t3) para (o i j k)
+                % Rotation matrix base (T t1 t2 t3) to (o i j k)
                 RTI=[cos(PSI(j)) -sin(PSI(j));sin(PSI(j)) cos(PSI(j))];
-                % Vectores posi��o 1, 2, 3 e 4 em rela��o a origem do ref inercial na
+                % Position vectors 1, 2, 3 e 4 relative to origin of the inertial reference base (T t1 t2 t3)
                 rt1i(j,1:2) = (RTI*rt1t)';
-                % base (T t1 t2 t3)
                 rt2i(j,1:2) = (RTI*rt2t)';
                 rt3i(j,1:2) = (RTI*rt3t)';
                 rt4i(j,1:2) = (RTI*rt4t)';
-                % Posicionando o eixo dianteiro e o traseiro
-                eff(j,1:2) = (RTI*eif);     % Eixo dianteiro
-                err(j,1:2) = (RTI*eir);     % Eixo trasiro
+                % Position of front and rear axle
+                eff(j,1:2) = (RTI*eif);     % Front
+                err(j,1:2) = (RTI*eir);     % Rear
             end
 
-            % Posi��o absoluta dos cantos e eixos
-            % A evolu��o da posi��o absoluta dos pontos ao longo do tempo.
+            % Absolute position of corners and axles
+            % Absolute position over time
 
-            % Vectores posi��o 1, 2, 3 e 4 em rela��o a o na base (o i j k)
+            % Position vectors 1, 2, 3 e 4 relative to o base (o i j k)
             rc1t=[XT YT]+rt1i;
             rc2t=[XT YT]+rt2i;
             rc3t=[XT YT]+rt3i;
             rc4t=[XT YT]+rt4i;
 
-            % Posicionamento absoluto do eixo dianteiro e trasiero
+            % Absolute position of the front and rear axle
             ef = [XT YT]+eff;
             er = [XT YT]+err;
 
-            % Ajuste do tempo
-            % A exibi��o deve ser ajustada pois a o n�mero de frames n�o � a mesma que
-            % a resolu��o do integrador (TSPAN).
-            %
+            % Time adjustment
+            % Exhibition has to be adjusted the number of frames is different from the resolution of the integrator (TSPAN)
 
             TEMPO = 0:0.05:TOUT(end);
 
-            % Pre alocando as matrizes
+            % Preallocating matrix
             rc1 = zeros(length(TEMPO),2);
             rc2 = zeros(length(TEMPO),2);
             rc3 = zeros(length(TEMPO),2);
@@ -928,7 +884,7 @@ classdef Graphics
             rn4 = zeros(length(TEMPO),2);
 
             for i=1:length(TEMPO)
-                % Posi��o dos cantos e eixo
+                % Position of corners and axles
                 rc1(i,1:2) = interp1(TOUT,rc1t,TEMPO(i));
                 rc2(i,1:2) = interp1(TOUT,rc2t,TEMPO(i));
                 rc3(i,1:2) = interp1(TOUT,rc3t,TEMPO(i));
@@ -937,26 +893,25 @@ classdef Graphics
                 efrente(i,1:2) = interp1(TOUT,ef,TEMPO(i));
                 etras(i,1:2) = interp1(TOUT,er,TEMPO(i));
 
-                % Posi��o do centro de massa
+                % Position of CG
                 xxx(i,1:2) = interp1(TOUT,XT,TEMPO(i));
                 yyy(i,1:2) = interp1(TOUT,YT,TEMPO(i));
 
-                % Estados
+                % States
                 alphat(i,1:2) = interp1(TOUT,ALPHAT,TEMPO(i));
                 psii(i,1:2) = interp1(TOUT,PSI,TEMPO(i));
 
-                % �ngulos de deriva
+                % Slip angles
                 alphaf(i,1:2) = interp1(TOUT,ALPHAF,TEMPO(i));
                 alphar(i,1:2) = interp1(TOUT,ALPHAR,TEMPO(i));
 
-                % Velocidade
+                % Velocity
                 velf(i,1:2) = interp1(TOUT,VF,TEMPO(i));
                 velr(i,1:2) = interp1(TOUT,VR,TEMPO(i));
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             end
 
-            % Definindo a figura
-            % Gerando a figura e definindo algumas propriedades
+            % Defining figure
             f=figure(666);
             set(f,'Units','centimeters')
             set(f,'Position',[1 1 24 14])
@@ -967,52 +922,46 @@ classdef Graphics
             set(ax,'XLimMode','manual')
             set(ax,'YLim',[min(YT)-10 max(YT)+10])
             set(ax,'YLimMode','manual')
+            % Description
+            title('Trajectory','Interpreter','Latex')
+            xlabel('Distance [m]','Interpreter','Latex');
+            ylabel('Distance [m]','Interpreter','Latex');
 
-            % Legendas
-            title('Trajet\''oria','Interpreter','Latex')
-            xlabel('Dist\^ancia [m]','Interpreter','Latex');
-            ylabel('Dist\^ncia [m]','Interpreter','Latex');
+            % First frame
 
-            % Primeiro frame
-            %
-            %
-
-            % Vectores velocidade
-            % Script "vector.m"
-            % Escolhi n�o exibir o vector velocidade do centro de massa pq fica muito poluido
-            %vector([xxx(1) yyy(1)],(alphat(1)+psii(1)),velt(1),'k');
+            % Velocity vectors - Script "vector.m"
             self.Vector(efrente(1,1:2),(alphaf(1)+psii(1)),velf(1),'r');
             self.Vector(etras(1,1:2),(alphar(1)+psii(1)),velr(1),'g');
 
-            % Coordenadas dos cantos para o primeiro frame
+            % Corner coordinates for the first frame
             xc = [rc1(1,1) rc2(1,1) rc3(1,1) rc4(1,1)];
             yc = [rc1(1,2) rc2(1,2) rc3(1,2) rc4(1,2)];
 
-            % Exibindo o ve�culo
+            % The vehicle
             fill(xc,yc,'r')
 
             % Adding semitrailer
             if col == 8
-                PHI = XOUT(:,7);        % Orienta��o relativa do semirreboque [rad]
-                dPHI = XOUT(:,8);       % Velocidade angular relativa entre as unidades [rad/s]
+                PHI = XOUT(:,7);            % Relative yaw angle of the semitrailer [rad]
+                dPHI = XOUT(:,8);           % Relative yaw rate between the two units [rad/s]
 
-                c = self.vehicle.distRA;        % distancia da articula��o ao centro de massa do caminh�o-trator [m]
-                d = self.vehicle.distAS;        % distancia do eixo traseiro ao centro de massa do caminh�o-trator [m]
-                e = self.vehicle.distSM;        % distancia da articula��o ao centro de massa do caminh�o-trator [m]
-                lS = self.vehicle.widthSemi / 2;              % Metade da width do vehicle [m]
+                c = self.vehicle.distRA;    % Distance from  [m]
+                d = self.vehicle.distAS;    % Distance from  [m]
+                e = self.vehicle.distSM;    % Distance from  [m]
+                lS = self.vehicle.widthSemi / 2; % Half width of the vehicle [m]
 
-                % �ngulo de deriva no eixo do semirreboque [rad]
+                % Slip angle semitrailer axle [rad]
                 ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)),(VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)));
-                % M�dulo da velocidade no eixo do semirreboque [m/s]
+                % Velocity semitrailer axle [m/s]
                 VM = sqrt((VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)).^2 + ((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)).^2);
                 RS = [XT-(b+c)*cos(PSI)-d*cos(PSI-PHI) YT-(b+c)*sin(PSI)-d*sin(PSI-PHI)];
-                % Vectores posi��o 1, 2, 3 e 4 em rela��o a S na base (S s1 s2 s3)
-                rs1s = [d;lS];           % dianteira esquerda
-                rs2s = [d;-lS];          % dianteira direita
-                rs3s = [-e;-lS];         % traseira direita
-                rs4s = [-e;lS];          % traseira esquerda
+                % Position vectors 1, 2, 3 e 4 relative to S base (S s1 s2 s3)
+                rs1s = [d;lS];              % Front left
+                rs2s = [d;-lS];             % Front right
+                rs3s = [-e;-lS];            % Rear right
+                rs4s = [-e;lS];             % Rear left
 
-                eim = [-e;0];           % Posicao do eixo do semirreboque
+                eim = [-e;0];               % Position of semitrailer axle
 
                 rn1i = zeros(length(TOUT),2);
                 rn2i = zeros(length(TOUT),2);
@@ -1022,19 +971,19 @@ classdef Graphics
                 emm = zeros(length(TOUT),2);
 
                 for j=1:length(TOUT)
-                    % Matriz de rota��o da base (S s1 s2 s3) para (o i j k)
+                    % Rotation matrix base (S s1 s2 s3) to (o i j k)
                     RSI=[cos(PSI(j)-PHI(j)) -sin(PSI(j)-PHI(j));sin(PSI(j)-PHI(j)) cos(PSI(j)-PHI(j))];
-                    % Vectores posi��o 1, 2, 3 e 4 em rela��o a O na base (c c1 c2 c3)
+                    % Position vectors 1, 2, 3 e 4 relative to O base (c c1 c2 c3)
                     rn1i(j,1:2) = (RSI*rs1s)';
                     rn2i(j,1:2) = (RSI*rs2s)';
                     rn3i(j,1:2) = (RSI*rs3s)';
                     rn4i(j,1:2) = (RSI*rs4s)';
 
-                    % Posicionando o eixo dianteiro e o traseiro
-                    emm(j,1:2) = (RSI*eim);     % Eixo trasiro
+                    % Position of semitrailer axle
+                    emm(j,1:2) = (RSI*eim);
                 end
 
-                % Vectores posi��o 1, 2, 3 e 4 em rela��o a o na base (o i j k)
+                % Position vectors 1, 2, 3 e 4 relative to o base (o i j k)
                 rn1t=RS+rn1i;
                 rn2t=RS+rn2i;
                 rn3t=RS+rn3i;
@@ -1051,7 +1000,7 @@ classdef Graphics
                     phii(i,1:2) = interp1(TOUT,PHI,TEMPO(i));
                     alpham(i,1:2) = interp1(TOUT,ALPHAM,TEMPO(i));
                     velm(i,1:2) = interp1(TOUT,VM,TEMPO(i));
-                    % Semirreboque
+                    % Semitrailer
                     rn1(i,1:2) = interp1(TOUT,rn1t,TEMPO(i));
                     rn2(i,1:2) = interp1(TOUT,rn2t,TEMPO(i));
                     rn3(i,1:2) = interp1(TOUT,rn3t,TEMPO(i));
@@ -1066,40 +1015,30 @@ classdef Graphics
                 fill(xn,yn,'g')
             end
 
-
             if saveit == 1
-                % Inicializando o gif
+                % Initializing gif
                 frame = getframe(666);
                 im = frame2im(frame);
                 [A,map] = rgb2ind(im,256,'nodither');
-                imwrite(A,map,'Animacao.gif','LoopCount',Inf,'DelayTime',0.05);
+                imwrite(A,map,'Animation.gif','LoopCount',Inf,'DelayTime',0.05);
             end
 
-            % Frames restantes
+            % Remaining frames
             %
             for j = 1:length(TEMPO)
-                % Trajet�ria do centro de massa
-
-                % Centro de massa (Comentado porque n�o sei se vou usar)
-                % plot(XT,YT,'r')
-                % plot(RS(:,1),RS(:,2),'g')
-
-                % Eixos
+                % Axles
                 plot(efrente(:,1),efrente(:,2),'r')
                 plot(etras(:,1),etras(:,2),'g')
 
-                % Coordenadas dos cantos para os frames
+                % Coordinates of the corners
                 xc = [rc1(j,1) rc2(j,1) rc3(j,1) rc4(j,1)];
                 yc = [rc1(j,2) rc2(j,2) rc3(j,2) rc4(j,2)];
 
-
-                % Exibindo o ve�culo
+                % Vehicle
                 fill(xc,yc,'r')
 
-                % Vectores velocidade
-                % Com cores diferentes
-                % Escolhi n�o exibir o vector velocidade do centro de massa pq fica muito poluido
-                %vector([xxx(j) yyy(j)],(alphat(j)+psii(j)),velt(j),'k');
+                % Velocity vectors
+                % Different colors
                 self.Vector(efrente(j,1:2),(alphaf(j)+psii(j)),velf(j),'r');
                 self.Vector(etras(j,1:2),(alphar(j)+psii(j)),velr(j),'g');
 
@@ -1112,41 +1051,36 @@ classdef Graphics
                 end
 
                 if saveit == 1
-                    % Adicionando o frame atual ao gif iniciado
+                    % Adding the current frame to the initialized gif
                     frame = getframe(666);
                     im = frame2im(frame);
                     [A,map] = rgb2ind(im,256,'nodither');
-                    imwrite(A,map,'Animacao.gif','WriteMode','append','DelayTime',0.05);
+                    imwrite(A,map,'Animation.gif','WriteMode','append','DelayTime',0.05);
                 end
-                % Pausa a exibi��o - ATEN��O: Tem que ser o mesmo valor usado no ajuste
-                % do tempo
 
-                pause(0.05)
+                pause(0.05)                 % OBS: It has to be the same value of the time adjustment
 
-                cla(ax); % Limpando o axes
+                cla(ax);                    % Clearing axes
             end
 
-            % �ltimo frame
-            % A �ltima imagem que a figura vai exibir quando a anima��o acabar
-            %
+            % Last frame
+            % Last image seen when the animation is over
 
-            % Eixos
+            % Axles
             plot(efrente(:,1),efrente(:,2),'r')
             plot(etras(:,1),etras(:,2),'g')
 
-            % Coordenadas dos cantos para o �ltimo frame
+            % Coordinates of the corners of the last frame
             xc = [rc1(end,1) rc2(end,1) rc3(end,1) rc4(end,1)];
             yc = [rc1(end,2) rc2(end,2) rc3(end,2) rc4(end,2)];
 
-            % Exibindo o ve�culo
+            % Vehicle
             fill(xc,yc,'r')
 
-            % Escolhi n�o exibir o vector velocidade do centro de massa pq fica muito poluido
-            %vector([xxx(end) yyy(end)],(alphat(end)+psii(end)),velt(end),'k');
             self.Vector(efrente(end,1:2),(alphaf(end)+psii(end)),velf(end),'r');
             self.Vector(etras(end,1:2),(alphar(end)+psii(end)),velr(end),'g');
 
-            % Incluindo o semirreboque
+            % Adding the semitrailer
             if col == 8
                 plot(emsemi(:,1),emsemi(:,2),'b')
                 xn = [rn1(end,1) rn2(end,1) rn3(end,1) rn4(end,1)];
@@ -1170,15 +1104,15 @@ classdef Graphics
         % <html> <table border=1 width="97%">
         % <tr> <td width="30%"><tt>XOUT</tt></td> <td width="70%">Solution array. Each column corresponds to the solution of each state variable of the vehicle. The columns must respect the following variable order: [XT YT PSI dPSI VT ALPHAT (PHI dPHI)] </td> </tr>
         % <tr> <td width="30%"><tt>TOUT</tt></td> <td width="70%">Column vector of time points.</td> </tr>
-        % <tr> <td width="30%"><tt>saveit</tt></td> <td width="70%">Flag for saving the trajectory image in a pdf file. If savit = 0 the image will not be saved. If savit = 1 a file Trajetoria.pdf is generated.</td> </tr>
+        % <tr> <td width="30%"><tt>saveit</tt></td> <td width="70%">Flag for saving the trajectory image in a pdf file. If savit = 0 the image will not be saved. If savit = 1 a file Trajectory.pdf is generated.</td> </tr>
         % </table> </html>
         %
         % *Description*
         %
-        % TEXTO
+
 
         function Frame(self,XOUT,TOUT,saveit)
-            % Verificando quantidade de colunas para saber se � ve�culo simples ou articulado
+            % Verifying number of columns of the state output matrix
             % col = 6 -> simples
             % col = 8 -> articulado
             [col] = size(XOUT,2);
@@ -1194,34 +1128,31 @@ classdef Graphics
             % Distances
             a = self.vehicle.distFT;        % Distance FT [m]
             b = self.vehicle.distTR;        % Distance TR [m]
-            lT = self.vehicle.width / 2;  % Metade da width do vehicle [m]
+            lT = self.vehicle.width / 2;    % Half width of the vehicle [m]
 
-            % Slip angles
-            ALPHAF = atan2((a*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));   % Front [rad]
-            % OBS: N�o tem o delta pq � pra medir o �ngulo entre o vector velocidade do eixo dianteiro e o plano longitudinal do ve�culo
-            ALPHAR = atan2((-b*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));  % Rear [rad]
+            % Slip angle @ front axle [rad]
+            ALPHAF = atan2((a*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
+            % OBS: No steering angle because it measures the angle between velocity vector and longitudinal axle of the vehicle
+            % Slip angle @ rear axle [rad]
+            ALPHAR = atan2((-b*dPSI + VT.*sin(ALPHAT)),(VT.*cos(ALPHAT)));
+            % OBS: When using atan2 and the value reaches 180 degrees the vector becomes strange
 
-            %
-            % OBS: Calculando os �ngulos de deriva com "atan2", quando o valor chega a
-            % 180 graus fica estranho o vector.
-            %
             % Velocity
-            VF = sqrt((VT.*cos(ALPHAT)).^2 + (a*dPSI + VT.*sin(ALPHAT)).^2);    % Front [m/s]
-            VR = sqrt((VT.*cos(ALPHAT)).^2 + (-b*dPSI + VT.*sin(ALPHAT)).^2);   % Rear [m/s]
+            VF = sqrt((VT.*cos(ALPHAT)).^2 + (a*dPSI + VT.*sin(ALPHAT)).^2);
+            VR = sqrt((VT.*cos(ALPHAT)).^2 + (-b*dPSI + VT.*sin(ALPHAT)).^2);
 
-            % Posi��o relativa dos cantos e eixos
-            % Determina a posi��o dos cantos e eixos do ve�culo com rela��o ao centro
-            % de massa.
-            % Vectores posi��o 1, 2, 3 e 4 em rela��o a T na base (T t1 t2 t3)
-            rt1t = [a;lT];           % dianteira esquerda
-            rt2t = [a;-lT];          % dianteira direita
-            rt3t = [-b;-lT];         % traseira direita
-            rt4t = [-b;lT];          % traseira esquerda
+            % Position of the corners and axles relative to the CG
 
-            eif = [a;0];            % Posicao do eixo dianteiro
-            eir = [-b;0];           % Posicao do eixo trasiero
+            % Position vectors 1, 2, 3 e 4 relative to T base (T t1 t2 t3)
+            rt1t = [a;lT];                  % Front left
+            rt2t = [a;-lT];                 % Front right
+            rt3t = [-b;-lT];                % Rear right
+            rt4t = [-b;lT];                 % Rear left
 
-            % Pre alocando
+            eif = [a;0];                    % Front axle
+            eir = [-b;0];                   % Rear axle
+
+            % Preallocating matrix
             rt1i = zeros(length(TOUT),2);
             rt2i = zeros(length(TOUT),2);
             rt3i = zeros(length(TOUT),2);
@@ -1230,42 +1161,39 @@ classdef Graphics
             eff = zeros(length(TOUT),2);
             err = zeros(length(TOUT),2);
 
-            % Evolu��o da posi��o absoluta dos cantos e eixos
-            % Determina a movimenta��o dos pontos devido a mudan�a de orienta��o do
-            % ve�culo.
             for j=1:length(TOUT)
-                % Matriz de rota��o da base (T t1 t2 t3) para (o i j k)
+                % Rotation matrix base (T t1 t2 t3) to (o i j k)
                 RTI=[cos(PSI(j)) -sin(PSI(j));sin(PSI(j)) cos(PSI(j))];
-                % Vectores posi��o 1, 2, 3 e 4 em rela��o a origem do ref inercial na
-                % base (T t1 t2 t3)
+                % Position vectors 1, 2, 3 e 4 relative to origin of the inertial reference base (T t1 t2 t3)
                 rt1i(j,1:2) = (RTI*rt1t)';
                 rt2i(j,1:2) = (RTI*rt2t)';
                 rt3i(j,1:2) = (RTI*rt3t)';
                 rt4i(j,1:2) = (RTI*rt4t)';
-                % Posicionando o eixo dianteiro e o traseiro
-                eff(j,1:2) = (RTI*eif);     % Eixo dianteiro
-                err(j,1:2) = (RTI*eir);     % Eixo trasiro
+                % Position of front and rear axle
+                eff(j,1:2) = (RTI*eif);     % Front
+                err(j,1:2) = (RTI*eir);     % Rear
             end
 
-            % Posi��o absoluta dos cantos e eixos
-            % A evolu��o da posi��o absoluta dos pontos ao longo do tempo.
-            % Vectores posi��o 1, 2, 3 e 4 em rela��o a o na base (o i j k)
+            % Absolute position of corners and axles
+            % Absolute position over time
+
+            % Position vectors 1, 2, 3 e 4 relative to o base (o i j k)
             rc1t=[XT YT]+rt1i;
             rc2t=[XT YT]+rt2i;
             rc3t=[XT YT]+rt3i;
             rc4t=[XT YT]+rt4i;
-            % Posicionamento absoluto do eixo dianteiro e trasiero
+
+            % Absolute position of the front and rear axle
             ef = [XT YT]+eff;
             er = [XT YT]+err;
 
-            % Ajuste do tempo
-            % A exibi��o deve ser ajustada pois a o n�mero de frames n�o � a mesma que
-            % a resolu��o do integrador (TSPAN).
-            %
-            % A vari�vel tempo define em que instantes o ve�culo vai ser plotado
+            % Time adjustment
+            % Exhibition has to be adjusted the number of frames is different from the resolution of the integrator (TSPAN)
+
+            % The variable defines the instants the vehicle will be ploted
             TEMPO = 0:1:TOUT(end);
 
-            % Pre alocando as matrizes
+            % Preallocating matrix
             rc1 = zeros(length(TEMPO),2);
             rc2 = zeros(length(TEMPO),2);
             rc3 = zeros(length(TEMPO),2);
@@ -1287,29 +1215,30 @@ classdef Graphics
             velt = zeros(length(TEMPO),2);
 
             for i=1:length(TEMPO)
-                % Posi��o dos cantos e eixo
+                % Position of corners and axles
                 rc1(i,1:2) = interp1(TOUT,rc1t,TEMPO(i));
                 rc2(i,1:2) = interp1(TOUT,rc2t,TEMPO(i));
                 rc3(i,1:2) = interp1(TOUT,rc3t,TEMPO(i));
                 rc4(i,1:2) = interp1(TOUT,rc4t,TEMPO(i));
-                % Posi��o do centro de massa
+
                 xxx(i,1:2) = interp1(TOUT,XT,TEMPO(i));
                 yyy(i,1:2) = interp1(TOUT,YT,TEMPO(i));
-                % Estados
+
+                % States
                 alphat(i,1:2) = interp1(TOUT,ALPHAT,TEMPO(i));
                 psii(i,1:2) = interp1(TOUT,PSI,TEMPO(i));
-                % �ngulos de deriva
+
+                % Slip angles
                 alphaf(i,1:2) = interp1(TOUT,ALPHAF,TEMPO(i));
                 alphar(i,1:2) = interp1(TOUT,ALPHAR,TEMPO(i));
-                % Velocidade
+
+                % Velocity
                 velf(i,1:2) = interp1(TOUT,VF,TEMPO(i));
                 velr(i,1:2) = interp1(TOUT,VR,TEMPO(i));
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             end
 
-            % Definindo a figura
-            % Gerando a figura e definindo algumas propriedades
-            %
+            % Defining figure
             f999 = figure(999);
             set(f999,'Units','centimeters')
             set(f999,'Position',[1 1 24 14])
@@ -1325,50 +1254,48 @@ classdef Graphics
             set(ax999,'YLim',[min(YT)-10 max(YT)+10])
             set(ax999,'YLimMode','manual')
 
-            xlabel('Dist\^ancia [m]','Interpreter','Latex')
-            ylabel('Dist\^ancia [m]','Interpreter','Latex')
+            xlabel('Distance [m]','Interpreter','Latex')
+            ylabel('Distance [m]','Interpreter','Latex')
 
-            TEMPOplot = 0:0.05:TOUT(end); % Tempo para os plot da curva de trajet�ria
+            TEMPOplot = 0:0.05:TOUT(end); % Time for the plots
             for i=1:length(TEMPOplot)
                 efrente(i,1:2) = interp1(TOUT,ef,TEMPOplot(i));
                 etras(i,1:2) = interp1(TOUT,er,TEMPOplot(i));
             end
 
-            % plot(efrente(:,1),efrente(:,2),'r')
-            % plot(etras(:,1),etras(:,2),'g')
             plot(ef(:,1),ef(:,2),'r')
             plot(er(:,1),er(:,2),'g')
 
             for j = 1:length(TEMPO)
-                % Coordenadas dos cantos para os frames
+                % Coordinates of the corners
                 xc = [rc1(j,1) rc2(j,1) rc3(j,1) rc4(j,1)];
                 yc = [rc1(j,2) rc2(j,2) rc3(j,2) rc4(j,2)];
-                % Exibindo o ve�culo
+                % Vehicle
                 fill(xc,yc,'r');
             end
 
             % Adding semitrailer
             if col == 8
-                PHI = XOUT(:,7);        % Orienta��o relativa do semirreboque [rad]
-                dPHI = XOUT(:,8);       % Velocidade angular relativa entre as unidades [rad/s]
+                PHI = XOUT(:,7);            % Relative yaw angle of the semitrailer [rad]
+                dPHI = XOUT(:,8);           % Relative yaw rate between the two units [rad/s]
 
-                c = self.vehicle.distRA;        % distancia da articula��o ao centro de massa do caminh�o-trator [m]
-                d = self.vehicle.distAS;        % distancia do eixo traseiro ao centro de massa do caminh�o-trator [m]
-                e = self.vehicle.distSM;        % distancia da articula��o ao centro de massa do caminh�o-trator [m]
-                lS = self.vehicle.widthSemi / 2;              % Metade da width do vehicle [m]
-                % �ngulo de deriva no eixo do semirreboque [rad]
+                c = self.vehicle.distRA;    % Distance from  [m]
+                d = self.vehicle.distAS;    % Distance from  [m]
+                e = self.vehicle.distSM;    % Distance from  [m]
+                lS = self.vehicle.widthSemi / 2; % Half width of the vehicle [m]
+                % Slip angle semitrailer axle [rad]
                 ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)),(VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)));
-                % M�dulo da velocidade no eixo do semirreboque [m/s]
+                % Velocity semitrailer axle [m/s]
                 VM = sqrt((VT.*cos(ALPHAT + PHI) + b*dPSI.*sin(PHI) + c*dPSI.*sin(PHI)).^2 + ((d + e)*(dPHI - dPSI) + VT.*sin(ALPHAT + PHI) - b*dPSI.*cos(PHI) - c*dPSI.*cos(PHI)).^2);
-                % Posi��o do centro de massa do semirreboque
+                % CG position
                 RS = [XT-(b+c)*cos(PSI)-d*cos(PSI-PHI) YT-(b+c)*sin(PSI)-d*sin(PSI-PHI)];
-                % Vectores posi��o 1, 2, 3 e 4 em rela��o a S na base (S s1 s2 s3)
-                rs1s = [d;lS];           % dianteira esquerda
-                rs2s = [d;-lS];          % dianteira direita
-                rs3s = [-e;-lS];         % traseira direita
-                rs4s = [-e;lS];          % traseira esquerda
-                eim = [-e;0];           % Posicao do eixo do semirreboque
-                % Pre alocando
+                % Position vectors 1, 2, 3 e 4 relative to S base (S s1 s2 s3)
+                rs1s = [d;lS];              % Front left
+                rs2s = [d;-lS];             % Front right
+                rs3s = [-e;-lS];            % Rear right
+                rs4s = [-e;lS];             % Rear left
+                eim = [-e;0];               % Position of semitrailer axle
+
                 rn1i = zeros(length(TOUT),2);
                 rn2i = zeros(length(TOUT),2);
                 rn3i = zeros(length(TOUT),2);
@@ -1376,17 +1303,19 @@ classdef Graphics
                 emm = zeros(length(TOUT),2);
 
                 for j=1:length(TOUT)
-                    % Matriz de rota��o da base (S s1 s2 s3) para (o i j k)
+                    % Rotation matrix base (S s1 s2 s3) to (o i j k)
                     RSI=[cos(PSI(j)-PHI(j)) -sin(PSI(j)-PHI(j));sin(PSI(j)-PHI(j)) cos(PSI(j)-PHI(j))];
-                    % Vectores posi��o 1, 2, 3 e 4 em rela��o a O na base (c c1 c2 c3)
+                    % Position vectors 1, 2, 3 e 4 relative to O base (c c1 c2 c3)
                     rn1i(j,1:2) = (RSI*rs1s)';
                     rn2i(j,1:2) = (RSI*rs2s)';
                     rn3i(j,1:2) = (RSI*rs3s)';
                     rn4i(j,1:2) = (RSI*rs4s)';
-                    % Posicionando o eixo dianteiro e o traseiro
-                    emm(j,1:2) = (RSI*eim);     % Eixo trasiro
+
+                    % Position of semitrailer axle
+                    emm(j,1:2) = (RSI*eim);
                 end
-                % Vectores posi��o 1, 2, 3 e 4 em rela��o a o na base (o i j k)
+
+                % Position vectors 1, 2, 3 e 4 relative to o base (o i j k)
                 rn1t=RS+rn1i;
                 rn2t=RS+rn2i;
                 rn3t=RS+rn3i;
@@ -1417,7 +1346,6 @@ classdef Graphics
                     emsemi(i,1:2) = interp1(TOUT,em,TEMPOplot(i));
                 end
                 plot(em(:,1),em(:,2),'b')
-                % plot(emsemi(:,1),emsemi(:,2),'b')
 
                 for j = 1:length(TEMPO)
                     xn = [rn1(j,1) rn2(j,1) rn3(j,1) rn4(j,1)];
@@ -1427,7 +1355,7 @@ classdef Graphics
             end
 
             if saveit == 1
-                print(f999,'-dpdf','Trajetoria.pdf')
+                print(f999,'-dpdf','Trajectory.pdf')
             end
         end
     end
@@ -1446,48 +1374,46 @@ classdef Graphics
         % The following table describes the input arguments:
         %
         % <html> <table border=1 width="97%">
-        % <tr> <td width="30%"><tt>inicio</tt></td> <td width="70%">Coordenada do �nicio da flecha.</td> </tr>
-        % <tr> <td width="30%"><tt>angulo</tt></td> <td width="70%">�ngulo da orienta��o da flecha.</td> </tr>
-        % <tr> <td width="30%"><tt>M�dulo</tt></td> <td width="70%">Comprimento da flecha.</td> </tr>
-        % <tr> <td width="30%"><tt>cor</tt></td> <td width="70%">Cor da flecha.</td> </tr>
+        % <tr> <td width="30%"><tt>startCoord</tt></td> <td width="70%"> Vector start coordinate.</td> </tr>
+        % <tr> <td width="30%"><tt>angle</tt></td> <td width="70%"> Orientation angle of the arrow.</td> </tr>
+        % <tr> <td width="30%"><tt>modulo</tt></td> <td width="70%">Size of the arrow.</td> </tr>
+        % <tr> <td width="30%"><tt>color</tt></td> <td width="70%">Color of the arrow.</td> </tr>
         % </table> </html>
         %
         % *Description*
         %
         % TEXTO
 
-        function Vector(inicio,angulo,modulo,cor)
-            coord1 = inicio;                                    % inicio do vector
-            theta = angulo;
-            modulo = 0.7*modulo;                                % modulo do vector
-            coord2 = modulo*[cos(theta) sin(theta)] + coord1;   % fim do vector
+        function Vector(startCoord,angle,modulo,color)
+            coord1 = startCoord;                                % Vector start coordinate
+            theta = angle;
+            modulo = 0.7*modulo;                                % Size of the vector
+            coord2 = modulo*[cos(theta) sin(theta)] + coord1;   % Vector end coordinate
 
-            %theta = atan2((coord1(1)-coord2(1)),(coord1(2)-coord2(2))); % angulo de orienta��o do triangulo
-            esc = 1; % Escala
-            l = 0.5; % width relativa em rela��o ao comprimento do triangulo (0-1)
+            %theta = atan2((coord1(1)-coord2(1)),(coord1(2)-coord2(2))); % Orientatin angle of the triangle
+            esc = 1; % Scale
+            l = 0.5; % width relative to the triangle length (0-1)
 
-            % Forma e orienta��o do triangulo
-            c1 = esc*l*[-sin(theta) +cos(theta)];   % canto 1 - inferior esquerdo
-            c2 = esc*l*[+sin(theta) -cos(theta)];   % canto 2 - inferior direito
-            c3 = esc*[+cos(theta) +sin(theta)];     % canto 3 - superior central
+            % Shape and orientation of the triangle
+            c1 = esc*l*[-sin(theta) +cos(theta)];   % corner 1 - bottom left
+            c2 = esc*l*[+sin(theta) -cos(theta)];   % corner 2 - bottom right
+            c3 = esc*[+cos(theta) +sin(theta)];     % corner 3 - top central
 
-            % Escala e posicionamento
+            % Scale and positioning
             x = [c1(1)+coord2(1) c2(1)+coord2(1) c3(1)+coord2(1)];
             y = [c1(2)+coord2(2) c2(2)+coord2(2) c3(2)+coord2(2)];
 
-            % figure(1)
-            % axis equal
             hold on
-            fill(x,y,cor)
-            p = plot([coord1(1) coord2(1)],[coord1(2) coord2(2)],cor);
+            fill(x,y,color)
+            p = plot([coord1(1) coord2(1)],[coord1(2) coord2(2)],color);
             set(p,'LineWidth',2)
-            % Id�ia de colocar um marcador no in�cio do vector
+            % Idea of using a marker at the begining of the vector
             % m = plot(coord1(1),coord1(2),strcat('*',cor));
             % set(m,'MarkerSize',10)
         end
 
         %% changeMarker
-        % A fun��o changeMarker altera o n�mero de marcadores num plot.
+        % The function changeMarker changes the number of marker in a plot.
         %
         % *Sintax*
         %
@@ -1499,7 +1425,7 @@ classdef Graphics
         %
         % <html> <table border=1 width="97%">
         % <tr> <td width="30%"><tt>p</tt></td> <td width="70%">Handle do plot.</td> </tr>
-        % <tr> <td width="30%"><tt>n</tt></td> <td width="70%">N�mero de marcadores que devem ser exibidos.</td> </tr>
+        % <tr> <td width="30%"><tt>n</tt></td> <td width="70%">Number of markers to be included.</td> </tr>
         % </table> </html>
         %
         % *Description*
@@ -1527,18 +1453,18 @@ classdef Graphics
 
             step = floor((size_XData)/(n-1));
 
-            % Fazendo o plot dos marcadores
+            % Ploting the markers
             p_marker = plot(vec_XData(1:step:end),vec_YData(1:step:end));
             set(p_marker,'LineStyle','none','Marker',marker_type,'MarkerSize',marker_size,...
             	'MarkerEdgeColor',marker_EdgeColor,'MarkerFaceColor',marker_FaceColor)
 
-            % Removendo o marcador do plot original
+            % Removing the markers from the original plot
             set(p,'Marker','none')
-            % Remover a visibilidade do handle do original e do marcador
+            % Hiding the original plot
             set(p,'HandleVisibility','off')
             set(p_marker,'HandleVisibility','off')
 
-            % Dummy para legenda
+            % Dummy for legend
             p_dummy = plot(vec_XData(1),vec_YData(1));
             set(p_dummy,'Color',line_color,'LineStyle',line_Style,'LineWidth',line_LineWidth,...
             	'Marker',marker_type,'MarkerSize',marker_size,...

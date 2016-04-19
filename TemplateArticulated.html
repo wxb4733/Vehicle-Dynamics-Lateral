@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Template articulado</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-22"><meta name="DC.source" content="TemplateArticulated.m"><style type="text/css">
+      --><title>Template Articulated</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="TemplateArticulated.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,11 +65,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Template articulado</h1><!--introduction--><p>Exemplo de script para simula&#65533;&#65533;o de ve&#65533;culo articulado.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Code start</a></li><li><a href="#2">Integration parameters</a></li><li><a href="#3">Default models and parameters</a></li><li><a href="#4">Integration</a></li><li><a href="#5">Post integration</a></li><li><a href="#6">Results</a></li><li><a href="#10">See Also</a></li></ul></div><h2>Code start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+  </style></head><body><div class="content"><h1>Template Articulated</h1><!--introduction--><p>Template script for the simulation of articulated vehicle.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Code start</a></li><li><a href="#2">Integration parameters</a></li><li><a href="#3">Default models and parameters</a></li><li><a href="#4">Integration</a></li><li><a href="#5">Post integration</a></li><li><a href="#6">Results</a></li><li><a href="#10">See Also</a></li></ul></div><h2>Code start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
 close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 clc                         <span class="comment">% Clear command window</span>
 
-import <span class="string">VehicleDynamics.*</span>   <span class="comment">% Import package Vehicle Dynamics</span>
+import <span class="string">VehicleDynamicsLateral.*</span>   <span class="comment">% Import package Vehicle Dynamics</span>
 </pre><h2>Integration parameters<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Simulation time</span>
 T = 7;                      <span class="comment">% Total simulation time [s]</span>
 resol = 50;                 <span class="comment">% Resolution</span>
@@ -84,8 +84,8 @@ PSI0 = 0;                   <span class="comment">% Initial tractor yaw angle [r
 X0 = 0;                     <span class="comment">% Initial tractor CG horizontal position [m]</span>
 Y0 = 0;                     <span class="comment">% Initial tractor CG vertical position [m]</span>
 x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
-</pre><h2>Default models and parameters<a name="3"></a></h2><p>Definindo o modelo de ve&#65533;culo sem passagem de argumentos os par&#65533;metros e modelos padr&#65533;o s&#65533;o usados.</p><pre class="codeinput">System = VehicleDynamics.VehicleArticulatedNonlinear4DOF;
-</pre><h2>Integration<a name="4"></a></h2><p>Integration using mass matrix. Details: <a href="http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22">ode45 (Mass matrix)</a></p><pre class="codeinput"><span class="comment">% Configurando as op&#65533;&#65533;es do integrador para levar em considera&#65533;&#65533;o a matriz de massa</span>
+</pre><h2>Default models and parameters<a name="3"></a></h2><p>Defining the model of the vehicle without passing any argument the default parameters and models are used.</p><pre class="codeinput">System = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
+</pre><h2>Integration<a name="4"></a></h2><p>Integration using mass matrix. Details: <a href="http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22">ode45 (Mass matrix)</a></p><pre class="codeinput"><span class="comment">% Configuring integration options so that it takes into consideration the mass matrix</span>
 options = odeset(<span class="string">'Mass'</span>,@System.MassMatrix);
 
 [TOUT,XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN,x0,options);
@@ -98,13 +98,13 @@ PHI = XOUT(:,5);            <span class="comment">% Articulation angle [rad]</sp
 PSI = XOUT(:,6);            <span class="comment">% Tractor yaw angle [rad]</span>
 XT = XOUT(:,7);             <span class="comment">% Tractor CG horizontal position [m]</span>
 YT = XOUT(:,8);             <span class="comment">% Tractor CG vertical position [m]</span>
-</pre><h2>Results<a name="6"></a></h2><p>Details: <a href="Graphics.html">Graphics.m</a></p><pre class="codeinput">G = VehicleDynamics.Graphics(System);
+</pre><h2>Results<a name="6"></a></h2><p>Details: <a href="Graphics.html">Graphics.m</a></p><pre class="codeinput">G = VehicleDynamicsLateral.Graphics(System);
 </pre><p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
 </pre><img vspace="5" hspace="5" src="TemplateArticulated_01.png" alt=""> <p>Animation</p><pre class="codeinput">G.Animation([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
-</pre><img vspace="5" hspace="5" src="TemplateArticulated_02.png" alt=""> <p><img vspace="5" hspace="5" src="ilustracoes/AnimacaoArticulado.gif" alt=""> </p><h2>See Also<a name="10"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateSimple.html">TemplateSimple</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="TemplateArticulated_02.png" alt=""> <p><img vspace="5" hspace="5" src="illustrations/AnimationArticulated.gif" alt=""> </p><h2>See Also<a name="10"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateSimple.html">TemplateSimple</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Template articulado
-% Exemplo de script para simula��o de ve�culo articulado.
+%% Template Articulated
+% Template script for the simulation of articulated vehicle.
 %
 %% Code start
 
@@ -112,7 +112,7 @@ clear all                   % Clear workspace
 close all                   % Closing figures
 clc                         % Clear command window
 
-import VehicleDynamics.*   % Import package Vehicle Dynamics
+import VehicleDynamicsLateral.*   % Import package Vehicle Dynamics
 
 %% Integration parameters
 %
@@ -133,14 +133,14 @@ Y0 = 0;                     % Initial tractor CG vertical position [m]
 x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
 
 %% Default models and parameters
-% Definindo o modelo de ve�culo sem passagem de argumentos os par�metros e modelos padr�o s�o usados.
+% Defining the model of the vehicle without passing any argument the default parameters and models are used.
 
-System = VehicleDynamics.VehicleArticulatedNonlinear4DOF;
+System = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
 
 %% Integration
 % Integration using mass matrix. Details: <http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22 ode45 (Mass matrix)>
 
-% Configurando as op��es do integrador para levar em considera��o a matriz de massa
+% Configuring integration options so that it takes into consideration the mass matrix
 options = odeset('Mass',@System.MassMatrix);
 
 [TOUT,XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN,x0,options);
@@ -161,7 +161,7 @@ YT = XOUT(:,8);             % Tractor CG vertical position [m]
 %% Results
 % Details: <Graphics.html Graphics.m>
 
-G = VehicleDynamics.Graphics(System);
+G = VehicleDynamicsLateral.Graphics(System);
 
 %%
 % Trajectory
@@ -177,7 +177,7 @@ G.Animation([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
 
 %%
 %
-% <<ilustracoes/AnimacaoArticulado.gif>>
+% <<illustrations/AnimationArticulated.gif>>
 %
 %% See Also
 %
