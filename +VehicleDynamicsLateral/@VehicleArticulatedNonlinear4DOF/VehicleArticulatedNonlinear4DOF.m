@@ -86,116 +86,98 @@ classdef VehicleArticulatedNonlinear4DOF < VehicleDynamicsLateral.VehicleArticul
             FzR = self.params(4)*g;     % Carga vertical no eixo traseiro [N]
             FzM = self.params(5)*g;     % Carga vertical no eixo do semirreboque [N]
             muy = self.params(17);      % Coeficiente de atrito de opera��o
-            % Defini��o dos estados
-            dPSI = estados(1,1);        % Velocidade angular do caminh�o-trator [rad/s]
-            ALPHAT = estados(2,1);      % �ngulo de deriva do CG do caminh�o-trator [rad]
-            dPHI = estados(3,1);        % Velocidade angular relativa entre o semirreboque e o caminh�o-trator [rad/s]
-            VEL = estados(4,1);         % �ngulo relativo entre o semirreboque e o caminh�o-trator [rad]
-            PHI = estados(5,1);         % M�dulo do vetor velocidade do CG do caminh�o-trator [m/s]
-            PSI = estados(6,1);         % �ngulo de orienta��o do caminh�o-trator [rad]
 
-            % Angulos de deriva n�o linear
-            ALPHAF = atan2((a*dPSI + VEL*sin(ALPHAT)),(VEL*cos(ALPHAT))) - DELTA;
-            ALPHAR = atan2((-b*dPSI + VEL*sin(ALPHAT)),(VEL*cos(ALPHAT)));
-            ALPHAM = atan2(((d + e)*(dPHI - dPSI) + VEL*sin(ALPHAT + PHI) - b*dPSI*cos(PHI) - ...
-                     c*dPSI*cos(PHI)),(VEL*cos(ALPHAT + PHI) + b*dPSI*sin(PHI) + c*dPSI*sin(PHI)));
+            % State variables
+            % X = estados(1,1);         % Not used
+            % Y = estados(2,1);         % Not used
+            PSI     = estados(3,1);
+            PHI     = estados(4,1);
+            V       = estados(5,1);
+            ALPHAT  = estados(6,1);
+            dPSI    = estados(7,1);
+            dPHI    = estados(8,1);
 
-            % For�as longitudinais
+            % Slip angles
+            ALPHAF = - DELTA - PSI + atan2(V*sin(ALPHAT + PSI) + a*dPSI*cos(PSI), V*cos(ALPHAT + PSI) - a*dPSI*sin(PSI));
+            ALPHAR = - PSI + atan2(V*sin(ALPHAT + PSI) - b*dPSI*cos(PSI), V*cos(ALPHAT + PSI) + b*dPSI*sin(PSI));
+            ALPHAM = PHI - PSI + atan2(V*sin(ALPHAT + PSI) - dPSI*cos(PSI)*(b + c) + cos(PHI - PSI)*(d + e)*(dPHI - dPSI), V*cos(ALPHAT + PSI) + dPSI*sin(PSI)*(b + c) + sin(PHI - PSI)*(d + e)*(dPHI - dPSI));
+
+            % Longitudinal forces
             FxF = 0;
             FxR = 0;
             FxM = 0;
-            % For�as laterais nos tires - Curva caracter�stica
+
+            % Lateral forces - Characteristic curve
             FyF = nF*self.tire.Characteristic(ALPHAF,FzF/nF,muy);
             FyR = nR*self.tire.Characteristic(ALPHAR,FzR/nR,muy);
             FyM = nM*self.tire.Characteristic(ALPHAM,FzM/nM,muy);
 
-            % ddPSI,dALPHAT,ddPHI,dPHI,dVEL
-            % f1 = FxR + FxF*cos(DELTA) + FxM*cos(PHI) - FyF*sin(DELTA) + FyM*sin(PHI) - b*dPSI^2*mS - c*dPSI^2*mS + VEL*dPSI*mS*sin(ALPHAT) ...
-            %         + VEL*dPSI*mT*sin(ALPHAT) - d*dPHI^2*mS*cos(PHI) - d*dPSI^2*mS*cos(PHI) + 2*d*dPHI*dPSI*mS*cos(PHI);
-            % f2 = FyR + FyF*cos(DELTA) + FyM*cos(PHI) + FxF*sin(DELTA) - FxM*sin(PHI) - VEL*dPSI*mS*cos(ALPHAT) - VEL*dPSI*mT*cos(ALPHAT) + ...
-            %      d*dPHI^2*mS*sin(PHI) + d*dPSI^2*mS*sin(PHI) - 2*d*dPHI*dPSI*mS*sin(PHI);
-            % f3 = a*(FyF*cos(DELTA) + FxF*sin(DELTA)) - FyR*b - (b + c)*(d*mS*sin(PHI)*dPHI^2 - 2*d*mS*sin(PHI)*dPHI*dPSI + d*mS*sin(PHI)*dPSI^2 - ...
-            %      VEL*mS*cos(ALPHAT)*dPSI + FyM*cos(PHI) - FxM*sin(PHI));
-            % f4 = d*(b*dPSI^2*mS*sin(PHI) - FyM + c*dPSI^2*mS*sin(PHI) + VEL*dPSI*mS*cos(ALPHAT + PHI)) - FyM*e;
-            f1 = FxR + FxF*cos(DELTA) + FxM*cos(PHI) - FyF*sin(DELTA) + FyM*sin(PHI) - (b + c)*dPSI^2*mS + (mT + mS)*VEL*dPSI*sin(ALPHAT) - (dPSI - dPHI)^2*mS*d*cos(PHI);
-            f2 = FyR + FyF*cos(DELTA) + FyM*cos(PHI) + FxF*sin(DELTA) - FxM*sin(PHI) - (mT + mS)*VEL*dPSI*cos(ALPHAT) + (dPSI - dPHI)^2*mS*d*sin(PHI);
-            f3 = a*(FyF*cos(DELTA) + FxF*sin(DELTA)) - FyR*b - (b + c)*(-FxM*sin(PHI) + FyM*cos(PHI) - VEL*mS*cos(ALPHAT)*dPSI + (dPSI - dPHI)^2*mS*d*sin(PHI));
-            f4 = d*(b*dPSI^2*mS*sin(PHI) - FyM + c*dPSI^2*mS*sin(PHI) + VEL*dPSI*mS*cos(ALPHAT+ PHI)) - FyM*e;
+            % Functions
+            f = [...
+            V*cos(PSI+ALPHAT);...
+            V*sin(PSI+ALPHAT);...
+            dPSI;...
+            dPHI;...
+            FxF*cos(PSI + DELTA) + FxR*cos(PSI) + FxM*cos(PSI - PHI) - FyF*sin(PSI + DELTA) - FyR*sin(PSI) - FyM*sin(PSI - PHI) - mS*(b+c)*dPSI^2*cos(PSI) - mS*d*(dPSI - dPHI)^2*cos(PSI - PHI) + (mT + mS)*V*sin(PSI+ALPHAT)*dPSI;...
+            FxF*sin(PSI + DELTA) + FxR*sin(PSI) + FxM*sin(PSI - PHI) + FyF*cos(PSI + DELTA) + FyR*cos(PSI) + FyM*cos(PSI - PHI) - mS*(b+c)*dPSI^2*sin(PSI) - mS*d*(dPSI - dPHI)^2*sin(PSI - PHI) - (mT + mS)*V*cos(PSI+ALPHAT)*dPSI;...
+            FxF*a*sin(DELTA) + FxM*(b + c)*sin(PHI) + FyF*a*cos(DELTA) - FyR*b - FyM*((b+c)*cos(PHI) + (d+e)) - mS*(b+c)*d*(dPSI - dPHI)^2*sin(PHI) + mS*(b+c)*d*dPSI^2*sin(PHI) + mS*((b+c)*V*cos(ALPHAT) + d*V*cos(ALPHAT + PHI))*dPSI;...
+            FyM*(d + e) - mS*(b+c)*d*dPSI^2*sin(PHI) - mS*d*V*cos(ALPHAT + PHI)*dPSI ];
 
-            f5 = dPHI;
-
-
-
-
-            f = [f1 ; f2 ; f3 ; f4 ; f5];
-
-            % Equa��es adicionais para o posicionamento (N�o necess�rias para a din�mica em guinada)
-            dx6 = dPSI;
-            dx7 = VEL*cos(ALPHAT + PSI); % X
-            dx8 = VEL*sin(ALPHAT + PSI); % Y
-
-            dx = [f;...
-                  dx6;...
-                  dx7;...
-                  dx8];
+            % Integrator output
+            dx = f;
         end
 
         %% Matriz de massa
         %
 
         function M = MassMatrix(self,~,estados)
-            % Dados do ve�culo
-            mT = self.params(18);       % massa do veiculo [kg]
-            mS = self.params(19);       % massa do veiculo [kg]
-            IT = self.params(6);        % momento de inercia [kg]
-            IS = self.params(7);        % momento de inercia [kg]
-            % a = self.params(20);        % distancia do eixo dianteiro ao centro de massa do caminh�o-trator [m]
-            b = self.params(21);        % distancia do eixo traseiro ao centro de massa do caminh�o-trator [m]
-            c = self.params(9);         % distancia da articula��o ao centro de massa do caminh�o-trator [m]
-            d = self.params(22);        % distancia do eixo traseiro ao centro de massa do caminh�o-trator [m]
-            % e = self.params(23);        % distancia da articula��o ao centro de massa do caminh�o-trator [m]
-            % DELTA = self.params(8);   % Ester�amento [rad]
-            % nF = self.params(12);      % N�mero de tires no eixo dianteiro do caminh�o-trator
-            % nR = self.params(13);      % N�mero de tires no eixo traseiro do caminh�o-trator
-            % nM = self.params(14);      % N�mero de tires no eixo do semirreboque
-            % g = 9.81;                  % Acelera��o da gravidade [m/s^2]
-            % FzF = self.params(3)*g;     % Carga vertical no eixo dianteiro [N]
-            % FzR = self.params(4)*g;     % Carga vertical no eixo traseiro [N]
-            % FzM = self.params(5)*g;     % Carga vertical no eixo do semirreboque [N]
-            % muy = self.params(17);      % Coeficiente de atrito de opera��o
-            % Defini��o dos estados
-            % dPSI = estados(1,1);              % Velocidade angular do caminh�o-trator [rad/s]
-            ALPHAT = estados(2,1);      % �ngulo de deriva do CG do caminh�o-trator [rad]
-            % dPHI = estados(3,1);              % Velocidade angular relativa entre o semirreboque e o caminh�o-trator [rad/s]
-            VEL = estados(4,1);         % �ngulo relativo entre o semirreboque e o caminh�o-trator [rad]
-            PHI = estados(5,1);         % M�dulo do vetor velocidade do CG do caminh�o-trator [m/s]
-            % PSI = estados(6,1);               % �ngulo de orienta��o do caminh�o-trator [rad]
-            % Matriz de massa
-            M11 = -d*mS*sin(PHI);
-            M12 = -VEL*sin(ALPHAT)*(mS + mT);
-            M13 =  d*mS*sin(PHI);
-            M14 = cos(ALPHAT)*(mS + mT);
-            M21 = -mS*(b + c + d*cos(PHI));
-            M22 = VEL*cos(ALPHAT)*(mS + mT);
-            M23 = d*mS*cos(PHI);
-            M24 = sin(ALPHAT)*(mS + mT);
-            M31 = IT + mS*(b + c)*(b + c + d*cos(PHI));
-            M32 = -VEL*mS*cos(ALPHAT)*(b + c);
-            M33 = -d*mS*cos(PHI)*(b + c);
-            M34 = -mS*sin(ALPHAT)*(b + c);
-            M41 = IS + d*mS*(d + cos(PHI)*(b + c));
-            M42 = -VEL*d*mS*cos(ALPHAT + PHI);
-            M43 = - mS*d^2 - IS;
-            M44 = -d*mS*sin(ALPHAT + PHI);
+            % Vehicle parameters
+            mT = self.params(18);
+            mS = self.params(19);
+            IT = self.params(6);
+            IS = self.params(7);
+            % a = self.params(20);         % Not used
+            b = self.params(21);
+            c = self.params(9);
+            d = self.params(22);
 
-            M = [M11 M12 M13 M14 0 0 0 0;...
-                 M21 M22 M23 M24 0 0 0 0;...
-                 M31 M32 M33 M34 0 0 0 0;...
-                 M41 M42 M43 M44 0 0 0 0;...
-                  0   0   0   0  1 0 0 0;...
-                  0   0   0   0  0 1 0 0;...
-                  0   0   0   0  0 0 1 0;...
-                  0   0   0   0  0 0 0 1];
+            % State variables
+            % X = estados(1,1);         % Not used
+            % Y = estados(2,1);         % Not used
+            PSI = estados(3,1);
+            PHI = estados(4,1);
+            V = estados(5,1);
+            ALPHAT = estados(6,1);
+            % dPSI = estados(7,1);         % Not used
+            % dPHI = estados(8,1);         % Not used
+
+            % Mass matrix
+            M55 = (mT + mS)*cos(PSI + ALPHAT);
+            M56 = -(mT + mS)*V*sin(PSI + ALPHAT);
+            M57 = mS*( (b+c)*sin(PSI) + d*sin(PSI - PHI) );
+            M58 = -mS*d*sin(PSI - PHI);
+            M65 = (mT + mS)*sin(PSI + ALPHAT);
+            M66 = (mT + mS)*V*cos(PSI + ALPHAT);
+            M67 = -mS*( (b+c)*cos(PSI) + d*cos(PSI - PHI) );
+            M68 = mS*d*cos(PSI - PHI);
+            M75 = -mS*( (b+c)*sin(ALPHAT) + d*sin(ALPHAT + PHI) );
+            M76 = -mS*( (b+c)*V*cos(ALPHAT) + d*V*cos(ALPHAT + PHI) );
+            M77 = mS*( (b+c)^2 + 2*(b+c)*d*cos(PHI) + d^2 ) + IT + IS;
+            M78 = -( mS*( (b+c)*d*cos(PHI) + d^2 ) + IS);
+            M85 = mS*d*sin(ALPHAT + PHI);
+            M86 = mS*d*V*cos(ALPHAT + PHI);
+            M87 = - (mS*(d^2 + (b+c)*d*cos(PHI)) + IS);
+            M88 = mS*d^2 + IS;
+
+            M = [   1 0 0 0  0   0   0   0 ;...
+                    0 1 0 0  0   0   0   0 ;...
+                    0 0 1 0  0   0   0   0 ;...
+                    0 0 0 1  0   0   0   0 ;...
+                    0 0 0 0 M55 M56 M57 M58 ;...
+                    0 0 0 0 M65 M66 M67 M68 ;...
+                    0 0 0 0 M75 M76 M77 M78 ;...
+                    0 0 0 0 M85 M86 M87 M88 ];
+
         end
 
 

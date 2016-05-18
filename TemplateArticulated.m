@@ -16,16 +16,18 @@ import VehicleDynamicsLateral.*   % Import package Vehicle Dynamics
 T = 7;                      % Total simulation time [s]
 resol = 50;                 % Resolution
 TSPAN = 0:T/resol:T;        % Time span [s]
+
 % Initial conditions
-dPSI0 = 0.25;               % Initial tractor yaw rate [rad/s]
-ALPHAT0 = 0.3;              % Initial tractor side slip angle [rad]
-dPHI0 = dPSI0;              % Initial articulation rate [rad/s]
-VEL0 = 20;                  % Initial tractor CG velocity [m/s]
-PHI0 = 0;                   % Initial articulation angle [rad]
-PSI0 = 0;                   % Initial tractor yaw angle [rad]
 X0 = 0;                     % Initial tractor CG horizontal position [m]
 Y0 = 0;                     % Initial tractor CG vertical position [m]
-x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
+PSI0 = 0;                   % Initial tractor yaw angle [rad]
+PHI0 = 0;                   % Initial articulation angle [rad]
+V0 = 20;                  % Initial tractor CG velocity [m/s]
+ALPHAT0 = 0.3;              % Initial tractor side slip angle [rad]
+dPSI0 = 0.25;               % Initial tractor yaw rate [rad/s]
+dPHI0 = dPSI0;              % Initial articulation rate [rad/s]
+
+x0 = [X0 Y0 PSI0 PHI0 V0 ALPHAT0 dPSI0 dPHI0];
 
 %% Default models and parameters
 % Defining the model of the vehicle without passing any argument the default parameters and models are used.
@@ -44,14 +46,14 @@ options = odeset('Mass',@System.MassMatrix);
 %
 
 % Retrieving states
-dPSI = XOUT(:,1);           % Tractor yaw rate [rad/s]
-ALPHAT = XOUT(:,2);         % Tractor side slip angle [rad]
-dPHI = XOUT(:,3);           % Articulation rate [rad/s]
-VEL = XOUT(:,4);            % Tractor CG velocity [m/s]
-PHI = XOUT(:,5);            % Articulation angle [rad]
-PSI = XOUT(:,6);            % Tractor yaw angle [rad]
-XT = XOUT(:,7);             % Tractor CG horizontal position [m]
-YT = XOUT(:,8);             % Tractor CG vertical position [m]
+XT = XOUT(:,1);             % Tractor CG horizontal position [m]
+YT = XOUT(:,2);             % Tractor CG vertical position [m]
+PSI = XOUT(:,3);            % Tractor yaw angle [rad]
+PHI = XOUT(:,4);            % Articulation angle [rad]
+VEL = XOUT(:,5);            % Tractor CG velocity [m/s]
+ALPHAT = XOUT(:,6);         % Tractor side slip angle [rad]
+dPSI = XOUT(:,7);           % Tractor yaw rate [rad/s]
+dPHI = XOUT(:,8);           % Articulation rate [rad/s]
 
 %% Results
 % Details: <Graphics.html Graphics.m>

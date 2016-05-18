@@ -158,9 +158,6 @@ ax3 = subplot(3,1,3);
     ylabel(ax3,'$v_T$ [m/s]','Interpreter','Latex')
     title(ax3,'$v_T$ x $t$','Interpreter','Latex')
 
-
-
-print(gcf,'-dpdf','figura.pdf')
 %%
 % Trajectory
 %
