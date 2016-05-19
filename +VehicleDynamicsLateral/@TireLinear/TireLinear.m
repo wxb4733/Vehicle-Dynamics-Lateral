@@ -32,7 +32,7 @@ classdef TireLinear < VehicleDynamicsLateral.Tire
         % Constructor
         function self = TireLinear(varargin)
             if nargin == 0
-                self.params = 1000;
+                self.params = 100000;
             else
                 self.params = varargin{1};
             end
