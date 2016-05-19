@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Documentation Generator</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="DocGen.m"><style type="text/css">
+      --><title>Documentation Generator</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-19"><meta name="DC.source" content="DocGen.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -86,10 +86,11 @@ publish(<span class="string">'+VehicleDynamicsLateral/@Tire/Tire'</span>,<span c
 publish(<span class="string">'TireComparison'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,true);
 
 <span class="comment">% Vehicle model</span>
+publish(<span class="string">'+VehicleDynamicsLateral/@VehicleSimple/VehicleSimple'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
+    publish(<span class="string">'+VehicleDynamicsLateral/@VehicleSimpleLinear2DOF/VehicleSimpleLinear2DOF'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
+    publish(<span class="string">'+VehicleDynamicsLateral/@VehicleSimpleNonlinear3DOF/VehicleSimpleNonlinear3DOF'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
 publish(<span class="string">'+VehicleDynamicsLateral/@VehicleArticulated/VehicleArticulated'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
     publish(<span class="string">'+VehicleDynamicsLateral/@VehicleArticulatedNonlinear4DOF/VehicleArticulatedNonlinear4DOF'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
-publish(<span class="string">'+VehicleDynamicsLateral/@VehicleSimple/VehicleSimple'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
-    publish(<span class="string">'+VehicleDynamicsLateral/@VehicleSimpleNonlinear3DOF/VehicleSimpleNonlinear3DOF'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
 
 <span class="comment">% Graphics</span>
 publish(<span class="string">'+VehicleDynamicsLateral/@Graphics/Graphics'</span>,<span class="string">'outputDir'</span>,<span class="string">'../Vehicle-Dynamics-Lateral-Documentation/'</span>,<span class="string">'evalCode'</span>,false);
@@ -134,10 +135,11 @@ publish('+VehicleDynamicsLateral/@Tire/Tire','outputDir','../Vehicle-Dynamics-La
 publish('TireComparison','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',true);
 
 % Vehicle model
+publish('+VehicleDynamicsLateral/@VehicleSimple/VehicleSimple','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
+    publish('+VehicleDynamicsLateral/@VehicleSimpleLinear2DOF/VehicleSimpleLinear2DOF','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
+    publish('+VehicleDynamicsLateral/@VehicleSimpleNonlinear3DOF/VehicleSimpleNonlinear3DOF','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
 publish('+VehicleDynamicsLateral/@VehicleArticulated/VehicleArticulated','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
     publish('+VehicleDynamicsLateral/@VehicleArticulatedNonlinear4DOF/VehicleArticulatedNonlinear4DOF','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
-publish('+VehicleDynamicsLateral/@VehicleSimple/VehicleSimple','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
-    publish('+VehicleDynamicsLateral/@VehicleSimpleNonlinear3DOF/VehicleSimpleNonlinear3DOF','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);
 
 % Graphics
 publish('+VehicleDynamicsLateral/@Graphics/Graphics','outputDir','../Vehicle-Dynamics-Lateral-Documentation/','evalCode',false);

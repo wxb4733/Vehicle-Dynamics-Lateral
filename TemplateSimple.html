@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Template Simple</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
+      --><title>Template Simple</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-19"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -82,14 +82,22 @@ X0 = 0;                     <span class="comment">% Initial CG horizontal positi
 Y0 = 0;                     <span class="comment">% Initial CG vertical position [m]</span>
 V0 = 20;                    <span class="comment">% Initial CG velocity [m/s]</span>
 x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
-</pre><h2>Tire parameters<a name="3"></a></h2><p>Chosen tire: <a href="TirePacejka1989.html">TirePacejka1989.m</a>.</p><pre class="codeinput">a0 = 1.002806;
-a1 = 2.014156;
-a2 = 710.5013;
-a3 = 5226.341;
-a4 = 78.87699;
-a5 = 0.01078379;
-a6 = -0.004759443;
-a7 = 0.6704447;
+</pre><h2>Tire parameters<a name="3"></a></h2><p>Chosen tire: <a href="TirePacejka1989.html">TirePacejka1989.m</a>.</p><pre class="codeinput">a0 = 1.2;
+a1 = 0;
+a2 = 700;
+a3 = 3000;
+a4 = 50;
+a5 = 0;
+a6 = 0;
+a7 = -1;
+<span class="comment">% a0 = 1.002806;</span>
+<span class="comment">% a1 = 2.014156;</span>
+<span class="comment">% a2 = 710.5013;</span>
+<span class="comment">% a3 = 5226.341;</span>
+<span class="comment">% a4 = 78.87699;</span>
+<span class="comment">% a5 = 0.01078379;</span>
+<span class="comment">% a6 = -0.004759443;</span>
+<span class="comment">% a7 = 0.6704447;</span>
 a8 = 0;
 a9 = 0;
 a10 = 0;
@@ -119,53 +127,77 @@ YT = XOUT(:,5);             <span class="comment">% CG vertical position [m]</sp
 VEL = XOUT(:,6);            <span class="comment">% CG velocity [m/s]</span>
 </pre><h2>Results<a name="7"></a></h2><p>Details: <a href="Graphics.html">Graphics.m</a></p><p>Coordinates over time</p><pre class="codeinput">G = VehicleDynamicsLateral.Graphics(System);
 
+<span class="comment">% f1 = figure(1);</span>
+<span class="comment">% set(f1,'Units','centimeters')</span>
+<span class="comment">% set(f1,'Position',[5 0 16 16])</span>
+<span class="comment">% set(f1,'PaperUnits','centimeters')</span>
+<span class="comment">% set(f1,'PaperPosition',[0 0 16 16])</span>
+<span class="comment">% PaperPos = get(f1,'PaperPosition');</span>
+<span class="comment">% set(f1,'PaperSize',PaperPos(3:4))</span>
+<span class="comment">% % Subplot grid</span>
+<span class="comment">% ax1 = subplot(2,2,1);</span>
+<span class="comment">% ax2 = subplot(2,2,2);</span>
+<span class="comment">% ax3 = subplot(2,2,3);</span>
+<span class="comment">% ax4 = subplot(2,2,4);</span>
+<span class="comment">%     % Subplot (1)</span>
+<span class="comment">%     set(ax1,'NextPlot','add','Box','on','XGrid','on','YGrid','on')</span>
+<span class="comment">%     plot(ax1,TOUT,dPSI,'r')</span>
+<span class="comment">%     xlabel(ax1,'$t$ [s]','Interpreter','Latex')</span>
+<span class="comment">%     ylabel(ax1,'$\dot{\psi}$ [rad/s]','Interpreter','Latex')</span>
+<span class="comment">%     title(ax1,'$\dot{\psi}$ x $t$','Interpreter','Latex')</span>
+<span class="comment">%     % Subplot (2)</span>
+<span class="comment">%     set(ax2,'NextPlot','add','Box','on','XGrid','on','YGrid','on')</span>
+<span class="comment">%     plot(ax2,TOUT,ALPHAT,'r')</span>
+<span class="comment">%     xlabel(ax2,'$t$ [s]','Interpreter','Latex')</span>
+<span class="comment">%     ylabel(ax2,'$\alpha_T$ [rad]','Interpreter','Latex')</span>
+<span class="comment">%     title(ax2,'$\alpha_T$ x $t$','Interpreter','Latex')</span>
+<span class="comment">%     % Subplot (3)</span>
+<span class="comment">%     set(ax3,'NextPlot','add','Box','on','XGrid','on','YGrid','on')</span>
+<span class="comment">%     plot(ax3,TOUT,PSI,'r')</span>
+<span class="comment">%     xlabel(ax3,'$t$ [s]','Interpreter','Latex')</span>
+<span class="comment">%     ylabel(ax3,'$\psi$ [rad]','Interpreter','Latex')</span>
+<span class="comment">%     title(ax3,'$\psi$ x $t$','Interpreter','Latex')</span>
+<span class="comment">%     % Subplot (4)</span>
+<span class="comment">%     set(ax4,'NextPlot','add','Box','on','XGrid','on','YGrid','on')</span>
+<span class="comment">%     plot(ax4,TOUT,VEL,'r')</span>
+<span class="comment">%     xlabel(ax4,'$t$ [s]','Interpreter','Latex')</span>
+<span class="comment">%     ylabel(ax4,'$v$ [m/s]','Interpreter','Latex')</span>
+<span class="comment">%     title(ax4,'$v$ x $t$','Interpreter','Latex')</span>
+
 f1 = figure(1);
 set(f1,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
-set(f1,<span class="string">'Position'</span>,[5 0 16 16])
+set(f1,<span class="string">'Position'</span>,[5 0 9 12])
 set(f1,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
-set(f1,<span class="string">'PaperPosition'</span>,[0 0 16 16])
+set(f1,<span class="string">'PaperPosition'</span>,[0 0 9 12])
 PaperPos = get(f1,<span class="string">'PaperPosition'</span>);
 set(f1,<span class="string">'PaperSize'</span>,PaperPos(3:4))
 <span class="comment">% Subplot grid</span>
-ax1 = subplot(2,2,1);
-ax2 = subplot(2,2,2);
-ax3 = subplot(2,2,3);
-ax4 = subplot(2,2,4);
+ax1 = subplot(3,1,1);
+ax2 = subplot(3,1,2);
+ax3 = subplot(3,1,3);
     <span class="comment">% Subplot (1)</span>
     set(ax1,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
-    plot(ax1,TOUT,dPSI,<span class="string">'r'</span>)
+    plot(ax1,TOUT,dPSI,<span class="string">'k'</span>)
     xlabel(ax1,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     ylabel(ax1,<span class="string">'$\dot{\psi}$ [rad/s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     title(ax1,<span class="string">'$\dot{\psi}$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     <span class="comment">% Subplot (2)</span>
     set(ax2,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
-    plot(ax2,TOUT,ALPHAT,<span class="string">'r'</span>)
+    plot(ax2,TOUT,ALPHAT,<span class="string">'k'</span>)
     xlabel(ax2,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     ylabel(ax2,<span class="string">'$\alpha_T$ [rad]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     title(ax2,<span class="string">'$\alpha_T$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
     <span class="comment">% Subplot (3)</span>
     set(ax3,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
-    plot(ax3,TOUT,PSI,<span class="string">'r'</span>)
+    plot(ax3,TOUT,VEL,<span class="string">'k'</span>)
     xlabel(ax3,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-    ylabel(ax3,<span class="string">'$\psi$ [rad]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-    title(ax3,<span class="string">'$\psi$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-    <span class="comment">% Subplot (4)</span>
-    set(ax4,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>)
-    plot(ax4,TOUT,VEL,<span class="string">'r'</span>)
-    xlabel(ax4,<span class="string">'$t$ [s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-    ylabel(ax4,<span class="string">'$v$ [m/s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-    title(ax4,<span class="string">'$v$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-</pre><img vspace="5" hspace="5" src="TemplateSimple_01.png" alt=""> <p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+    ylabel(ax3,<span class="string">'$v_T$ [m/s]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+    title(ax3,<span class="string">'$v_T$ x $t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
 
-figFrame = gcf;
-<span class="comment">% Setting Matlab figure</span>
-set(figFrame,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
-set(figFrame,<span class="string">'Position'</span>,[0 0 16 7])
-<span class="comment">% Setting PDF</span>
-set(figFrame,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
-set(figFrame,<span class="string">'PaperPosition'</span>,[0 0 16 7])
-PaperPos = get(figFrame,<span class="string">'PaperPosition'</span>);
-set(figFrame,<span class="string">'PaperSize'</span>,PaperPos(3:4))
+
+
+print(gcf,<span class="string">'-dpdf'</span>,<span class="string">'figura.pdf'</span>)
+</pre><img vspace="5" hspace="5" src="TemplateSimple_01.png" alt=""> <p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
 </pre><img vspace="5" hspace="5" src="TemplateSimple_02.png" alt=""> <p>Animation</p><pre class="codeinput">G.Animation([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
 </pre><img vspace="5" hspace="5" src="TemplateSimple_03.png" alt=""> <p><img vspace="5" hspace="5" src="illustrations/AnimationSimple.gif" alt=""> </p><h2>See Also<a name="11"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateArticulated.html">TemplateArticulated</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
@@ -200,14 +232,22 @@ x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
 % Chosen tire: <TirePacejka1989.html TirePacejka1989.m>.
 %
 
-a0 = 1.002806;
-a1 = 2.014156;
-a2 = 710.5013;
-a3 = 5226.341;
-a4 = 78.87699;
-a5 = 0.01078379;
-a6 = -0.004759443;
-a7 = 0.6704447;
+a0 = 1.2;
+a1 = 0;
+a2 = 700;
+a3 = 3000;
+a4 = 50;
+a5 = 0;
+a6 = 0;
+a7 = -1;
+% a0 = 1.002806;
+% a1 = 2.014156;
+% a2 = 710.5013;
+% a3 = 5226.341;
+% a4 = 78.87699;
+% a5 = 0.01078379;
+% a6 = -0.004759443;
+% a7 = 0.6704447;
 a8 = 0;
 a9 = 0;
 a10 = 0;
@@ -254,58 +294,81 @@ VEL = XOUT(:,6);            % CG velocity [m/s]
 
 G = VehicleDynamicsLateral.Graphics(System);
 
+% f1 = figure(1);
+% set(f1,'Units','centimeters')
+% set(f1,'Position',[5 0 16 16])
+% set(f1,'PaperUnits','centimeters')
+% set(f1,'PaperPosition',[0 0 16 16])
+% PaperPos = get(f1,'PaperPosition');
+% set(f1,'PaperSize',PaperPos(3:4))
+% % Subplot grid
+% ax1 = subplot(2,2,1);
+% ax2 = subplot(2,2,2);
+% ax3 = subplot(2,2,3);
+% ax4 = subplot(2,2,4);
+%     % Subplot (1)
+%     set(ax1,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+%     plot(ax1,TOUT,dPSI,'r')
+%     xlabel(ax1,'$t$ [s]','Interpreter','Latex')
+%     ylabel(ax1,'$\dot{\psi}$ [rad/s]','Interpreter','Latex')
+%     title(ax1,'$\dot{\psi}$ x $t$','Interpreter','Latex')
+%     % Subplot (2)
+%     set(ax2,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+%     plot(ax2,TOUT,ALPHAT,'r')
+%     xlabel(ax2,'$t$ [s]','Interpreter','Latex')
+%     ylabel(ax2,'$\alpha_T$ [rad]','Interpreter','Latex')
+%     title(ax2,'$\alpha_T$ x $t$','Interpreter','Latex')
+%     % Subplot (3)
+%     set(ax3,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+%     plot(ax3,TOUT,PSI,'r')
+%     xlabel(ax3,'$t$ [s]','Interpreter','Latex')
+%     ylabel(ax3,'$\psi$ [rad]','Interpreter','Latex')
+%     title(ax3,'$\psi$ x $t$','Interpreter','Latex')
+%     % Subplot (4)
+%     set(ax4,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
+%     plot(ax4,TOUT,VEL,'r')
+%     xlabel(ax4,'$t$ [s]','Interpreter','Latex')
+%     ylabel(ax4,'$v$ [m/s]','Interpreter','Latex')
+%     title(ax4,'$v$ x $t$','Interpreter','Latex')
+
 f1 = figure(1);
 set(f1,'Units','centimeters')
-set(f1,'Position',[5 0 16 16])
+set(f1,'Position',[5 0 9 12])
 set(f1,'PaperUnits','centimeters')
-set(f1,'PaperPosition',[0 0 16 16])
+set(f1,'PaperPosition',[0 0 9 12])
 PaperPos = get(f1,'PaperPosition');
 set(f1,'PaperSize',PaperPos(3:4))
 % Subplot grid
-ax1 = subplot(2,2,1);
-ax2 = subplot(2,2,2);
-ax3 = subplot(2,2,3);
-ax4 = subplot(2,2,4);
+ax1 = subplot(3,1,1);
+ax2 = subplot(3,1,2);
+ax3 = subplot(3,1,3);
     % Subplot (1)
     set(ax1,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
-    plot(ax1,TOUT,dPSI,'r')
+    plot(ax1,TOUT,dPSI,'k')
     xlabel(ax1,'$t$ [s]','Interpreter','Latex')
     ylabel(ax1,'$\dot{\psi}$ [rad/s]','Interpreter','Latex')
     title(ax1,'$\dot{\psi}$ x $t$','Interpreter','Latex')
     % Subplot (2)
     set(ax2,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
-    plot(ax2,TOUT,ALPHAT,'r')
+    plot(ax2,TOUT,ALPHAT,'k')
     xlabel(ax2,'$t$ [s]','Interpreter','Latex')
     ylabel(ax2,'$\alpha_T$ [rad]','Interpreter','Latex')
     title(ax2,'$\alpha_T$ x $t$','Interpreter','Latex')
     % Subplot (3)
     set(ax3,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
-    plot(ax3,TOUT,PSI,'r')
+    plot(ax3,TOUT,VEL,'k')
     xlabel(ax3,'$t$ [s]','Interpreter','Latex')
-    ylabel(ax3,'$\psi$ [rad]','Interpreter','Latex')
-    title(ax3,'$\psi$ x $t$','Interpreter','Latex')
-    % Subplot (4)
-    set(ax4,'NextPlot','add','Box','on','XGrid','on','YGrid','on')
-    plot(ax4,TOUT,VEL,'r')
-    xlabel(ax4,'$t$ [s]','Interpreter','Latex')
-    ylabel(ax4,'$v$ [m/s]','Interpreter','Latex')
-    title(ax4,'$v$ x $t$','Interpreter','Latex')
+    ylabel(ax3,'$v_T$ [m/s]','Interpreter','Latex')
+    title(ax3,'$v_T$ x $t$','Interpreter','Latex')
 
+
+
+print(gcf,'-dpdf','figura.pdf')
 %%
 % Trajectory
 %
 
 G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
-
-figFrame = gcf;
-% Setting Matlab figure
-set(figFrame,'Units','centimeters')
-set(figFrame,'Position',[0 0 16 7])
-% Setting PDF
-set(figFrame,'PaperUnits','centimeters')
-set(figFrame,'PaperPosition',[0 0 16 7])
-PaperPos = get(figFrame,'PaperPosition');
-set(figFrame,'PaperSize',PaperPos(3:4))
 
 %%
 % Animation

@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Polynomial tire</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="TirePolynomial.m"><style type="text/css">
+      --><title>Polynomial Tire</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-19"><meta name="DC.source" content="TirePolynomial.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,16 +65,16 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Polynomial tire</h1><!--introduction--><p>Nonlinear relation between tire lateral force and slip angle expressed by polinomial equation [1].</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#6">Properties</a></li><li><a href="#8">References</a></li><li><a href="#9">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>Fy = <i>TireModel</i>.Characteristic(alpha)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
+  </style></head><body><div class="content"><h1>Polynomial Tire</h1><!--introduction--><p>Nonlinear relation between tire lateral force and slip angle expressed by a third order polinomial equation. This model is used by several authors [1] [2] [3].</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Sintax</a></li><li><a href="#2">Arguments</a></li><li><a href="#3">Description</a></li><li><a href="#4">Code</a></li><li><a href="#6">Properties</a></li><li><a href="#8">References</a></li><li><a href="#9">See Also</a></li></ul></div><h2>Sintax<a name="1"></a></h2><p><tt>Fy = <i>TireModel</i>.Characteristic(alpha)</tt></p><h2>Arguments<a name="2"></a></h2><p>The following table describes the input arguments:</p><p> <table border=1 width="97%">
 <tr> <td width="30%"><tt>alpha</tt></td> <td width="70%">Tire slip angle [rad]</td> </tr>
-</table> </p><h2>Description<a name="3"></a></h2><p>Model equation:</p><p><img src="TirePolynomial_eq28957.png" alt="$$ F_y = k_1 \alpha  - k_2\alpha^3 $$"></p><p><img src="TirePolynomial_eq40767.png" alt="$F_y$"> is the lateral force and <img src="TirePolynomial_eq87919.png" alt="$\alpha$"> is the tire slip angle. <img src="TirePolynomial_eq27372.png" alt="$k_1$"> e <img src="TirePolynomial_eq32346.png" alt="$k_2$"> are the model coefficients.</p><p><b>Hypothesis</b></p><div><ul><li>Nonlinear.</li><li>Valid until the maximal lateral force (Tire saturation).</li></ul></div><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> TirePolynomial &lt; VehicleDynamicsLateral.Tire
+</table> </p><h2>Description<a name="3"></a></h2><p>Model equation:</p><p><img src="TirePolynomial_eq28957.png" alt="$$ F_y = k_1 \alpha  - k_2\alpha^3 $$"></p><p>where <img src="TirePolynomial_eq40767.png" alt="$F_y$"> is the lateral force and <img src="TirePolynomial_eq87919.png" alt="$\alpha$"> is the tire slip angle. <img src="TirePolynomial_eq27372.png" alt="$k_1$"> and <img src="TirePolynomial_eq32346.png" alt="$k_2$"> are the model coefficients.</p><p><b>Hypothesis</b></p><div><ul><li>Nonlinear tire model</li><li>Valid up to the maximal lateral force (Tire saturation).</li></ul></div><h2>Code<a name="4"></a></h2><pre class="codeinput"><span class="keyword">classdef</span> TirePolynomial &lt; VehicleDynamicsLateral.Tire
 </pre><pre class="codeinput">    methods
         <span class="comment">% Constructor</span>
         <span class="keyword">function</span> self = TirePolynomial(varargin)
             <span class="keyword">if</span> nargin == 0
-                <span class="comment">% Tire parameters - [1]</span>
-                Ca = 57300;         <span class="comment">%</span>
-                k = 4.87;           <span class="comment">%</span>
+                <span class="comment">% Tire parameters [1]</span>
+                Ca = 57300;
+                k = 4.87;
 
                 k1 = 2*Ca;
                 k2 = 2*Ca*k;
@@ -96,10 +96,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
         params
     <span class="keyword">end</span>
 </pre><pre class="codeinput"><span class="keyword">end</span>
-</pre><h2>References<a name="8"></a></h2><p>[1] SADRI, S.; WU, C. Stability analysis of a nonlinear vehicle model in plane motion using the concept of lyapunov exponents. Vehicle System Dynamics, Taylor &amp; Francis, v. 51, n. 6, p.906&#65533;924, 2013.</p><h2>See Also<a name="9"></a></h2><p><a href="index.html">Index</a> | <a href="TireLinear.html">Tire linear</a> | <a href="TirePacejka1989.html">Tire Pacejka 1989</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><h2>References<a name="8"></a></h2><p>[1] JOHNSON, D.; HUSTON, J. Nonlinear lateral stability analysis of road vehicles using Liapunov's second method. SAE Technical Paper, SAE International, 1984.</p><p>[2] SADRI, S.; WU, C. Stability analysis of a nonlinear vehicle model in plane motion using the concept of lyapunov exponents. Vehicle System Dynamics, Taylor &amp; Francis, v. 51, n. 6, p.906-924, 2013.</p><p>[3] SAMSUNDAR, J.; HUSTON, J. C. Estimating lateral stability region of a nonlinear 2 degree-of-freedom vehicle. SAE Technical Paper, 1998.</p><h2>See Also<a name="9"></a></h2><p><a href="index.html">Index</a> | <a href="TireLinear.html">Tire linear</a> | <a href="TirePacejka1989.html">Tire Pacejka 1989</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Polynomial tire
-% Nonlinear relation between tire lateral force and slip angle expressed by polinomial equation [1].
+%% Polynomial Tire
+% Nonlinear relation between tire lateral force and slip angle expressed by a third order polinomial equation. This model is used by several authors [1] [2] [3].
 %
 %% Sintax
 % |Fy = _TireModel_.Characteristic(alpha)|
@@ -117,13 +117,12 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %
 % $$ F_y = k_1 \alpha  - k_2\alpha^3 $$
 %
-% $F_y$ is the lateral force and $\alpha$ is the tire slip angle. $k_1$ e
-% $k_2$ are the model coefficients.
+% where $F_y$ is the lateral force and $\alpha$ is the tire slip angle. $k_1$ and $k_2$ are the model coefficients.
 %
 % *Hypothesis*
 %
-% * Nonlinear.
-% * Valid until the maximal lateral force (Tire saturation).
+% * Nonlinear tire model
+% * Valid up to the maximal lateral force (Tire saturation).
 %
 %% Code
 %
@@ -133,9 +132,9 @@ classdef TirePolynomial < VehicleDynamicsLateral.Tire
         % Constructor
         function self = TirePolynomial(varargin)
             if nargin == 0
-                % Tire parameters - [1]
-                Ca = 57300;         %
-                k = 4.87;           %
+                % Tire parameters [1]
+                Ca = 57300;
+                k = 4.87;
 
                 k1 = 2*Ca;
                 k2 = 2*Ca*k;
@@ -163,7 +162,12 @@ classdef TirePolynomial < VehicleDynamicsLateral.Tire
 end
 
 %% References
-% [1] SADRI, S.; WU, C. Stability analysis of a nonlinear vehicle model in plane motion using the concept of lyapunov exponents. Vehicle System Dynamics, Taylor & Francis, v. 51, n. 6, p.906�924, 2013.
+%
+% [1] JOHNSON, D.; HUSTON, J. Nonlinear lateral stability analysis of road vehicles using Liapunov's second method. SAE Technical Paper, SAE International, 1984.
+%
+% [2] SADRI, S.; WU, C. Stability analysis of a nonlinear vehicle model in plane motion using the concept of lyapunov exponents. Vehicle System Dynamics, Taylor & Francis, v. 51, n. 6, p.906-924, 2013.
+%
+% [3] SAMSUNDAR, J.; HUSTON, J. C. Estimating lateral stability region of a nonlinear 2 degree-of-freedom vehicle. SAE Technical Paper, 1998.
 %
 %% See Also
 %

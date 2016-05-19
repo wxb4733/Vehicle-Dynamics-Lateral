@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Graphics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-19"><meta name="DC.source" content="Graphics.m"><style type="text/css">
+      --><title>Graphics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-19"><meta name="DC.source" content="Graphics.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -220,21 +220,26 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             <span class="keyword">end</span>
 
+            XSize = 25 ;                            <span class="comment">% Horizontal size of the figure [cm]</span>
             <span class="comment">% Defining figure</span>
-            f=figure(666);
-            set(f,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
-            set(f,<span class="string">'Position'</span>,[1 1 24 14])
-            ax=gca();
+            f666=figure(666);
+            set(f666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
+            set(f666,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
+            <span class="comment">% Position and size of the figure window</span>
+            set(f666,<span class="string">'Position'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            <span class="comment">% Position and size of the figure on the printed page</span>
+            set(f666,<span class="string">'PaperPosition'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            <span class="comment">% % Size of the paper</span>
+            set(f666,<span class="string">'PaperSize'</span>,[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            ax666=gca;
+            set(ax666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
+            set(ax666,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
             axis <span class="string">equal</span>
-            set(ax,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
-            set(ax,<span class="string">'XLim'</span>,[min(XT)-10 max(XT)+10])
-            set(ax,<span class="string">'XLimMode'</span>,<span class="string">'manual'</span>)
-            set(ax,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
-            set(ax,<span class="string">'YLimMode'</span>,<span class="string">'manual'</span>)
-            <span class="comment">% Description</span>
-            title(<span class="string">'Trajectory'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-            xlabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>);
-            ylabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>);
+            set(ax666,<span class="string">'XLim'</span>,[min(XT)-20 max(XT)+10])
+            set(ax666,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
+
+            xlabel(<span class="string">'Distance [m]'</span>)
+            ylabel(<span class="string">'Distance [m]'</span>)
 
             <span class="comment">% First frame</span>
 
@@ -369,7 +374,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
                 pause(0.05)                 <span class="comment">% OBS: It has to be the same value of the time adjustment</span>
 
-                cla(ax);                    <span class="comment">% Clearing axes</span>
+                cla(ax666);                    <span class="comment">% Clearing axes</span>
             <span class="keyword">end</span>
 
             <span class="comment">% Last frame</span>
@@ -529,24 +534,27 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             <span class="keyword">end</span>
 
+            XSize = 25 ;                            <span class="comment">% Horizontal size of the figure [cm]</span>
+
             <span class="comment">% Defining figure</span>
             f999 = figure(999);
-            set(f999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)
-            set(f999,<span class="string">'Position'</span>,[1 1 24 14])
-            set(f999,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
-            set(f999,<span class="string">'PaperPosition'</span>,[5 0 16 12])
-            PaperPos = get(f999,<span class="string">'PaperPosition'</span>);
-            set(f999,<span class="string">'PaperSize'</span>,PaperPos(3:4))
-            ax999=gca();
+            set(f999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
+            set(f999,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
+            <span class="comment">% Position and size of the figure window</span>
+            set(f999,<span class="string">'Position'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            <span class="comment">% Position and size of the figure on the printed page</span>
+            set(f999,<span class="string">'PaperPosition'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            <span class="comment">% % Size of the paper</span>
+            set(f999,<span class="string">'PaperSize'</span>,[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            ax999=gca;
+            set(ax999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
             set(ax999,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
             axis <span class="string">equal</span>
             set(ax999,<span class="string">'XLim'</span>,[min(XT)-20 max(XT)+10])
-            set(ax999,<span class="string">'XLimMode'</span>,<span class="string">'manual'</span>)
             set(ax999,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
-            set(ax999,<span class="string">'YLimMode'</span>,<span class="string">'manual'</span>)
 
-            xlabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
-            ylabel(<span class="string">'Distance [m]'</span>,<span class="string">'Interpreter'</span>,<span class="string">'Latex'</span>)
+            xlabel(<span class="string">'Distance [m]'</span>)
+            ylabel(<span class="string">'Distance [m]'</span>)
 
             TEMPOplot = 0:0.05:TOUT(end); <span class="comment">% Time for the plots</span>
             <span class="keyword">for</span> i=1:length(TEMPOplot)
@@ -911,21 +919,26 @@ classdef Graphics
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             end
 
+            XSize = 25 ;                            % Horizontal size of the figure [cm]
             % Defining figure
-            f=figure(666);
-            set(f,'Units','centimeters')
-            set(f,'Position',[1 1 24 14])
-            ax=gca();
+            f666=figure(666);
+            set(f666,'Units','centimeters')         % Changing units of the figure to centimeters
+            set(f666,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
+            % Position and size of the figure window
+            set(f666,'Position',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            % Position and size of the figure on the printed page
+            set(f666,'PaperPosition',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            % % Size of the paper
+            set(f666,'PaperSize',[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            ax666=gca;
+            set(ax666,'Units','centimeters')        % Changing units of the axes to centimeters
+            set(ax666,'NextPlot','add','Box','on','XGrid','on','YGrid','on','ZGrid','on')
             axis equal
-            set(ax,'NextPlot','add','Box','on','XGrid','on','YGrid','on','ZGrid','on')
-            set(ax,'XLim',[min(XT)-10 max(XT)+10])
-            set(ax,'XLimMode','manual')
-            set(ax,'YLim',[min(YT)-10 max(YT)+10])
-            set(ax,'YLimMode','manual')
-            % Description
-            title('Trajectory','Interpreter','Latex')
-            xlabel('Distance [m]','Interpreter','Latex');
-            ylabel('Distance [m]','Interpreter','Latex');
+            set(ax666,'XLim',[min(XT)-20 max(XT)+10])
+            set(ax666,'YLim',[min(YT)-10 max(YT)+10])
+
+            xlabel('Distance [m]')
+            ylabel('Distance [m]')
 
             % First frame
 
@@ -1060,7 +1073,7 @@ classdef Graphics
 
                 pause(0.05)                 % OBS: It has to be the same value of the time adjustment
 
-                cla(ax);                    % Clearing axes
+                cla(ax666);                    % Clearing axes
             end
 
             % Last frame
@@ -1238,24 +1251,27 @@ classdef Graphics
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             end
 
+            XSize = 25 ;                            % Horizontal size of the figure [cm]
+
             % Defining figure
             f999 = figure(999);
-            set(f999,'Units','centimeters')
-            set(f999,'Position',[1 1 24 14])
-            set(f999,'PaperUnits','centimeters')
-            set(f999,'PaperPosition',[5 0 16 12])
-            PaperPos = get(f999,'PaperPosition');
-            set(f999,'PaperSize',PaperPos(3:4))
-            ax999=gca();
+            set(f999,'Units','centimeters')         % Changing units of the figure to centimeters
+            set(f999,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
+            % Position and size of the figure window
+            set(f999,'Position',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            % Position and size of the figure on the printed page
+            set(f999,'PaperPosition',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            % % Size of the paper
+            set(f999,'PaperSize',[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            ax999=gca;
+            set(ax999,'Units','centimeters')        % Changing units of the axes to centimeters
             set(ax999,'NextPlot','add','Box','on','XGrid','on','YGrid','on','ZGrid','on')
             axis equal
             set(ax999,'XLim',[min(XT)-20 max(XT)+10])
-            set(ax999,'XLimMode','manual')
             set(ax999,'YLim',[min(YT)-10 max(YT)+10])
-            set(ax999,'YLimMode','manual')
 
-            xlabel('Distance [m]','Interpreter','Latex')
-            ylabel('Distance [m]','Interpreter','Latex')
+            xlabel('Distance [m]')
+            ylabel('Distance [m]')
 
             TEMPOplot = 0:0.05:TOUT(end); % Time for the plots
             for i=1:length(TEMPOplot)
