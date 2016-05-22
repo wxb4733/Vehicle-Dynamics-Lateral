@@ -62,14 +62,14 @@ classdef TirePacejka1989 < VehicleDynamicsLateral.Tire
         function self = TirePacejka1989(varargin)
             if nargin == 0
                 % Default values
-                a0 = 1.002806;      % Shape factor [-]
-                a1 = 2.014156;      % Load dependency of lateral friction (*1000) [1/kN]
-                a2 = 710.5013;      % Lateral friction level (*1000) [-]
-                a3 = 5226.341;      % Maximum cornering stiffness [N/deg]
-                a4 = 78.87699;      % Load at maximum cornering stiffness [kN]
-                a5 = 0.01078379;    % Camber sensitivity of cornering stiffness
-                a6 = -0.004759443;  % Load dependency of curvature factor
-                a7 = 0.6704447;     % Curvature factor level
+                a0 = 1.0;      % Shape factor [-]
+                a1 = 2.0;      % Load dependency of lateral friction (*1000) [1/kN]
+                a2 = 700;      % Lateral friction level (*1000) [-]
+                a3 = 5000;      % Maximum cornering stiffness [N/deg]
+                a4 = 80;      % Load at maximum cornering stiffness [kN]
+                a5 = 0;    % Camber sensitivity of cornering stiffness
+                a6 = 0;  % Load dependency of curvature factor
+                a7 = 0.6;     % Curvature factor level
                 a8 = 0;             % Camber sensitivity of horizontal shift
                 a9 = 0;             % Load dependency of horizontal shift
                 a10 = 0;            % Horizontal shift level

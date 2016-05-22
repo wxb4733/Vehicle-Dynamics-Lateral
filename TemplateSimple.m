@@ -29,7 +29,7 @@ x0 = [dPSI0 ALPHAT0 PSI0 X0 Y0 V0];
 % Chosen tire: <TirePacejka1989.html TirePacejka1989.m>.
 %
 
-a0 = 1.2;
+a0 = 1;
 a1 = 0;
 a2 = 700;
 a3 = 3000;
@@ -61,7 +61,7 @@ mF0 = 700;                  % mass over front axle [kg]
 mR0 = 600;                  % mass over rear axle [kg]
 IT = 10000;                 % moment of inertia [kg*m2]
 DELTA = 0;                  % front axle steering [rad]
-lT = 3.550;                 % distance between axles [m]
+lT = 3.50;                 % distance between axles [m]
 nF = 2;                     % number of tires in the front axle
 nR = 2;                     % number of tires in the rear axle
 largT = 2;                  % width [m]
@@ -130,9 +130,9 @@ G = VehicleDynamicsLateral.Graphics(System);
 
 f1 = figure(1);
 set(f1,'Units','centimeters')
-set(f1,'Position',[5 0 9 12])
+set(f1,'Position',[5 0 9 15])
 set(f1,'PaperUnits','centimeters')
-set(f1,'PaperPosition',[0 0 9 12])
+set(f1,'PaperPosition',[0 0 9 15])
 PaperPos = get(f1,'PaperPosition');
 set(f1,'PaperSize',PaperPos(3:4))
 % Subplot grid
@@ -158,11 +158,13 @@ ax3 = subplot(3,1,3);
     ylabel(ax3,'$v_T$ [m/s]','Interpreter','Latex')
     title(ax3,'$v_T$ x $t$','Interpreter','Latex')
 
+print(gcf,'-dpdf','states.pdf')
+
 %%
 % Trajectory
 %
 
-G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,0);
+G.Frame([XT YT PSI dPSI VEL ALPHAT],TOUT,1);
 
 %%
 % Animation

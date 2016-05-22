@@ -20,7 +20,7 @@ TSPAN = 0:T/resol:T;        % Time span [s]
 % Initial conditions
 X0 = 0;                     % Initial tractor CG horizontal position [m]
 Y0 = 0;                     % Initial tractor CG vertical position [m]
-PSI0 = 45*pi/180;                   % Initial tractor yaw angle [rad]
+PSI0 = 35*pi/180;                   % Initial tractor yaw angle [rad]
 PHI0 = 0;                   % Initial articulation angle [rad]
 V0 = 20;                  % Initial tractor CG velocity [m/s]
 ALPHAT0 = 0;              % Initial tractor side slip angle [rad]

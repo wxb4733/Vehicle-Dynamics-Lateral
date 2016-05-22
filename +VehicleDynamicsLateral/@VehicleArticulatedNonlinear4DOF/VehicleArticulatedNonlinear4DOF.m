@@ -30,22 +30,22 @@ classdef VehicleArticulatedNonlinear4DOF < VehicleDynamicsLateral.VehicleArticul
         function self = VehicleArticulatedNonlinear4DOF(varargin)
             if nargin == 0
                 % Entrada padr�o dos dados do ve�culo
-                mF0 = 5237;         % Massa no eixo dianteiro do caminh�o-trator desacoplado [kg]
-                mR0 = 2440;         % Massa no eixo traseiro do caminh�o-trator desacoplado [kg]
+                mF0 = 5200;         % Massa no eixo dianteiro do caminh�o-trator desacoplado [kg]
+                mR0 = 2400;         % Massa no eixo traseiro do caminh�o-trator desacoplado [kg]
                 mF = 6000;          % Massa no eixo dianteiro do caminh�o-trator (F) [kg]
                 mR = 10000;         % Massa no eixo traseiro do caminh�o-trator (R) [kg]
                 mM = 17000;         % Massa no eixo do semirreboque (M) [kg]
-                IT = 46100;         % Momento de in�rcia do caminh�o-trator [kg*m2]
-                IS = 452010;        % Momento de in�rcia do semirreboque [kg*m2]
+                IT = 46000;         % Momento de in�rcia do caminh�o-trator [kg*m2]
+                IS = 450000;        % Momento de in�rcia do semirreboque [kg*m2]
                 DELTA = 0;          % Ester�amento do eixo dianteiro [rad]
-                c = -0.310;         % Dist�ncia da articula��o ao eixo traseiro do caminh�o-trator (A-R) [m]
-                lT = 3.550;         % Dist�ncia entre os eixos do caminh�o-trator [m]
+                c = -0.3;         % Dist�ncia da articula��o ao eixo traseiro do caminh�o-trator (A-R) [m]
+                lT = 3.5;         % Dist�ncia entre os eixos do caminh�o-trator [m]
                 lS = 7.700;         % Dist�ncia entre a articula��o e o eixo do semirreboque [m]
                 nF = 2;             % N�mero de tires no eixo dianteiro do caminh�o-trator
                 nR = 4;             % N�mero de tires no eixo traseiro do caminh�o-trator
                 nM = 8;             % N�mero de tires no eixo do semirreboque
                 widthT = 2.6;     % width do caminh�o-trator [m]
-                widthS = 2.550;   % width do semirreboque [m]
+                widthS = 2.4;   % width do semirreboque [m]
                 muy = 0.3;          % Coeficiente de atrito de opera��o
                 entradaVetor = [mF0 mR0 mF mR mM IT IS DELTA c lT lS nF nR nM widthT widthS muy];
                 % Definindo os par�metros da classe

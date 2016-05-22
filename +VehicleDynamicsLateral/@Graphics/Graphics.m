@@ -509,7 +509,7 @@ classdef Graphics
                 velt(i,1:2) = interp1(TOUT,VT,TEMPO(i));
             end
 
-            XSize = 25 ;                            % Horizontal size of the figure [cm]
+            XSize = 16 ;                            % Horizontal size of the figure [cm]
 
             % Defining figure
             f999 = figure(999);

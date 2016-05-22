@@ -64,7 +64,7 @@ G = VehicleDynamicsLateral.Graphics(System);
 % Trajectory
 %
 
-G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
+G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,1);
 
 %%
 % Animation
