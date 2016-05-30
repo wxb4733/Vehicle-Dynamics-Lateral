@@ -1,0 +1,738 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>FILTRO DE KALMAN</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-30"><meta name="DC.source" content="KalmanFilter.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>FILTRO DE KALMAN</h1><!--introduction--><p>VERIFICAR A NORMA DE P - PARECE ERRADA FAZER NORMA DO GANHO DE KALMAN RESIDO? OU ALGO PARECIDO COM O GRAFICO QUE COMPARA P- e P+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Planta</a></li><li><a href="#6">Modelo</a></li><li><a href="#13">Matrizes do modelo linearizado</a></li><li><a href="#24">Medi&ccedil;&atilde;o</a></li><li><a href="#31">Filtro estendido de Kalman</a></li><li><a href="#32">Compara&ccedil;&atilde;o</a></li><li><a href="#34">Trajet&oacute;ria da estimativa</a></li></ul></div><p>M&eacute;dia e matriz de covari&acirc;ncia dos erros, condicionadas &agrave; hist&oacute;ria das observa&ccedil;&otilde;es</p><p>Problemas</p><p>Mesmo que a condi&ccedil;&atilde;o inicial do estado do sistema seja Gaussiana, como as transforma&ccedil;&otilde;es s&atilde;o n&atilde;o lineares, n&atilde;o se pode garantir que qualquer estado subsequente seja Gaussiano.</p><p>Filtros sub-&oacute;timos</p><p>O sistema din&acirc;mico &eacute; descrito por uma equa&ccedil;&atilde;o diferencial estoc&aacute;stica vetorial</p><p><img src="KalmanFilter_eq55787.png" alt="$$ \dot{x} = ... $$"></p><h2>Planta<a name="2"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+clc                         <span class="comment">% Clear command window</span>
+
+import <span class="string">VehicleDynamicsLateral.*</span>
+
+<span class="comment">% Par&acirc;metros da planta</span>
+<span class="comment">% Choosing plant tire</span>
+TirePlant = TirePacejka()
+</pre><pre class="codeinput"><span class="comment">% Choosing plant vehicle</span>
+VehiclePlant = VehicleSimpleNonlinear();
+VehiclePlant.tire = TirePlant
+</pre><pre class="codeinput"><span class="comment">% Choosing simulation</span>
+T = 6;                      <span class="comment">% Total simulation time [s]</span>
+resol = 50;                 <span class="comment">% Resolution</span>
+TSPAN = 0:T/resol:T;        <span class="comment">% Time span [s]</span>
+simulatorPlant = Simulator(VehiclePlant, TSPAN);
+
+<span class="comment">% Simulation</span>
+simulatorPlant.Simulate()
+
+simulatorPlant
+</pre><pre class="codeinput"><span class="comment">% Retrieving states</span>
+XTPlant = simulatorPlant.XT;
+YTPlant = simulatorPlant.YT;
+PSIPlant = simulatorPlant.PSI;
+VELPlant = simulatorPlant.VEL;
+ALPHATPlant = simulatorPlant.ALPHAT;
+dPSIPlant = simulatorPlant.dPSI;
+
+XOUTPlant = [XTPlant YTPlant PSIPlant VELPlant ALPHATPlant dPSIPlant];
+
+gPlant = Graphics(simulatorPlant);
+gPlant.TractorColor = <span class="string">'r'</span>;
+gPlant.Frame(0);
+</pre><h2>Modelo<a name="6"></a></h2><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+<span class="comment">% Par&acirc;metros da planta</span>
+<span class="comment">% Choosing plant tire</span>
+TireModel = TireLinear()
+</pre><pre class="codeinput"><span class="comment">% Choosing plant vehicle</span>
+VehicleModel = VehicleSimpleNonlinear();
+VehicleModel.tire = TireModel
+</pre><pre class="codeinput"><span class="comment">% Choosing simulation</span>
+T = 6;                      <span class="comment">% Total simulation time [s]</span>
+resol = 50;                 <span class="comment">% Resolution</span>
+TSPAN = 0:T/resol:T;        <span class="comment">% Time span [s]</span>
+simulatorModel = Simulator(VehicleModel, TSPAN);
+
+<span class="comment">% Simulation</span>
+simulatorModel.Simulate()
+
+simulatorModel
+</pre><pre class="codeinput"><span class="comment">% Retrieving states</span>
+XTModel = simulatorModel.XT;
+YTModel = simulatorModel.YT;
+PSIModel = simulatorModel.PSI;
+PHIModel = simulatorModel.PHI;
+VELModel = simulatorModel.VEL;
+ALPHATModel = simulatorModel.ALPHAT;
+dPSIModel = simulatorModel.dPSI;
+dPHIModel = simulatorModel.dPHI;
+
+gModel = Graphics(simulatorModel);
+gModel.TractorColor = <span class="string">'g'</span>;
+gModel.Frame(0);
+</pre><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+</pre><p>Compara&ccedil;&atilde;o - Diferen&ccedil;a de 10 m na dire&ccedil;&atilde;o X no momento da curva.</p><pre class="codeinput">gPlant.Frame(0);
+hold <span class="string">on</span>
+gModel.Frame(0);
+</pre><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+</pre><h2>Matrizes do modelo linearizado<a name="13"></a></h2><pre class="codeinput">syms <span class="string">XT</span> <span class="string">YT</span> <span class="string">PSI</span> <span class="string">vT</span> <span class="string">ALPHAT</span> <span class="string">dPSI</span> <span class="string">mT</span> <span class="string">IT</span> <span class="string">a</span> <span class="string">b</span> <span class="string">K</span>
+</pre><p>Slip angles</p><pre class="codeinput">ALPHAF = atan((vT * sin(ALPHAT) + a * dPSI)/(vT * cos(ALPHAT))); <span class="comment">% Dianteiro</span>
+ALPHAR = atan((vT * sin(ALPHAT) - b * dPSI)/(vT * cos(ALPHAT))); <span class="comment">% Traseiro</span>
+</pre><pre class="codeinput">pretty(ALPHAF)
+</pre><pre class="codeinput">pretty(ALPHAR)
+</pre><p>Lateral forces</p><pre class="codeinput">FyF = -K*ALPHAF;
+FyR = -K*ALPHAR;
+</pre><pre class="codeinput">pretty(FyF)
+</pre><pre class="codeinput">pretty(FyR)
+</pre><p>Equations of motion</p><pre class="codeinput">f1 = vT * cos(ALPHAT + PSI);
+f2 = vT * sin(ALPHAT + PSI);
+f3 = dPSI;
+f4 = (FyF * sin(ALPHAT) + FyR * sin(ALPHAT))/(mT);
+f5 = (FyF * cos(ALPHAT) + FyR * cos(ALPHAT) - mT * vT * dPSI) / (mT * vT);
+f6 = (FyF * a - FyR * b) / IT;
+
+f = [f1 ; f2 ; f3 ; f4 ; f5 ; f6];
+</pre><pre class="codeinput">pretty(f)
+</pre><p>Vetor de estados</p><pre class="codeinput">States = [XT ; YT ; PSI ; vT ; ALPHAT ; dPSI];
+
+F = jacobian(f,States);
+F = simplify(F);
+</pre><pre class="codeinput">pretty(F)
+</pre><h2>Medi&ccedil;&atilde;o<a name="24"></a></h2><p><img src="KalmanFilter_eq85127.png" alt="$$ \dot{x} = v_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq33685.png" alt="$$ \dot{y} = v_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq64255.png" alt="$$ \ddot{x} = \dot{v}_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) - v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \sin \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq89316.png" alt="$$ \ddot{y} = \dot{v}_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) + v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \cos \left( \psi + \alpha_{\rm T} \right) $$"></p><pre class="codeinput">ddX = f4*cos(PSI + ALPHAT) - vT*(dPSI + f5)*sin(PSI + ALPHAT);
+ddY = f4*sin(PSI + ALPHAT) + vT*(dPSI + f5)*cos(PSI + ALPHAT);
+
+<span class="comment">% $$ {\bf A} = \left( \ddot{x} \cos \psi - \ddot{y} \sin \psi \right) {\bf t}_x + \left( - \ddot{x} \sin \psi + \ddot{y} \sin \psi \right) {\bf t}_y$$</span>
+</pre><pre class="codeinput">ACEL = [ddX*cos(PSI) - ddY*sin(PSI) ; -ddX*sin(PSI) + ddY*cos(PSI)];
+ACEL = simplify(ACEL);
+</pre><pre class="codeinput">pretty(ACEL)
+
+H = jacobian(ACEL,States);
+H = simplify(H);
+</pre><p>Testando a lineariza&ccedil;&atilde;o na reta</p><pre class="codeinput">syms <span class="string">v0</span>
+A = subs(F,States,[0 ; 0 ; 0 ; v0 ; 0 ; 0]);
+</pre><pre class="codeinput">pretty(A)
+</pre><pre class="codeinput">C = subs(H,States,[0 ; 0 ; 0 ; v0 ; 0 ; 0]);
+pretty(C)
+</pre><h2>Filtro estendido de Kalman<a name="31"></a></h2><pre class="codeinput">Q = eye(6);
+R = eye(2);
+G = eye(6);
+
+PMat0 = eye(6);
+P0 = [PMat0(1)  PMat0(2)  PMat0(3)  PMat0(4)  PMat0(5)  PMat0(6) PMat0(7)  PMat0(8)  PMat0(9)  PMat0(10) PMat0(11) PMat0(12) PMat0(13) PMat0(14) PMat0(15) PMat0(16) PMat0(17) PMat0(18) PMat0(19) PMat0(20) PMat0(21) PMat0(22) PMat0(23) PMat0(24) PMat0(25) PMat0(26) PMat0(27) PMat0(28) PMat0(29) PMat0(30) PMat0(31) PMat0(32) PMat0(33) PMat0(34) PMat0(35) PMat0(36)];
+
+
+<span class="comment">% Recuperando as condi&ccedil;&otilde;es iniciais usadas acima</span>
+X0Num = simulatorModel.X0;
+Y0Num = simulatorModel.Y0;
+PSI0Num = simulatorModel.PSI0;
+VEL0Num = simulatorModel.V0;
+ALPHAT0Num = simulatorModel.ALPHAT0;
+dPSI0Num = simulatorModel.dPSI0;
+
+
+<span class="comment">% Condi&ccedil;&otilde;es iniciais</span>
+x0 = [ X0Num ; Y0Num ; PSI0Num ; VEL0Num ; ALPHAT0Num ; dPSI0Num ];
+
+mTNum = VehicleModel.mT;
+ITNum = VehicleModel.IT;
+aNum = VehicleModel.a;
+bNum = VehicleModel.b;
+KNum = TireModel.k;
+
+parameters = [mTNum ITNum aNum bNum KNum];
+
+
+
+
+ACELXcontinuo = (KNum*sin(2*PSIPlant).*(atan((aNum*dPSIPlant + VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant))) - atan((bNum*dPSIPlant - VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant)))))/mTNum;
+
+ACELYcontinuo = -(KNum*(atan((aNum*dPSIPlant + VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant))) - atan((bNum*dPSIPlant - VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant)))))/mTNum;
+
+
+
+
+<span class="comment">% Inicializando o tempo t</span>
+
+intervalo = 0.25;
+
+<span class="comment">% Prealocando z</span>
+
+z = zeros(2,1);
+
+t = 0:intervalo:T;
+XOUTopt = zeros(length(t) + 1,length(States));
+Popt = zeros(length(t) + 1,1);
+
+XOUTopt(1,:) = x0';
+Popt = norm(P0);
+
+<span class="keyword">for</span> j = 1:length(t)
+
+tspan = t(j):intervalo/100:t(j)+intervalo;
+
+z(1) = interp1(TSPAN,ACELXcontinuo,t(j));
+z(2) = interp1(TSPAN,ACELYcontinuo,t(j));
+
+ACELNum = subs(ACEL,[States.' mT IT a b K],[x0.' parameters]);
+ACELNum = double(ACELNum);
+
+Fnum = subs(F,[States.' mT IT a b K],[x0.' parameters]);
+Fnum = double(Fnum);
+Hnum = subs(H,[States.' mT IT a b K],[x0.' parameters]);
+Hnum = double(Hnum);
+
+<span class="comment">% Ciclo de propaga&ccedil;&atilde;o</span>
+
+[TOUT,Pout] = ode45(@(t,P) IntCov(t,P,Fnum,G,Q),tspan,P0');
+
+Pmatrix = [     Pout(1)  Pout(2)  Pout(3)  Pout(4)  Pout(5)  Pout(6);<span class="keyword">...</span>
+                Pout(7)  Pout(8)  Pout(9)  Pout(10) Pout(11) Pout(12);<span class="keyword">...</span>
+                Pout(13) Pout(14) Pout(15) Pout(16) Pout(17) Pout(18);<span class="keyword">...</span>
+                Pout(19) Pout(20) Pout(21) Pout(22) Pout(23) Pout(24);<span class="keyword">...</span>
+                Pout(25) Pout(26) Pout(27) Pout(28) Pout(29) Pout(30);<span class="keyword">...</span>
+                Pout(31) Pout(32) Pout(33) Pout(34) Pout(35) Pout(36)];
+
+
+simulatorKalman = Simulator(VehicleModel, tspan);
+<span class="comment">% Definindo as condi&ccedil;&otilde;es iniciais</span>
+simulatorKalman.X0 = x0(1);
+simulatorKalman.Y0 = x0(2);
+simulatorKalman.PSI0 = x0(3);
+simulatorKalman.V0 = x0(4);
+simulatorKalman.ALPHAT0 = x0(5);
+simulatorKalman.dPSI0 = x0(6);
+<span class="comment">% Simulando</span>
+simulatorKalman.Simulate()
+
+XTKalman = simulatorKalman.XT;
+YTKalman = simulatorKalman.YT;
+PSIKalman = simulatorKalman.PSI;
+VELKalman = simulatorKalman.VEL;
+ALPHATKalman = simulatorKalman.ALPHAT;
+dPSIKalman = simulatorKalman.dPSI;
+
+XOUTKalman = [XTKalman YTKalman PSIKalman VELKalman ALPHATKalman dPSIKalman];
+
+<span class="comment">% Ciclo de atualiza&ccedil;&atilde;o</span>
+
+KKalman = Pmatrix*Hnum' / (Hnum*Pmatrix*Hnum' + R);
+
+
+
+XKalman = XOUTKalman(end,:)' + KKalman*(z - ACELNum);
+PKalman = Pmatrix - KKalman*Hnum*Pmatrix;
+
+x0 = XKalman;
+P0 = PKalman;
+
+XOUTopt(j+1,:) = XKalman';
+Popt(j+1) = norm(PKalman);
+
+
+<span class="keyword">end</span>
+</pre><h2>Compara&ccedil;&atilde;o<a name="32"></a></h2><pre class="codeinput">figure(1)
+hold <span class="string">on</span>
+plot(TSPAN,XOUTPlant(:,1),<span class="string">'r'</span>)
+plot(t,XOUTopt(1:end-1,1),<span class="string">'r--'</span>)
+
+figure(2)
+hold <span class="string">on</span>
+plot(TSPAN,XOUTPlant(:,2),<span class="string">'g'</span>)
+plot(t,XOUTopt(1:end-1,2),<span class="string">'g--'</span>)
+
+figure(3)
+hold <span class="string">on</span>
+plot(TSPAN,XOUTPlant(:,3),<span class="string">'b'</span>)
+plot(t,XOUTopt(1:end-1,3),<span class="string">'b--'</span>)
+
+figure(4)
+hold <span class="string">on</span>
+plot(TSPAN,XOUTPlant(:,4),<span class="string">'c'</span>)
+plot(t,XOUTopt(1:end-1,4),<span class="string">'c--'</span>)
+
+figure(5)
+hold <span class="string">on</span>
+plot(TSPAN,XOUTPlant(:,5),<span class="string">'m'</span>)
+plot(t,XOUTopt(1:end-1,5),<span class="string">'m--'</span>)
+
+figure(6)
+hold <span class="string">on</span>
+plot(TSPAN,XOUTPlant(:,6),<span class="string">'k'</span>)
+plot(t,XOUTopt(1:end-1,6),<span class="string">'k--'</span>)
+
+
+figure(7)
+plot(t,Popt(1:end-1))
+</pre><pre class="codeinput">close <span class="string">all</span>
+</pre><h2>Trajet&oacute;ria da estimativa<a name="34"></a></h2><p>Usando o simulatorPlant para inicializar o Graphics do Kalman</p><pre class="codeinput">gKalman = Graphics(simulatorKalman);
+gKalman.Simulator.TSpan = t;
+gKalman.Simulator.XT = XOUTopt(1:end-1,1);
+gKalman.Simulator.YT = XOUTopt(1:end-1,2);
+gKalman.Simulator.PSI = XOUTopt(1:end-1,3);
+gKalman.Simulator.VEL = XOUTopt(1:end-1,4);
+gKalman.Simulator.ALPHAT = XOUTopt(1:end-1,5);
+gKalman.Simulator.dPSI = XOUTopt(1:end-1,6);
+gKalman.TractorColor = <span class="string">'b'</span>;
+gKalman.Frame(0)
+</pre><pre class="codeinput">close <span class="string">all</span>
+</pre><pre class="codeinput">gPlant.Frame(0);
+hold <span class="string">on</span>
+gModel.Frame(0);
+gKalman.Frame(0);
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% FILTRO DE KALMAN
+%
+% VERIFICAR A NORMA DE P - PARECE ERRADA
+% FAZER NORMA DO GANHO DE KALMAN
+% RESIDO? OU ALGO PARECIDO COM O GRAFICO QUE COMPARA P- e P+
+%
+%%
+% Média e matriz de covariância dos erros, condicionadas à história das observações
+%
+%
+% Problemas
+%
+% Mesmo que a condição inicial do estado do sistema seja Gaussiana, como as transformações são não lineares, não se pode garantir que qualquer estado subsequente seja Gaussiano.
+%
+% Filtros sub-ótimos
+%
+% O sistema dinâmico é descrito por uma equação diferencial estocástica vetorial
+%
+% $$ \dot{x} = ... $$
+%
+%
+%% Planta
+%
+%
+
+clear all                   % Clear workspace
+close all                   % Closing figures
+clc                         % Clear command window
+
+import VehicleDynamicsLateral.*
+
+% Parâmetros da planta
+% Choosing plant tire
+TirePlant = TirePacejka()
+%%
+
+% Choosing plant vehicle
+VehiclePlant = VehicleSimpleNonlinear();
+VehiclePlant.tire = TirePlant
+%%
+
+% Choosing simulation
+T = 6;                      % Total simulation time [s]
+resol = 50;                 % Resolution
+TSPAN = 0:T/resol:T;        % Time span [s]
+simulatorPlant = Simulator(VehiclePlant, TSPAN);
+
+% Simulation
+simulatorPlant.Simulate()
+
+simulatorPlant
+%%
+
+% Retrieving states
+XTPlant = simulatorPlant.XT;
+YTPlant = simulatorPlant.YT;
+PSIPlant = simulatorPlant.PSI;
+VELPlant = simulatorPlant.VEL;
+ALPHATPlant = simulatorPlant.ALPHAT;
+dPSIPlant = simulatorPlant.dPSI;
+
+XOUTPlant = [XTPlant YTPlant PSIPlant VELPlant ALPHATPlant dPSIPlant];
+
+gPlant = Graphics(simulatorPlant);
+gPlant.TractorColor = 'r';
+gPlant.Frame(0);
+
+
+%% Modelo
+%
+%
+close all                   % Closing figures
+% Parâmetros da planta
+% Choosing plant tire
+TireModel = TireLinear()
+%%
+
+% Choosing plant vehicle
+VehicleModel = VehicleSimpleNonlinear();
+VehicleModel.tire = TireModel
+%%
+
+% Choosing simulation
+T = 6;                      % Total simulation time [s]
+resol = 50;                 % Resolution
+TSPAN = 0:T/resol:T;        % Time span [s]
+simulatorModel = Simulator(VehicleModel, TSPAN);
+
+% Simulation
+simulatorModel.Simulate()
+
+simulatorModel
+%%
+
+% Retrieving states
+XTModel = simulatorModel.XT;
+YTModel = simulatorModel.YT;
+PSIModel = simulatorModel.PSI;
+PHIModel = simulatorModel.PHI;
+VELModel = simulatorModel.VEL;
+ALPHATModel = simulatorModel.ALPHAT;
+dPSIModel = simulatorModel.dPSI;
+dPHIModel = simulatorModel.dPHI;
+
+gModel = Graphics(simulatorModel);
+gModel.TractorColor = 'g';
+gModel.Frame(0);
+
+%%
+close all                   % Closing figures
+%%
+% Comparação - Diferença de 10 m na direção X no momento da curva.
+gPlant.Frame(0);
+hold on
+gModel.Frame(0);
+
+%%
+close all                   % Closing figures
+
+
+%% Matrizes do modelo linearizado
+
+syms XT YT PSI vT ALPHAT dPSI mT IT a b K
+
+%%
+% Slip angles
+
+ALPHAF = atan((vT * sin(ALPHAT) + a * dPSI)/(vT * cos(ALPHAT))); % Dianteiro
+ALPHAR = atan((vT * sin(ALPHAT) - b * dPSI)/(vT * cos(ALPHAT))); % Traseiro
+
+%%
+pretty(ALPHAF)
+%%
+pretty(ALPHAR)
+
+%%
+% Lateral forces
+FyF = -K*ALPHAF;
+FyR = -K*ALPHAR;
+
+%%
+pretty(FyF)
+%%
+pretty(FyR)
+
+%%
+% Equations of motion
+f1 = vT * cos(ALPHAT + PSI);
+f2 = vT * sin(ALPHAT + PSI);
+f3 = dPSI;
+f4 = (FyF * sin(ALPHAT) + FyR * sin(ALPHAT))/(mT);
+f5 = (FyF * cos(ALPHAT) + FyR * cos(ALPHAT) - mT * vT * dPSI) / (mT * vT);
+f6 = (FyF * a - FyR * b) / IT;
+
+f = [f1 ; f2 ; f3 ; f4 ; f5 ; f6];
+
+%%
+pretty(f)
+
+%%
+% Vetor de estados
+
+States = [XT ; YT ; PSI ; vT ; ALPHAT ; dPSI];
+
+F = jacobian(f,States);
+F = simplify(F);
+
+%%
+pretty(F)
+
+%% Medição
+
+
+%%
+% $$ \dot{x} = v_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) $$
+%
+%
+% $$ \dot{y} = v_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) $$
+%
+% $$ \ddot{x} = \dot{v}_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) - v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \sin \left( \psi + \alpha_{\rm T} \right) $$
+%
+%
+% $$ \ddot{y} = \dot{v}_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) + v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \cos \left( \psi + \alpha_{\rm T} \right) $$
+%
+
+ddX = f4*cos(PSI + ALPHAT) - vT*(dPSI + f5)*sin(PSI + ALPHAT);
+ddY = f4*sin(PSI + ALPHAT) + vT*(dPSI + f5)*cos(PSI + ALPHAT);
+
+% $$ {\bf A} = \left( \ddot{x} \cos \psi - \ddot{y} \sin \psi \right) {\bf t}_x + \left( - \ddot{x} \sin \psi + \ddot{y} \sin \psi \right) {\bf t}_y$$
+
+%%
+ACEL = [ddX*cos(PSI) - ddY*sin(PSI) ; -ddX*sin(PSI) + ddY*cos(PSI)];
+ACEL = simplify(ACEL);
+%%
+pretty(ACEL)
+
+H = jacobian(ACEL,States);
+H = simplify(H);
+
+%%
+% Testando a linearização na reta
+syms v0
+A = subs(F,States,[0 ; 0 ; 0 ; v0 ; 0 ; 0]);
+%%
+pretty(A)
+
+%%
+C = subs(H,States,[0 ; 0 ; 0 ; v0 ; 0 ; 0]);
+pretty(C)
+
+%% Filtro estendido de Kalman
+
+Q = eye(6);
+R = eye(2);
+G = eye(6);
+
+PMat0 = eye(6);
+P0 = [PMat0(1)  PMat0(2)  PMat0(3)  PMat0(4)  PMat0(5)  PMat0(6) PMat0(7)  PMat0(8)  PMat0(9)  PMat0(10) PMat0(11) PMat0(12) PMat0(13) PMat0(14) PMat0(15) PMat0(16) PMat0(17) PMat0(18) PMat0(19) PMat0(20) PMat0(21) PMat0(22) PMat0(23) PMat0(24) PMat0(25) PMat0(26) PMat0(27) PMat0(28) PMat0(29) PMat0(30) PMat0(31) PMat0(32) PMat0(33) PMat0(34) PMat0(35) PMat0(36)];
+
+
+% Recuperando as condições iniciais usadas acima
+X0Num = simulatorModel.X0;
+Y0Num = simulatorModel.Y0;
+PSI0Num = simulatorModel.PSI0;
+VEL0Num = simulatorModel.V0;
+ALPHAT0Num = simulatorModel.ALPHAT0;
+dPSI0Num = simulatorModel.dPSI0;
+
+
+% Condições iniciais
+x0 = [ X0Num ; Y0Num ; PSI0Num ; VEL0Num ; ALPHAT0Num ; dPSI0Num ];
+
+mTNum = VehicleModel.mT;
+ITNum = VehicleModel.IT;
+aNum = VehicleModel.a;
+bNum = VehicleModel.b;
+KNum = TireModel.k;
+
+parameters = [mTNum ITNum aNum bNum KNum];
+
+
+
+
+ACELXcontinuo = (KNum*sin(2*PSIPlant).*(atan((aNum*dPSIPlant + VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant))) - atan((bNum*dPSIPlant - VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant)))))/mTNum;
+
+ACELYcontinuo = -(KNum*(atan((aNum*dPSIPlant + VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant))) - atan((bNum*dPSIPlant - VELPlant.*sin(ALPHATPlant))./(VELPlant.*cos(ALPHATPlant)))))/mTNum;
+
+
+
+
+% Inicializando o tempo t
+
+intervalo = 0.25;
+
+% Prealocando z
+
+z = zeros(2,1);
+
+t = 0:intervalo:T;
+XOUTopt = zeros(length(t) + 1,length(States));
+Popt = zeros(length(t) + 1,1);
+
+XOUTopt(1,:) = x0';
+Popt = norm(P0);
+
+for j = 1:length(t)
+
+tspan = t(j):intervalo/100:t(j)+intervalo;
+
+z(1) = interp1(TSPAN,ACELXcontinuo,t(j));
+z(2) = interp1(TSPAN,ACELYcontinuo,t(j));
+
+ACELNum = subs(ACEL,[States.' mT IT a b K],[x0.' parameters]);
+ACELNum = double(ACELNum);
+
+Fnum = subs(F,[States.' mT IT a b K],[x0.' parameters]);
+Fnum = double(Fnum);
+Hnum = subs(H,[States.' mT IT a b K],[x0.' parameters]);
+Hnum = double(Hnum);
+
+% Ciclo de propagação
+
+[TOUT,Pout] = ode45(@(t,P) IntCov(t,P,Fnum,G,Q),tspan,P0');
+
+Pmatrix = [     Pout(1)  Pout(2)  Pout(3)  Pout(4)  Pout(5)  Pout(6);...
+                Pout(7)  Pout(8)  Pout(9)  Pout(10) Pout(11) Pout(12);...
+                Pout(13) Pout(14) Pout(15) Pout(16) Pout(17) Pout(18);...
+                Pout(19) Pout(20) Pout(21) Pout(22) Pout(23) Pout(24);...
+                Pout(25) Pout(26) Pout(27) Pout(28) Pout(29) Pout(30);...
+                Pout(31) Pout(32) Pout(33) Pout(34) Pout(35) Pout(36)];
+
+
+simulatorKalman = Simulator(VehicleModel, tspan);
+% Definindo as condições iniciais
+simulatorKalman.X0 = x0(1);
+simulatorKalman.Y0 = x0(2);
+simulatorKalman.PSI0 = x0(3);
+simulatorKalman.V0 = x0(4);
+simulatorKalman.ALPHAT0 = x0(5);
+simulatorKalman.dPSI0 = x0(6);
+% Simulando
+simulatorKalman.Simulate()
+
+XTKalman = simulatorKalman.XT;
+YTKalman = simulatorKalman.YT;
+PSIKalman = simulatorKalman.PSI;
+VELKalman = simulatorKalman.VEL;
+ALPHATKalman = simulatorKalman.ALPHAT;
+dPSIKalman = simulatorKalman.dPSI;
+
+XOUTKalman = [XTKalman YTKalman PSIKalman VELKalman ALPHATKalman dPSIKalman];
+
+% Ciclo de atualização
+
+KKalman = Pmatrix*Hnum' / (Hnum*Pmatrix*Hnum' + R);
+
+
+
+XKalman = XOUTKalman(end,:)' + KKalman*(z - ACELNum);
+PKalman = Pmatrix - KKalman*Hnum*Pmatrix;
+
+x0 = XKalman;
+P0 = PKalman;
+
+XOUTopt(j+1,:) = XKalman';
+Popt(j+1) = norm(PKalman);
+
+
+end
+
+%% Comparação
+figure(1)
+hold on
+plot(TSPAN,XOUTPlant(:,1),'r')
+plot(t,XOUTopt(1:end-1,1),'rREPLACE_WITH_DASH_DASH')
+
+figure(2)
+hold on
+plot(TSPAN,XOUTPlant(:,2),'g')
+plot(t,XOUTopt(1:end-1,2),'gREPLACE_WITH_DASH_DASH')
+
+figure(3)
+hold on
+plot(TSPAN,XOUTPlant(:,3),'b')
+plot(t,XOUTopt(1:end-1,3),'bREPLACE_WITH_DASH_DASH')
+
+figure(4)
+hold on
+plot(TSPAN,XOUTPlant(:,4),'c')
+plot(t,XOUTopt(1:end-1,4),'cREPLACE_WITH_DASH_DASH')
+
+figure(5)
+hold on
+plot(TSPAN,XOUTPlant(:,5),'m')
+plot(t,XOUTopt(1:end-1,5),'mREPLACE_WITH_DASH_DASH')
+
+figure(6)
+hold on
+plot(TSPAN,XOUTPlant(:,6),'k')
+plot(t,XOUTopt(1:end-1,6),'kREPLACE_WITH_DASH_DASH')
+
+
+figure(7)
+plot(t,Popt(1:end-1))
+
+%%
+%
+close all
+
+%% Trajetória da estimativa
+% Usando o simulatorPlant para inicializar o Graphics do Kalman
+
+gKalman = Graphics(simulatorKalman);
+gKalman.Simulator.TSpan = t;
+gKalman.Simulator.XT = XOUTopt(1:end-1,1);
+gKalman.Simulator.YT = XOUTopt(1:end-1,2);
+gKalman.Simulator.PSI = XOUTopt(1:end-1,3);
+gKalman.Simulator.VEL = XOUTopt(1:end-1,4);
+gKalman.Simulator.ALPHAT = XOUTopt(1:end-1,5);
+gKalman.Simulator.dPSI = XOUTopt(1:end-1,6);
+gKalman.TractorColor = 'b';
+gKalman.Frame(0)
+
+%%
+close all
+
+%%
+%
+gPlant.Frame(0);
+hold on
+gModel.Frame(0);
+gKalman.Frame(0);
+
+##### SOURCE END #####
+--></body></html>

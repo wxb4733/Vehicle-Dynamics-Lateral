@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Template Articulated</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-19"><meta name="DC.source" content="TemplateArticulated.m"><style type="text/css">
+      --><title>Template Articulated</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-30"><meta name="DC.source" content="TemplateArticulated.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -84,11 +84,11 @@ PSI0 = 0;                   <span class="comment">% Initial tractor yaw angle [r
 X0 = 0;                     <span class="comment">% Initial tractor CG horizontal position [m]</span>
 Y0 = 0;                     <span class="comment">% Initial tractor CG vertical position [m]</span>
 x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
-</pre><h2>Default models and parameters<a name="3"></a></h2><p>Defining the model of the vehicle without passing any argument the default parameters and models are used.</p><pre class="codeinput">System = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
+</pre><h2>Default models and parameters<a name="3"></a></h2><p>Defining the model of the vehicle without passing any argument the default parameters and models are used.</p><pre class="codeinput">System = VehicleDynamicsLateral.VehicleArticulatedNonlinear;
 </pre><h2>Integration<a name="4"></a></h2><p>Integration using mass matrix. Details: <a href="http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22">ode45 (Mass matrix)</a></p><pre class="codeinput"><span class="comment">% Configuring integration options so that it takes into consideration the mass matrix</span>
 options = odeset(<span class="string">'Mass'</span>,@System.MassMatrix);
 
-[TOUT,XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN,x0,options);
+[TOUT, XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN, x0, options);
 </pre><h2>Post integration<a name="5"></a></h2><pre class="codeinput"><span class="comment">% Retrieving states</span>
 dPSI = XOUT(:,1);           <span class="comment">% Tractor yaw rate [rad/s]</span>
 ALPHAT = XOUT(:,2);         <span class="comment">% Tractor side slip angle [rad]</span>
@@ -99,9 +99,9 @@ PSI = XOUT(:,6);            <span class="comment">% Tractor yaw angle [rad]</spa
 XT = XOUT(:,7);             <span class="comment">% Tractor CG horizontal position [m]</span>
 YT = XOUT(:,8);             <span class="comment">% Tractor CG vertical position [m]</span>
 </pre><h2>Results<a name="6"></a></h2><p>Details: <a href="Graphics.html">Graphics.m</a></p><pre class="codeinput">G = VehicleDynamicsLateral.Graphics(System);
-</pre><p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
-</pre><img vspace="5" hspace="5" src="TemplateArticulated_01.png" alt=""> <p>Animation</p><pre class="codeinput">G.Animation([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
-</pre><img vspace="5" hspace="5" src="TemplateArticulated_02.png" alt=""> <p><img vspace="5" hspace="5" src="illustrations/AnimationArticulated.gif" alt=""> </p><h2>See Also<a name="10"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateSimple.html">TemplateSimple</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><p>Trajectory</p><pre class="codeinput">G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT, 0);
+</pre><p>Animation</p><pre class="codeinput">G.Animation([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT, 0);
+</pre><p><img vspace="5" hspace="5" src="illustrations/AnimationArticulated.gif" alt=""> </p><h2>See Also<a name="10"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateSimple.html">TemplateSimple</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Template Articulated
 % Template script for the simulation of articulated vehicle.
@@ -135,7 +135,7 @@ x0 = [dPSI0 ALPHAT0 dPHI0 VEL0 PHI0 PSI0 X0 Y0];
 %% Default models and parameters
 % Defining the model of the vehicle without passing any argument the default parameters and models are used.
 
-System = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
+System = VehicleDynamicsLateral.VehicleArticulatedNonlinear;
 
 %% Integration
 % Integration using mass matrix. Details: <http://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=%22mass%20matrix%22 ode45 (Mass matrix)>
@@ -143,7 +143,7 @@ System = VehicleDynamicsLateral.VehicleArticulatedNonlinear4DOF;
 % Configuring integration options so that it takes into consideration the mass matrix
 options = odeset('Mass',@System.MassMatrix);
 
-[TOUT,XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN,x0,options);
+[TOUT, XOUT] = ode45(@(t, estados) System.Model(t, estados),TSPAN, x0, options);
 
 %% Post integration
 %
@@ -167,13 +167,13 @@ G = VehicleDynamicsLateral.Graphics(System);
 % Trajectory
 %
 
-G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
+G.Frame([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT, 0);
 
 %%
 % Animation
 %
 
-G.Animation([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT,0);
+G.Animation([XT YT PSI dPSI VEL ALPHAT PHI dPHI],TOUT, 0);
 
 %%
 %
