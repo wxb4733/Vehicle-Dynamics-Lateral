@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>FILTRO DE KALMAN</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-30"><meta name="DC.source" content="KalmanFilter.m"><style type="text/css">
+      --><title>FILTRO DE KALMAN</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-01"><meta name="DC.source" content="KalmanFilter.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -23,7 +23,7 @@ a:visited { color:#004aa0; text-decoration:none; }
 
 p { padding:0px; margin:0px 0px 20px; }
 img { padding:0px; margin:0px 0px 20px; border:none; }
-p img, pre img, tt img, li img { margin-bottom:0px; } 
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
 
 ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
 ul li { padding:0px; margin:0px 0px 7px 0px; }
@@ -38,11 +38,12 @@ ol li ul li { list-style:square; }
 
 .content { font-size:1.2em; line-height:140%; padding: 20px; }
 
-pre, tt, code { font-size:12px; }
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
 pre { margin:0px 0px 20px; }
-pre.error { color:red; }
 pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
 pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
 
 @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
 
@@ -65,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>FILTRO DE KALMAN</h1><!--introduction--><p>VERIFICAR A NORMA DE P - PARECE ERRADA FAZER NORMA DO GANHO DE KALMAN RESIDO? OU ALGO PARECIDO COM O GRAFICO QUE COMPARA P- e P+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Planta</a></li><li><a href="#6">Modelo</a></li><li><a href="#13">Matrizes do modelo linearizado</a></li><li><a href="#24">Medi&ccedil;&atilde;o</a></li><li><a href="#31">Filtro estendido de Kalman</a></li><li><a href="#32">Compara&ccedil;&atilde;o</a></li><li><a href="#34">Trajet&oacute;ria da estimativa</a></li></ul></div><p>M&eacute;dia e matriz de covari&acirc;ncia dos erros, condicionadas &agrave; hist&oacute;ria das observa&ccedil;&otilde;es</p><p>Problemas</p><p>Mesmo que a condi&ccedil;&atilde;o inicial do estado do sistema seja Gaussiana, como as transforma&ccedil;&otilde;es s&atilde;o n&atilde;o lineares, n&atilde;o se pode garantir que qualquer estado subsequente seja Gaussiano.</p><p>Filtros sub-&oacute;timos</p><p>O sistema din&acirc;mico &eacute; descrito por uma equa&ccedil;&atilde;o diferencial estoc&aacute;stica vetorial</p><p><img src="KalmanFilter_eq55787.png" alt="$$ \dot{x} = ... $$"></p><h2>Planta<a name="2"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+  </style></head><body><div class="content"><h1>FILTRO DE KALMAN</h1><!--introduction--><p>VERIFICAR A NORMA DE P - PARECE ERRADA FAZER NORMA DO GANHO DE KALMAN RESIDO? OU ALGO PARECIDO COM O GRAFICO QUE COMPARA P- e P+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Planta</a></li><li><a href="#6">Modelo</a></li><li><a href="#13">Matrizes do modelo linearizado</a></li><li><a href="#24">Medi&ccedil;&atilde;o</a></li><li><a href="#31">Filtro estendido de Kalman</a></li><li><a href="#32">Compara&ccedil;&atilde;o</a></li><li><a href="#34">Trajet&oacute;ria da estimativa</a></li></ul></div><p>M&eacute;dia e matriz de covari&acirc;ncia dos erros, condicionadas &agrave; hist&oacute;ria das observa&ccedil;&otilde;es</p><p>Problemas</p><p>Mesmo que a condi&ccedil;&atilde;o inicial do estado do sistema seja Gaussiana, como as transforma&ccedil;&otilde;es s&atilde;o n&atilde;o lineares, n&atilde;o se pode garantir que qualquer estado subsequente seja Gaussiano.</p><p>Filtros sub-&oacute;timos</p><p>O sistema din&acirc;mico &eacute; descrito por uma equa&ccedil;&atilde;o diferencial estoc&aacute;stica vetorial</p><p><img src="KalmanFilter_eq15760525876817640845.png" alt="$$ \dot{x} = ... $$"></p><h2>Planta<a name="2"></a></h2><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
 close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 clc                         <span class="comment">% Clear command window</span>
 
@@ -74,48 +75,9 @@ import <span class="string">VehicleDynamicsLateral.*</span>
 <span class="comment">% Par&acirc;metros da planta</span>
 <span class="comment">% Choosing plant tire</span>
 TirePlant = TirePacejka()
-</pre><pre class="codeoutput">
-TirePlant = 
-
-  TirePacejka with properties:
-
-     a0: 1
-     a1: 0
-     a2: 700
-     a3: 3000
-     a4: 50
-     a5: 0
-     a6: 0
-     a7: -1
-     a8: 0
-     a9: 0
-    a10: 0
-    a11: 0
-    a12: 0
-    a13: 0
-
 </pre><pre class="codeinput"><span class="comment">% Choosing plant vehicle</span>
 VehiclePlant = VehicleSimpleNonlinear();
 VehiclePlant.tire = TirePlant
-</pre><pre class="codeoutput">
-VehiclePlant = 
-
-  VehicleSimpleNonlinear with properties:
-
-        mT: 1300
-        IT: 10000
-         a: 1.6154
-         b: 1.8846
-       mF0: 700
-       mR0: 600
-        lT: 3.5000
-        nF: 2
-        nR: 2
-    deltaf: 0
-        wT: 2
-       muy: 0.8000
-      tire: [1x1 VehicleDynamicsLateral.TirePacejka]
-
 </pre><pre class="codeinput"><span class="comment">% Choosing simulation</span>
 T = 6;                      <span class="comment">% Total simulation time [s]</span>
 resol = 50;                 <span class="comment">% Resolution</span>
@@ -126,30 +88,6 @@ simulatorPlant = Simulator(VehiclePlant, TSPAN);
 simulatorPlant.Simulate()
 
 simulatorPlant
-</pre><pre class="codeoutput">
-simulatorPlant = 
-
-  Simulator with properties:
-
-    Vehicle: [1x1 VehicleDynamicsLateral.VehicleSimpleNonlinear]
-      TSpan: [51x1 double]
-         X0: 0
-         Y0: 0
-       PSI0: 0
-       PHI0: []
-         V0: 20
-    ALPHAT0: -0.2000
-      dPSI0: 0.7000
-      dPHI0: []
-         XT: [51x1 double]
-         YT: [51x1 double]
-        PSI: [51x1 double]
-        PHI: []
-        VEL: [51x1 double]
-     ALPHAT: [51x1 double]
-       dPSI: [51x1 double]
-       dPHI: []
-
 </pre><pre class="codeinput"><span class="comment">% Retrieving states</span>
 XTPlant = simulatorPlant.XT;
 YTPlant = simulatorPlant.YT;
@@ -163,39 +101,13 @@ XOUTPlant = [XTPlant YTPlant PSIPlant VELPlant ALPHATPlant dPSIPlant];
 gPlant = Graphics(simulatorPlant);
 gPlant.TractorColor = <span class="string">'r'</span>;
 gPlant.Frame(0);
-</pre><img vspace="5" hspace="5" src="KalmanFilter_01.png" alt=""> <h2>Modelo<a name="6"></a></h2><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+</pre><h2>Modelo<a name="6"></a></h2><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 <span class="comment">% Par&acirc;metros da planta</span>
 <span class="comment">% Choosing plant tire</span>
 TireModel = TireLinear()
-</pre><pre class="codeoutput">
-TireModel = 
-
-  TireLinear with properties:
-
-    k: 2300
-
 </pre><pre class="codeinput"><span class="comment">% Choosing plant vehicle</span>
 VehicleModel = VehicleSimpleNonlinear();
 VehicleModel.tire = TireModel
-</pre><pre class="codeoutput">
-VehicleModel = 
-
-  VehicleSimpleNonlinear with properties:
-
-        mT: 1300
-        IT: 10000
-         a: 1.6154
-         b: 1.8846
-       mF0: 700
-       mR0: 600
-        lT: 3.5000
-        nF: 2
-        nR: 2
-    deltaf: 0
-        wT: 2
-       muy: 0.8000
-      tire: [1x1 VehicleDynamicsLateral.TireLinear]
-
 </pre><pre class="codeinput"><span class="comment">% Choosing simulation</span>
 T = 6;                      <span class="comment">% Total simulation time [s]</span>
 resol = 50;                 <span class="comment">% Resolution</span>
@@ -206,30 +118,6 @@ simulatorModel = Simulator(VehicleModel, TSPAN);
 simulatorModel.Simulate()
 
 simulatorModel
-</pre><pre class="codeoutput">
-simulatorModel = 
-
-  Simulator with properties:
-
-    Vehicle: [1x1 VehicleDynamicsLateral.VehicleSimpleNonlinear]
-      TSpan: [51x1 double]
-         X0: 0
-         Y0: 0
-       PSI0: 0
-       PHI0: []
-         V0: 20
-    ALPHAT0: -0.2000
-      dPSI0: 0.7000
-      dPHI0: []
-         XT: [51x1 double]
-         YT: [51x1 double]
-        PSI: [51x1 double]
-        PHI: []
-        VEL: [51x1 double]
-     ALPHAT: [51x1 double]
-       dPSI: [51x1 double]
-       dPHI: []
-
 </pre><pre class="codeinput"><span class="comment">% Retrieving states</span>
 XTModel = simulatorModel.XT;
 YTModel = simulatorModel.YT;
@@ -243,36 +131,20 @@ dPHIModel = simulatorModel.dPHI;
 gModel = Graphics(simulatorModel);
 gModel.TractorColor = <span class="string">'g'</span>;
 gModel.Frame(0);
-</pre><img vspace="5" hspace="5" src="KalmanFilter_02.png" alt=""> <pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+</pre><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 </pre><p>Compara&ccedil;&atilde;o - Diferen&ccedil;a de 10 m na dire&ccedil;&atilde;o X no momento da curva.</p><pre class="codeinput">gPlant.Frame(0);
 hold <span class="string">on</span>
 gModel.Frame(0);
-</pre><img vspace="5" hspace="5" src="KalmanFilter_03.png" alt=""> <pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
+</pre><pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 </pre><h2>Matrizes do modelo linearizado<a name="13"></a></h2><pre class="codeinput">syms <span class="string">XT</span> <span class="string">YT</span> <span class="string">PSI</span> <span class="string">vT</span> <span class="string">ALPHAT</span> <span class="string">dPSI</span> <span class="string">mT</span> <span class="string">IT</span> <span class="string">a</span> <span class="string">b</span> <span class="string">K</span>
 </pre><p>Slip angles</p><pre class="codeinput">ALPHAF = atan((vT * sin(ALPHAT) + a * dPSI)/(vT * cos(ALPHAT))); <span class="comment">% Dianteiro</span>
 ALPHAR = atan((vT * sin(ALPHAT) - b * dPSI)/(vT * cos(ALPHAT))); <span class="comment">% Traseiro</span>
 </pre><pre class="codeinput">pretty(ALPHAF)
-</pre><pre class="codeoutput">
-      / a dPSI + vT sin(ALPHAT) \
-  atan| ----------------------- |
-      \     vT cos(ALPHAT)      /
 </pre><pre class="codeinput">pretty(ALPHAR)
-</pre><pre class="codeoutput">
-        / b dPSI - vT sin(ALPHAT) \
-  - atan| ----------------------- |
-        \     vT cos(ALPHAT)      /
 </pre><p>Lateral forces</p><pre class="codeinput">FyF = -K*ALPHAF;
 FyR = -K*ALPHAR;
 </pre><pre class="codeinput">pretty(FyF)
-</pre><pre class="codeoutput">
-          / a dPSI + vT sin(ALPHAT) \
-  - K atan| ----------------------- |
-          \     vT cos(ALPHAT)      /
 </pre><pre class="codeinput">pretty(FyR)
-</pre><pre class="codeoutput">
-        / b dPSI - vT sin(ALPHAT) \
-  K atan| ----------------------- |
-        \     vT cos(ALPHAT)      /
 </pre><p>Equations of motion</p><pre class="codeinput">f1 = vT * cos(ALPHAT + PSI);
 f2 = vT * sin(ALPHAT + PSI);
 f3 = dPSI;
@@ -282,101 +154,12 @@ f6 = (FyF * a - FyR * b) / IT;
 
 f = [f1 ; f2 ; f3 ; f4 ; f5 ; f6];
 </pre><pre class="codeinput">pretty(f)
-</pre><pre class="codeoutput">
-  +-                                                    -+
-  |                 vT cos(ALPHAT + PSI)                 |
-  |                                                      |
-  |                 vT sin(ALPHAT + PSI)                 |
-  |                                                      |
-  |                         dPSI                         |
-  |                                                      |
-  |           K #2 sin(ALPHAT) - K #1 sin(ALPHAT)        |
-  |         - -----------------------------------        |
-  |                           mT                         |
-  |                                                      |
-  |    dPSI mT vT + K cos(ALPHAT) #2 - K cos(ALPHAT) #1  |
-  |  - ------------------------------------------------  |
-  |                         mT vT                        |
-  |                                                      |
-  |                     K a #2 + K b #1                  |
-  |                   - ---------------                  |
-  |                           IT                         |
-  +-                                                    -+
-  
-  where
-  
-               / b dPSI - vT sin(ALPHAT) \
-     #1 == atan| ----------------------- |
-               \     vT cos(ALPHAT)      /
-  
-               / a dPSI + vT sin(ALPHAT) \
-     #2 == atan| ----------------------- |
-               \     vT cos(ALPHAT)      /
 </pre><p>Vetor de estados</p><pre class="codeinput">States = [XT ; YT ; PSI ; vT ; ALPHAT ; dPSI];
 
 F = jacobian(f,States);
 F = simplify(F);
 </pre><pre class="codeinput">pretty(F)
-</pre><pre class="codeoutput">
-  +-                                                                                                                                                                                                                                                              -+
-  |  0, 0, #6,                                                cos(ALPHAT + PSI),                                                                                        #6,                                                               0                        |
-  |                                                                                                                                                                                                                                                                |
-  |  0, 0, #7,                                                sin(ALPHAT + PSI),                                                                                        #7,                                                               0                        |
-  |                                                                                                                                                                                                                                                                |
-  |  0, 0,  0,                                                        0,                                                                                                0,                                                                1                        |
-  |                                                                                                                                                                                                                                                                |
-  |                                                                                                                                                       K vT sin(ALPHAT) #4   K vT sin(ALPHAT) #3                   K a vT sin(2 ALPHAT)   K b vT sin(2 ALPHAT)  |
-  |                                              2       2      2     2                                   2       2                             #9 - #8 + ------------------- + -------------------                   -------------------- - --------------------  |
-  |                       K dPSI sin(2 ALPHAT) (a  b dPSI  - a b  dPSI  + 4 sin(ALPHAT) a b dPSI vT - a vT  + b vT )                                              #2                    #1                                    2 #2                   2 #1          |
-  |  0, 0,  0,          - ------------------------------------------------------------------------------------------,                         - ---------------------------------------------------,                - -------------------------------------------  |
-  |                                                               2 mT #2 #1                                                                                            mT                                                                mT                       |
-  |                                                                                                                                                                                                                                                                |
-  |                                                                                                                                                                      K vT cos(ALPHAT) #4   K vT cos(ALPHAT) #3                   K a vT #5   K b vT #5         |
-  |                                                                                                                              K #10 sin(ALPHAT) - K #11 sin(ALPHAT) + ------------------- + -------------------           mT vT - --------- + ---------         |
-  |                                                #9       #8     K a dPSI #5   K b dPSI #5                                                                                     #2                    #1                               #2          #1             |
-  |  0, 0,  0,                                   ------ - ------ - ----------- + -----------,                                  - ---------------------------------------------------------------------------------,        - -----------------------------         |
-  |                                                   2        2    mT vT #2      mT vT #1                                                                             mT vT                                                             mT vT                     |
-  |                                              mT vT    mT vT                                                                                                                                                                                                    |
-  |                                                                                                                                                                                                                                                                |
-  |                                                                                                                                                                                                                       2                     2                  |
-  |                                                                                                                                                            K a vT #4   K b vT #3                                   K a  vT cos(ALPHAT)   K b  vT cos(ALPHAT)   |
-  |                                   2  2     2                  2              2   2                    2            2   2                                   --------- - ---------                                   ------------------- + -------------------   |
-  |            K dPSI cos(ALPHAT) (2 a  b  dPSI  - 2 sin(ALPHAT) a  b dPSI vT + a  vT  + 2 sin(ALPHAT) a b  dPSI vT + b  vT )                                     #2          #1                                               #2                    #1            |
-  |  0, 0,  0, --------------------------------------------------------------------------------------------------------------,                               - ---------------------,                                - -----------------------------------------   |
-  |                                                               IT #2 #1                                                                                              IT                                                                IT                       |
-  +-                                                                                                                                                                                                                                                              -+
-  
-  where
-  
-            2     2                               2
-     #1 == b  dPSI  - 2 sin(ALPHAT) b dPSI vT + vT
-  
-            2     2                               2
-     #2 == a  dPSI  + 2 sin(ALPHAT) a dPSI vT + vT
-  
-     #3 == vT - b dPSI sin(ALPHAT)
-  
-     #4 == vT + a dPSI sin(ALPHAT)
-  
-                      2
-     #5 == sin(ALPHAT)  - 1
-  
-     #6 == -vT sin(ALPHAT + PSI)
-  
-     #7 == vT cos(ALPHAT + PSI)
-  
-     #8 == K cos(ALPHAT) #10
-  
-     #9 == K cos(ALPHAT) #11
-  
-                / b dPSI - vT sin(ALPHAT) \
-     #10 == atan| ----------------------- |
-                \     vT cos(ALPHAT)      /
-  
-                / a dPSI + vT sin(ALPHAT) \
-     #11 == atan| ----------------------- |
-                \     vT cos(ALPHAT)      /
-</pre><h2>Medi&ccedil;&atilde;o<a name="24"></a></h2><p><img src="KalmanFilter_eq85127.png" alt="$$ \dot{x} = v_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq33685.png" alt="$$ \dot{y} = v_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq64255.png" alt="$$ \ddot{x} = \dot{v}_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) - v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \sin \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq89316.png" alt="$$ \ddot{y} = \dot{v}_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) + v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \cos \left( \psi + \alpha_{\rm T} \right) $$"></p><pre class="codeinput">ddX = f4*cos(PSI + ALPHAT) - vT*(dPSI + f5)*sin(PSI + ALPHAT);
+</pre><h2>Medi&ccedil;&atilde;o<a name="24"></a></h2><p><img src="KalmanFilter_eq05502835617217259270.png" alt="$$ \dot{x} = v_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq00547383064805776281.png" alt="$$ \dot{y} = v_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq07714664920595481288.png" alt="$$ \ddot{x} = \dot{v}_{\rm T} \cos \left( \psi + \alpha_{\rm T} \right) - v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \sin \left( \psi + \alpha_{\rm T} \right) $$"></p><p><img src="KalmanFilter_eq17232889631116709610.png" alt="$$ \ddot{y} = \dot{v}_{\rm T} \sin \left( \psi + \alpha_{\rm T} \right) + v_{\rm T} \left( \dot{\psi} + \dot{\alpha}_{\rm T} \right) \cos \left( \psi + \alpha_{\rm T} \right) $$"></p><pre class="codeinput">ddX = f4*cos(PSI + ALPHAT) - vT*(dPSI + f5)*sin(PSI + ALPHAT);
 ddY = f4*sin(PSI + ALPHAT) + vT*(dPSI + f5)*cos(PSI + ALPHAT);
 
 <span class="comment">% $$ {\bf A} = \left( \ddot{x} \cos \psi - \ddot{y} \sin \psi \right) {\bf t}_x + \left( - \ddot{x} \sin \psi + \ddot{y} \sin \psi \right) {\bf t}_y$$</span>
@@ -386,60 +169,11 @@ ACEL = simplify(ACEL);
 
 H = jacobian(ACEL,States);
 H = simplify(H);
-</pre><pre class="codeoutput">
-  +-                 -+
-  |  K sin(2 PSI) #1  |
-  |  ---------------  |
-  |        mT         |
-  |                   |
-  |         K #1      |
-  |       - ----      |
-  |          mT       |
-  +-                 -+
-  
-  where
-  
-               / a dPSI + vT sin(ALPHAT) \       / b dPSI - vT sin(ALPHAT) \
-     #1 == atan| ----------------------- | - atan| ----------------------- |
-               \     vT cos(ALPHAT)      /       \     vT cos(ALPHAT)      /
 </pre><p>Testando a lineariza&ccedil;&atilde;o na reta</p><pre class="codeinput">syms <span class="string">v0</span>
 A = subs(F,States,[0 ; 0 ; 0 ; v0 ; 0 ; 0]);
 </pre><pre class="codeinput">pretty(A)
-</pre><pre class="codeoutput">
-  +-                                               -+
-  |  0, 0,  0, 1,      0,               0           |
-  |                                                 |
-  |  0, 0, v0, 0,      v0,              0           |
-  |                                                 |
-  |  0, 0,  0, 0,      0,               1           |
-  |                                                 |
-  |  0, 0,  0, 0,      0,               0           |
-  |                                                 |
-  |                                      K a   K b  |
-  |                              mT v0 + --- - ---  |
-  |                    2 K               v0    v0   |
-  |  0, 0,  0, 0,   - -----,   - -----------------  |
-  |                   mT v0            mT v0        |
-  |                                                 |
-  |                                    2      2     |
-  |                                 K a    K b      |
-  |                                 ---- + ----     |
-  |                 K a - K b        v0     v0      |
-  |  0, 0,  0, 0, - ---------,    - -----------     |
-  |                    IT               IT          |
-  +-                                               -+
 </pre><pre class="codeinput">C = subs(H,States,[0 ; 0 ; 0 ; v0 ; 0 ; 0]);
 pretty(C)
-</pre><pre class="codeoutput">
-  +-                                    -+
-  |  0, 0, 0, 0,   0,          0         |
-  |                                      |
-  |                         / a    b  \  |
-  |                       K | -- - -- |  |
-  |                2 K      \ v0   v0 /  |
-  |  0, 0, 0, 0, - ---, - -------------  |
-  |                mT          mT        |
-  +-                                    -+
 </pre><h2>Filtro estendido de Kalman<a name="31"></a></h2><pre class="codeinput">Q = eye(6);
 R = eye(2);
 G = eye(6);
@@ -590,7 +324,7 @@ plot(t,XOUTopt(1:end-1,6),<span class="string">'k--'</span>)
 
 figure(7)
 plot(t,Popt(1:end-1))
-</pre><img vspace="5" hspace="5" src="KalmanFilter_04.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_05.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_06.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_07.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_08.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_09.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_10.png" alt=""> <pre class="codeinput">close <span class="string">all</span>
+</pre><pre class="codeinput">close <span class="string">all</span>
 </pre><h2>Trajet&oacute;ria da estimativa<a name="34"></a></h2><p>Usando o simulatorPlant para inicializar o Graphics do Kalman</p><pre class="codeinput">gKalman = Graphics(simulatorKalman);
 gKalman.Simulator.TSpan = t;
 gKalman.Simulator.XT = XOUTopt(1:end-1,1);
@@ -601,12 +335,12 @@ gKalman.Simulator.ALPHAT = XOUTopt(1:end-1,5);
 gKalman.Simulator.dPSI = XOUTopt(1:end-1,6);
 gKalman.TractorColor = <span class="string">'b'</span>;
 gKalman.Frame(0)
-</pre><img vspace="5" hspace="5" src="KalmanFilter_11.png" alt=""> <pre class="codeinput">close <span class="string">all</span>
+</pre><pre class="codeinput">close <span class="string">all</span>
 </pre><pre class="codeinput">gPlant.Frame(0);
 hold <span class="string">on</span>
 gModel.Frame(0);
 gKalman.Frame(0);
-</pre><img vspace="5" hspace="5" src="KalmanFilter_12.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% FILTRO DE KALMAN
 %
