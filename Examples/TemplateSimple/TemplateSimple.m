@@ -6,21 +6,25 @@
 
 clear all                   % Clear workspace
 close all                   % Closing figures
+clc                         % Clear command window
+
+% only octave
+addpath('/home/andre/Repos/Vehicle-Dynamics/Vehicle-Dynamics-Lateral/')
+pkg load odepkg
 
 %%
 %
-import VehicleDynamicsLateral.*
 
 % Choosing tire
-TireModel = TirePolynomial();
+TireModel = VehicleDynamicsLateral.TirePolynomial();
 % Choosing vehicle
-System = VehicleSimpleNonlinear();
+System = VehicleDynamicsLateral.VehicleSimpleNonlinear();
 System.tire = TireModel;
 % Choosing simulation
 T = 6;                      % Total simulation time [s]
 resol = 50;                 % Resolution
 TSPAN = 0:T/resol:T;        % Time span [s]
-simulator = Simulator(System, TSPAN);
+simulator = VehicleDynamicsLateral.Simulator(System, TSPAN);
 
 % Simulation
 simulator.Simulate();
@@ -68,7 +72,7 @@ ylabel('Yaw rate [rad/s]')
 %%
 % Frame and animation
 
-g = Graphics(simulator);
+g = VehicleDynamicsLateral.Graphics(simulator);
 g.TractorColor = 'c';
 g.SemitrailerColor = 'm';
 
