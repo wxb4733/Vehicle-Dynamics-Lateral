@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Template Simple</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
+      --><title>Template Simple</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="TemplateSimple.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -74,12 +74,28 @@ clc                         <span class="comment">% Clear command window</span>
 TireModel = TirePacejka();
 <span class="comment">% Choosing vehicle</span>
 System = VehicleSimpleNonlinear();
+<span class="comment">% Defining vehicle parameters</span>
+System.mF0 = 700;
+System.mR0 = 600;
+System.IT = 10000;
+System.lT = 3.5;
+System.nF = 2;
+System.nR = 2;
+System.wT = 2;
+System.muy = .8;
+System.deltaf = 0;
+
 System.tire = TireModel;
 <span class="comment">% Choosing simulation</span>
 T = 6;                      <span class="comment">% Total simulation time [s]</span>
 resol = 50;                 <span class="comment">% Resolution</span>
 TSPAN = 0:T/resol:T;        <span class="comment">% Time span [s]</span>
 simulator = Simulator(System, TSPAN);
+
+<span class="comment">% Changing initial conditions</span>
+simulator.ALPHAT0 = -0.2;             <span class="comment">% Initial side slip angle [rad]</span>
+simulator.dPSI0 = 0.7;                <span class="comment">% Initial yaw rate [rad/s]</span>
+
 
 <span class="comment">% Simulation</span>
 simulator.Simulate();
@@ -121,11 +137,10 @@ plot(TSPAN,dPSI)
 xlabel(<span class="string">'time [s]'</span>)
 ylabel(<span class="string">'Yaw rate [rad/s]'</span>)
 </pre><img vspace="5" hspace="5" src="TemplateSimple_01.png" alt=""> <img vspace="5" hspace="5" src="TemplateSimple_02.png" alt=""> <img vspace="5" hspace="5" src="TemplateSimple_03.png" alt=""> <img vspace="5" hspace="5" src="TemplateSimple_04.png" alt=""> <img vspace="5" hspace="5" src="TemplateSimple_05.png" alt=""> <img vspace="5" hspace="5" src="TemplateSimple_06.png" alt=""> <p>Frame and animation</p><pre class="codeinput">g = Graphics(simulator);
-g.TractorColor = <span class="string">'c'</span>;
-g.SemitrailerColor = <span class="string">'m'</span>;
+g.TractorColor = <span class="string">'r'</span>;
 
-g.Frame(0);
-g.Animation(0);
+g.Frame();
+g.Animation();
 </pre><img vspace="5" hspace="5" src="TemplateSimple_07.png" alt=""> <img vspace="5" hspace="5" src="TemplateSimple_08.png" alt=""> <p><img vspace="5" hspace="5" src="illustrations/AnimationSimple.gif" alt=""> </p><h2>See Also<a name="6"></a></h2><p><a href="index.html">Index</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Template Simple
@@ -146,12 +161,28 @@ import VehicleDynamicsLateral.*
 TireModel = TirePacejka();
 % Choosing vehicle
 System = VehicleSimpleNonlinear();
+% Defining vehicle parameters
+System.mF0 = 700;
+System.mR0 = 600;
+System.IT = 10000;
+System.lT = 3.5;
+System.nF = 2;
+System.nR = 2;
+System.wT = 2;
+System.muy = .8;
+System.deltaf = 0;
+
 System.tire = TireModel;
 % Choosing simulation
 T = 6;                      % Total simulation time [s]
 resol = 50;                 % Resolution
 TSPAN = 0:T/resol:T;        % Time span [s]
 simulator = Simulator(System, TSPAN);
+
+% Changing initial conditions
+simulator.ALPHAT0 = -0.2;             % Initial side slip angle [rad]
+simulator.dPSI0 = 0.7;                % Initial yaw rate [rad/s]
+
 
 % Simulation
 simulator.Simulate();
@@ -200,11 +231,10 @@ ylabel('Yaw rate [rad/s]')
 % Frame and animation
 
 g = Graphics(simulator);
-g.TractorColor = 'c';
-g.SemitrailerColor = 'm';
+g.TractorColor = 'r';
 
-g.Frame(0);
-g.Animation(0);
+g.Frame();
+g.Animation();
 
 %%
 % <<illustrations/AnimationSimple.gif>>

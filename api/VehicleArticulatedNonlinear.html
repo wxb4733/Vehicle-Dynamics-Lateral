@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>VehicleArticulatedNonlinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="VehicleArticulatedNonlinear.m"><style type="text/css">
+      --><title>VehicleArticulatedNonlinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="VehicleArticulatedNonlinear.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -92,7 +92,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             self.deltaf = 0;
         <span class="keyword">end</span>
 
-        <span class="keyword">function</span> dx = Model(self, ~, estados)
+        <span class="keyword">function</span> dx = Model(self,t, estados,tspan)
             <span class="comment">% Vehicle parameters</span>
             mT = self.mT;
             mS = self.mS;
@@ -103,10 +103,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             c = self.c;
             d = self.d;
             e = self.e;
-            deltaf = self.deltaf;
             nF = self.nF;
             nR = self.nR;
             nM = self.nM;
+
+            deltaf = interp1(tspan,self.deltaf,t);
 
             g = 9.81;
 
@@ -150,6 +151,14 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             FyM*(d + e) - mS*(b+c)*d*dPSI^2*sin(PHI) - mS*d*VT*cos(ALPHAT + PHI)*dPSI ];
 
             dx = f;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> [value,isterminal,direction] = velocity(~,~,estados)
+            <span class="comment">% If the velocity is less than 0.1m/s the integrator stops.</span>
+            <span class="comment">% The MassMatrix is singular when the velocity is 0 m/s.</span>
+            value = estados(5,1) - 0.1;
+            isterminal = 1;
+            direction = -1;
         <span class="keyword">end</span>
 
         <span class="keyword">function</span> M = MassMatrix(self,~,estados)
@@ -242,7 +251,7 @@ classdef VehicleArticulatedNonlinear < VehicleDynamicsLateral.VehicleArticulated
             self.deltaf = 0;
         end
 
-        function dx = Model(self, ~, estados)
+        function dx = Model(self,t, estados,tspan)
             % Vehicle parameters
             mT = self.mT;
             mS = self.mS;
@@ -253,10 +262,11 @@ classdef VehicleArticulatedNonlinear < VehicleDynamicsLateral.VehicleArticulated
             c = self.c;
             d = self.d;
             e = self.e;
-            deltaf = self.deltaf;
             nF = self.nF;
             nR = self.nR;
             nM = self.nM;
+
+            deltaf = interp1(tspan,self.deltaf,t);
 
             g = 9.81;
 
@@ -302,6 +312,14 @@ classdef VehicleArticulatedNonlinear < VehicleDynamicsLateral.VehicleArticulated
             dx = f;
         end
 
+        function [value,isterminal,direction] = velocity(~,~,estados)
+            % If the velocity is less than 0.1m/s the integrator stops.
+            % The MassMatrix is singular when the velocity is 0 m/s.
+            value = estados(5,1) - 0.1;
+            isterminal = 1;
+            direction = -1;
+        end
+
         function M = MassMatrix(self,~,estados)
             % Vehicle Parameters
             mT = self.mT;
@@ -319,7 +337,7 @@ classdef VehicleArticulatedNonlinear < VehicleDynamicsLateral.VehicleArticulated
             nM = self.nM;
 
             g = 9.81;
-            
+
             FzF = self.mF * g;
             FzR = self.mR * g;
             FzM = self.mM * g;

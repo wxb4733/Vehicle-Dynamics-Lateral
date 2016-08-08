@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>KALMAN FILTER</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="KalmanFilter.m"><style type="text/css">
+      --><title>KALMAN FILTER</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="KalmanFilter.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -65,7 +65,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>KALMAN FILTER</h1><!--introduction--><p>Kalman filter application.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">System</a></li><li><a href="#2">Plant</a></li><li><a href="#6">Maneuver</a></li><li><a href="#12">Modelo</a></li><li><a href="#18">Plant and model comparison</a></li><li><a href="#24">Model linearization</a></li><li><a href="#37">Medi&ccedil;&atilde;o</a></li><li><a href="#42">Verifica&ccedil;&atilde;o da lineariza&ccedil;&atilde;o</a></li><li><a href="#47">Filtro estendido de Kalman</a></li><li><a href="#58">Compara&ccedil;&atilde;o</a></li><li><a href="#62">Trajet&oacute;ria da estimativa</a></li></ul></div><h2>System<a name="1"></a></h2><p>Supondo um sistema n&atilde;o linear descrito por uma equa&ccedil;&atilde;o diferencial estoc&aacute;stica vetorial dada por:</p><p><img src="KalmanFilter_eq80846.png" alt="$$ \dot{{\bf x}} = {\bf f} ( {\bf x}(t) , t ) + {\bf G} (t) {\bf w} (t) $$"></p><p>onde</p><div><ul><li><img src="KalmanFilter_eq61038.png" alt="${\bf w}$"> &eacute; de processo branco gaussiano. <img src="KalmanFilter_eq12832.png" alt="${\bf w}(t)$"> ~ <img src="KalmanFilter_eq65234.png" alt="$N ( {\bf 0} , {\bf Q}(t) )$"></li><li><img src="KalmanFilter_eq31425.png" alt="${\bf f} ( {\bf x}(t) , t )$"> &eacute; uma fun&ccedil;&atilde;o vetorial de dimens&atilde;o <img src="KalmanFilter_eq25947.png" alt="$n$"></li><li><img src="KalmanFilter_eq79713.png" alt="${\bf x}(t)$"> &eacute; o vetor de estados <img src="KalmanFilter_eq57984.png" alt="$(n \times 1)$"></li><li><img src="KalmanFilter_eq56645.png" alt="${\bf G}$"> &eacute; uma matriz conhecida <img src="KalmanFilter_eq77967.png" alt="$(n \times s)$"></li></ul></div><h2>Plant<a name="2"></a></h2><p>Neste exemplo, a planta &eacute; representada por um modelo din&acirc;mico n&atilde;o linear baseado no modelo f&iacute;sico ilustrado na seguinte figura</p><p><img vspace="5" hspace="5" src="../illustrations/modelSimple.svg" alt=""> </p><p>O modelo da planta &eacute; composto pelos modelos n&atilde;o lineares de maior complexidade dispon&iacute;vel no pacote, ou seja, o modelo de ve&iacute;culo <a href="../DocVehicleSimpleNonlinear.html">Vehicle Simple Nonlinear</a> com o modelo de pneu <a href="../DocTirePacejka.html">Tire Pacejka</a>. A descri&ccedil;&atilde;o das equa&ccedil;&otilde;es de movimento podem ser encontradas em <a href="../theory/vehicleSimple.pdf">Simple equations of motion</a></p><p>Iniciando o c&oacute;digo:</p><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
+  </style></head><body><div class="content"><h1>KALMAN FILTER</h1><!--introduction--><p>Kalman filter application.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">System</a></li><li><a href="#2">Plant</a></li><li><a href="#6">Maneuver</a></li><li><a href="#12">Modelo</a></li><li><a href="#18">Plant and model comparison</a></li><li><a href="#24">Model linearization</a></li><li><a href="#37">Medi&ccedil;&atilde;o</a></li><li><a href="#42">Verifica&ccedil;&atilde;o da lineariza&ccedil;&atilde;o</a></li><li><a href="#47">Filtro estendido de Kalman</a></li><li><a href="#58">Compara&ccedil;&atilde;o</a></li><li><a href="#62">Trajet&oacute;ria da estimativa</a></li><li><a href="#65">See Also</a></li></ul></div><h2>System<a name="1"></a></h2><p>Supondo um sistema n&atilde;o linear descrito por uma equa&ccedil;&atilde;o diferencial estoc&aacute;stica vetorial dada por:</p><p><img src="KalmanFilter_eq80846.png" alt="$$ \dot{{\bf x}} = {\bf f} ( {\bf x}(t) , t ) + {\bf G} (t) {\bf w} (t) $$"></p><p>onde</p><div><ul><li><img src="KalmanFilter_eq61038.png" alt="${\bf w}$"> &eacute; de processo branco gaussiano. <img src="KalmanFilter_eq12832.png" alt="${\bf w}(t)$"> ~ <img src="KalmanFilter_eq65234.png" alt="$N ( {\bf 0} , {\bf Q}(t) )$"></li><li><img src="KalmanFilter_eq31425.png" alt="${\bf f} ( {\bf x}(t) , t )$"> &eacute; uma fun&ccedil;&atilde;o vetorial de dimens&atilde;o <img src="KalmanFilter_eq25947.png" alt="$n$"></li><li><img src="KalmanFilter_eq79713.png" alt="${\bf x}(t)$"> &eacute; o vetor de estados <img src="KalmanFilter_eq57984.png" alt="$(n \times 1)$"></li><li><img src="KalmanFilter_eq56645.png" alt="${\bf G}$"> &eacute; uma matriz conhecida <img src="KalmanFilter_eq77967.png" alt="$(n \times s)$"></li></ul></div><h2>Plant<a name="2"></a></h2><p>Neste exemplo, a planta &eacute; representada por um modelo din&acirc;mico n&atilde;o linear baseado no modelo f&iacute;sico ilustrado na seguinte figura</p><p><img vspace="5" hspace="5" src="illustrations/modelSimple.svg" alt=""> </p><p>O modelo da planta &eacute; composto pelos modelos n&atilde;o lineares de maior complexidade dispon&iacute;vel no pacote, ou seja, o modelo de ve&iacute;culo <a href="../DocVehicleSimpleNonlinear.html">Vehicle Simple Nonlinear</a> com o modelo de pneu <a href="../DocTirePacejka.html">Tire Pacejka</a>. A descri&ccedil;&atilde;o das equa&ccedil;&otilde;es de movimento podem ser encontradas em <a href="../theory/vehicleSimple.pdf">Simple equations of motion</a></p><p>Iniciando o c&oacute;digo:</p><pre class="codeinput">clear <span class="string">all</span>                   <span class="comment">% Clear workspace</span>
 close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 clc                         <span class="comment">% Clear command window</span>
 </pre><p>O pacote &eacute; importado com o comando:</p><pre class="codeinput">import <span class="string">VehicleDynamicsLateral.*</span>
@@ -123,7 +123,7 @@ simulatorPlant.Simulate
        PSI0: 0
        PHI0: []
          V0: 20
-    ALPHAT0: -0.2000
+    ALPHAT0: 0
       dPSI0: 0.3500
       dPHI0: []
          XT: [51x1 double]
@@ -146,7 +146,7 @@ dPSIPlant = simulatorPlant.dPSI;
 XOUTPlant = [XTPlant YTPlant PSIPlant vTPlant ALPHATPlant dPSIPlant];
 </pre><p>Gerando os gr&aacute;ficos da manobra do carro (plant)</p><pre class="codeinput">gPlant = Graphics(simulatorPlant);
 gPlant.TractorColor = <span class="string">'r'</span>;
-gPlant.Frame(0);
+gPlant.Frame();
 </pre><img vspace="5" hspace="5" src="KalmanFilter_01.png" alt=""> <pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 </pre><h2>Modelo<a name="12"></a></h2><p>O modelo utilizado no algoritmo de estima&ccedil;&atilde;o &eacute; baseado no mesmo modelo f&iacute;sico considerado no modelo da planta. Al&eacute;m disso, o modelo parte da premissa de que o projetista do estimador n&atilde;o tem conhecimento adequado da curva caracter&iacute;stica do pneu. Logo, o modelo de ve&iacute;culo &eacute; igual ao utilizado na planta, por&eacute;m, o modelo de pneu &eacute; dado pelo modelo linear <a href="../DocTireLinear.html">Tire linear</a>, resultando num modelo do sistema de menor complexidade (em rela&ccedil;&atilde;o &agrave; planta) e com mais hip&oacute;teses simplificadoras.</p><p>Inicializando o pneu</p><pre class="codeinput">TireModel = TireLinear;
 disp(TireModel)
@@ -187,7 +187,7 @@ disp(simulatorModel)
        PSI0: 0
        PHI0: []
          V0: 20
-    ALPHAT0: -0.2000
+    ALPHAT0: 0
       dPSI0: 0.3500
       dPHI0: []
          XT: [51x1 double]
@@ -207,7 +207,7 @@ ALPHATModel = simulatorModel.ALPHAT;
 dPSIModel = simulatorModel.dPSI;
 </pre><p>A manobra gerada pelo modelo escolhido pelo projetista a partir da mesma condi&ccedil;&atilde;o inicial &eacute; ilustrada na figura a seguir</p><pre class="codeinput">gModel = Graphics(simulatorModel);
 gModel.TractorColor = <span class="string">'g'</span>;
-gModel.Frame(0);
+gModel.Frame();
 </pre><img vspace="5" hspace="5" src="KalmanFilter_02.png" alt=""> <pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 </pre><h2>Plant and model comparison<a name="18"></a></h2><p>Comparando o modelo de pneu</p><pre class="codeinput">g = 9.81;
 FzF = VehiclePlant.mF0*g;
@@ -282,7 +282,7 @@ ylabel(<span class="string">'dPSI [rad/s]'</span>)
 </pre><img vspace="5" hspace="5" src="KalmanFilter_04.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_05.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_06.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_07.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_08.png" alt=""> <img vspace="5" hspace="5" src="KalmanFilter_09.png" alt=""> <p>Comparando a acelera&ccedil;&atilde;o longitudinal e transversal</p><pre class="codeinput">saidasPlant = [XTPlant YTPlant PSIPlant vTPlant ALPHATPlant dPSIPlant];
 matDerivEstadosPlant = zeros(size(saidasPlant));
 <span class="keyword">for</span> i = 1:size(saidasPlant,1)
-    auxil = VehiclePlant.Model(0,saidasPlant(i,:));
+    auxil = simulatorPlant.Vehicle.Model(1,saidasPlant(i,:),TSPAN);
     matDerivEstadosPlant(i,:) = auxil';
 <span class="keyword">end</span>
 
@@ -301,7 +301,7 @@ ACELNumPlant = [(ddXPlant.*cos(PSIPlant) - ddYPlant.*sin(PSIPlant))  (-ddXPlant.
 saidasModel = [XTModel YTModel PSIModel vTModel ALPHATModel dPSIModel];
 matDerivEstadosModel = zeros(size(saidasModel));
 <span class="keyword">for</span> i = 1:size(saidasModel,1)
-    auxil = VehicleModel.Model(0,saidasModel(i,:));
+    auxil = simulatorModel.Vehicle.Model(1,saidasModel(i,:),TSPAN);
     matDerivEstadosModel(i,:) = auxil';
 <span class="keyword">end</span>
 
@@ -387,10 +387,10 @@ set(l,<span class="string">'Location'</span>,<span class="string">'NorthEast'</s
 <span class="comment">% ylabel('ddPSI [rad/s2]')</span>
 <span class="comment">% l = legend('Plant','Model');</span>
 <span class="comment">% set(l,'Location','SouthEast')</span>
-</pre><p>Compara&ccedil;&atilde;o - Diferen&ccedil;a de 10 m na dire&ccedil;&atilde;o X no momento da curva.</p><pre class="codeinput">gModel.Frame(0);
+</pre><p>Compara&ccedil;&atilde;o - Diferen&ccedil;a de 10 m na dire&ccedil;&atilde;o X no momento da curva.</p><pre class="codeinput">gModel.Frame();
 hold <span class="string">on</span>
-gPlant.Frame(0);
-gModel.Frame(0);
+gPlant.Frame();
+gModel.Frame();
 </pre><img vspace="5" hspace="5" src="KalmanFilter_11.png" alt=""> <pre class="codeinput">close <span class="string">all</span>                   <span class="comment">% Closing figures</span>
 </pre><h2>Model linearization<a name="24"></a></h2><p>A express&atilde;o geral da equa&ccedil;&atilde;o linearizada &eacute; obtida neste t&oacute;pico utilizando o processador simb&oacute;lico.</p><p>Definindo os s&iacute;mbolos:</p><pre class="codeinput">syms <span class="string">XT</span> <span class="string">YT</span> <span class="string">PSI</span> <span class="string">vT</span> <span class="string">ALPHAT</span> <span class="string">dPSI</span> <span class="string">mT</span> <span class="string">IT</span> <span class="string">a</span> <span class="string">b</span> <span class="string">K</span>
 </pre><p>Slip angles</p><pre class="codeinput">ALPHAF = atan((vT * sin(ALPHAT) + a * dPSI)/(vT * cos(ALPHAT))); <span class="comment">% Dianteiro</span>
@@ -667,6 +667,8 @@ ALPHAT0Num = simulatorModel.ALPHAT0;
 dPSI0Num = simulatorModel.dPSI0;
 
 x0 = [ X0Num ; Y0Num ; PSI0Num ; VEL0Num ; ALPHAT0Num ; dPSI0Num ];
+x0 = zeros(6,1);
+x0(4)=20;
 </pre><p>Recuperando os par&acirc;metros do ve&iacute;culo</p><pre class="codeinput">mTNum = VehicleModel.mT;
 ITNum = VehicleModel.IT;
 aNum = VehicleModel.a;
@@ -684,6 +686,10 @@ KKalmanopt = ones(length(t) + 1,1);                 <span class="comment">% Ganh
 XOUTantes(1,:) = x0';
 Pantes(1,1) = norm(P0);
 Popt(1,1) = norm(P0);
+
+<span class="comment">% Distribui&ccedil;&atilde;o dos erros</span>
+
+pesos = [5; 5; 0.1; 0.5; 0.5];
 </pre><p>Itera&ccedil;&atilde;o</p><pre class="codeinput"><span class="keyword">for</span> j = 1:length(t)
     <span class="comment">% &Iacute;ndice variando por todos os instantes de observa&ccedil;&atilde;o</span>
 
@@ -692,6 +698,8 @@ Popt(1,1) = norm(P0);
 
     <span class="comment">% Obtendo as medidas da itera&ccedil;&atilde;o</span>
     z = [interp1(TSPAN,XTPlant(:,1),t(j)) ; interp1(TSPAN,YTPlant(:,1),t(j)) ; interp1(TSPAN,ddPSIPlant(:,1),t(j)) ; interp1(TSPAN,ACELNumPlant(:,1),t(j)) ; interp1(TSPAN,ACELNumPlant(:,2),t(j))];
+
+    z = z + pesos.*(rand(5,1)-0.5);
 
     Fnum = subs(F,[States.' mT IT a b K],[x0.' parameters]);
     Fnum = double(Fnum);
@@ -839,13 +847,13 @@ gKalman.Simulator.VEL = XOUTopt(1:end-1,4);
 gKalman.Simulator.ALPHAT = XOUTopt(1:end-1,5);
 gKalman.Simulator.dPSI = XOUTopt(1:end-1,6);
 gKalman.TractorColor = <span class="string">'b'</span>;
-gKalman.Frame(0)
+gKalman.Frame()
 </pre><img vspace="5" hspace="5" src="KalmanFilter_20.png" alt=""> <pre class="codeinput">close <span class="string">all</span>
-</pre><pre class="codeinput">gPlant.Frame(0);
+</pre><pre class="codeinput">gPlant.Frame();
 hold <span class="string">on</span>
-gModel.Frame(0);
-gKalman.Frame(0);
-</pre><img vspace="5" hspace="5" src="KalmanFilter_21.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+gModel.Frame();
+gKalman.Frame();
+</pre><img vspace="5" hspace="5" src="KalmanFilter_21.png" alt=""> <h2>See Also<a name="65"></a></h2><p><a href="index.html">Index</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% KALMAN FILTER
 % Kalman filter application.
@@ -865,7 +873,7 @@ gKalman.Frame(0);
 %% Plant
 % Neste exemplo, a planta é representada por um modelo dinâmico não linear baseado no modelo físico ilustrado na seguinte figura
 %
-% <<../illustrations/modelSimple.svg>>
+% <<illustrations/modelSimple.svg>>
 %
 % O modelo da planta é composto pelos modelos não lineares de maior complexidade disponível no pacote, ou seja, o modelo de veículo <../DocVehicleSimpleNonlinear.html Vehicle Simple Nonlinear> com o modelo de pneu <../DocTirePacejka.html Tire Pacejka>. A descrição das equações de movimento podem ser encontradas em <../theory/vehicleSimple.pdf Simple equations of motion>
 %
@@ -941,7 +949,7 @@ XOUTPlant = [XTPlant YTPlant PSIPlant vTPlant ALPHATPlant dPSIPlant];
 
 gPlant = Graphics(simulatorPlant);
 gPlant.TractorColor = 'r';
-gPlant.Frame(0);
+gPlant.Frame();
 
 %%
 %
@@ -992,7 +1000,7 @@ dPSIModel = simulatorModel.dPSI;
 
 gModel = Graphics(simulatorModel);
 gModel.TractorColor = 'g';
-gModel.Frame(0);
+gModel.Frame();
 
 %%
 %
@@ -1084,7 +1092,7 @@ ylabel('dPSI [rad/s]')
 saidasPlant = [XTPlant YTPlant PSIPlant vTPlant ALPHATPlant dPSIPlant];
 matDerivEstadosPlant = zeros(size(saidasPlant));
 for i = 1:size(saidasPlant,1)
-    auxil = VehiclePlant.Model(0,saidasPlant(i,:));
+    auxil = simulatorPlant.Vehicle.Model(1,saidasPlant(i,:),TSPAN);
     matDerivEstadosPlant(i,:) = auxil';
 end
 
@@ -1103,7 +1111,7 @@ ACELNumPlant = [(ddXPlant.*cos(PSIPlant) - ddYPlant.*sin(PSIPlant))  (-ddXPlant.
 saidasModel = [XTModel YTModel PSIModel vTModel ALPHATModel dPSIModel];
 matDerivEstadosModel = zeros(size(saidasModel));
 for i = 1:size(saidasModel,1)
-    auxil = VehicleModel.Model(0,saidasModel(i,:));
+    auxil = simulatorModel.Vehicle.Model(1,saidasModel(i,:),TSPAN);
     matDerivEstadosModel(i,:) = auxil';
 end
 
@@ -1198,10 +1206,10 @@ set(l,'Location','NorthEast')
 % Comparação - Diferença de 10 m na direção X no momento da curva.
 %
 
-gModel.Frame(0);
+gModel.Frame();
 hold on
-gPlant.Frame(0);
-gModel.Frame(0);
+gPlant.Frame();
+gModel.Frame();
 
 %%
 %
@@ -1435,6 +1443,8 @@ ALPHAT0Num = simulatorModel.ALPHAT0;
 dPSI0Num = simulatorModel.dPSI0;
 
 x0 = [ X0Num ; Y0Num ; PSI0Num ; VEL0Num ; ALPHAT0Num ; dPSI0Num ];
+x0 = zeros(6,1);
+x0(4)=20;
 
 %%
 % Recuperando os parâmetros do veículo
@@ -1481,11 +1491,13 @@ XOUTantes(1,:) = x0';
 Pantes(1,1) = norm(P0);
 Popt(1,1) = norm(P0);
 
+% Distribuição dos erros
+
+pesos = [5; 5; 0.1; 0.5; 0.5];
 
 %%
 % Iteração
 %
-
 
 for j = 1:length(t)
     % Índice variando por todos os instantes de observação
@@ -1495,6 +1507,8 @@ for j = 1:length(t)
 
     % Obtendo as medidas da iteração
     z = [interp1(TSPAN,XTPlant(:,1),t(j)) ; interp1(TSPAN,YTPlant(:,1),t(j)) ; interp1(TSPAN,ddPSIPlant(:,1),t(j)) ; interp1(TSPAN,ACELNumPlant(:,1),t(j)) ; interp1(TSPAN,ACELNumPlant(:,2),t(j))];
+
+    z = z + pesos.*(rand(5,1)-0.5);
 
     Fnum = subs(F,[States.' mT IT a b K],[x0.' parameters]);
     Fnum = double(Fnum);
@@ -1660,17 +1674,22 @@ gKalman.Simulator.VEL = XOUTopt(1:end-1,4);
 gKalman.Simulator.ALPHAT = XOUTopt(1:end-1,5);
 gKalman.Simulator.dPSI = XOUTopt(1:end-1,6);
 gKalman.TractorColor = 'b';
-gKalman.Frame(0)
+gKalman.Frame()
 
 %%
 close all
 
 %%
 %
-gPlant.Frame(0);
+gPlant.Frame();
 hold on
-gModel.Frame(0);
-gKalman.Frame(0);
+gModel.Frame();
+gKalman.Frame();
+
+%% See Also
+%
+% <index.html Index>
+%
 
 ##### SOURCE END #####
 --></body></html>

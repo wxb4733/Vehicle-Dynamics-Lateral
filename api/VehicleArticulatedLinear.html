@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>VehicleArticulatedLinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="VehicleArticulatedLinear.m"><style type="text/css">
+      --><title>VehicleArticulatedLinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="VehicleArticulatedLinear.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -92,7 +92,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             self.deltaf = 0;
         <span class="keyword">end</span>
 
-        <span class="keyword">function</span> dx = Model(self,~,estados)
+        <span class="keyword">function</span> dx = Model(self,t,estados,tspan)
             <span class="comment">% Vehicle parameters</span>
             mT = self.mT;
             mS = self.mS;
@@ -103,17 +103,19 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             c = self.c;
             d = self.d;
             e = self.e;
-            deltaf = self.deltaf;
             nF = self.nF;
             nR = self.nR;
             nM = self.nM;
             g = 9.81;
 
+            <span class="comment">% Steering angle</span>
+            deltaf = interp1(tspan,self.deltaf,t);
+
+            <span class="comment">% Vertical forces</span>
             FzF = self.mF * g;
             FzR = self.mR * g;
             FzM = self.mM * g;
             muy = self.muy;
-
 
             v0 = 20;
 
@@ -229,7 +231,7 @@ classdef VehicleArticulatedLinear < VehicleDynamicsLateral.VehicleArticulated
             self.deltaf = 0;
         end
 
-        function dx = Model(self,~,estados)
+        function dx = Model(self,t,estados,tspan)
             % Vehicle parameters
             mT = self.mT;
             mS = self.mS;
@@ -240,17 +242,19 @@ classdef VehicleArticulatedLinear < VehicleDynamicsLateral.VehicleArticulated
             c = self.c;
             d = self.d;
             e = self.e;
-            deltaf = self.deltaf;
             nF = self.nF;
             nR = self.nR;
             nM = self.nM;
             g = 9.81;
-            
+
+            % Steering angle
+            deltaf = interp1(tspan,self.deltaf,t);
+
+            % Vertical forces
             FzF = self.mF * g;
             FzR = self.mR * g;
             FzM = self.mM * g;
             muy = self.muy;
-
 
             v0 = 20;
 

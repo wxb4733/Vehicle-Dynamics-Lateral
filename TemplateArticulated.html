@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Template Articulated</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="TemplateArticulated.m"><style type="text/css">
+      --><title>Template Articulated</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="TemplateArticulated.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -72,22 +72,36 @@ clc                         <span class="comment">% Clear command window</span>
 
 <span class="comment">% Choosing tire</span>
 TireModel = TirePacejka();
+TireModel.a0 = 1;
+TireModel.a1 = 2;
+TireModel.a2 = 700;
+TireModel.a3 = 5000;
+TireModel.a4 = 80;
+TireModel.a5 = 0;
+TireModel.a6 = 0;
+TireModel.a7 = 0.6;
+
 <span class="comment">% Choosing vehicle</span>
 System = VehicleArticulatedNonlinear();
 System.tire = TireModel;
 <span class="comment">% Choosing simulation</span>
-T = 6;                      <span class="comment">% Total simulation time [s]</span>
+T = 7;                      <span class="comment">% Total simulation time [s]</span>
 resol = 50;                 <span class="comment">% Resolution</span>
 TSPAN = 0:T/resol:T;        <span class="comment">% Time span [s]</span>
 simulator = Simulator(System, TSPAN);
 
+simulator.ALPHAT0 = 0.3;              <span class="comment">% Initial tractor side slip angle [rad]</span>
+simulator.dPSI0 = 0.25;               <span class="comment">% Initial tractor yaw rate [rad/s]</span>
+simulator.dPHI0 = 0.25;        <span class="comment">% Initial articulation rate [rad/s]</span>
+
+
 <span class="comment">% Simulation</span>
 simulator.Simulate();
 </pre><h2>Results<a name="3"></a></h2><pre class="codeinput">g = Graphics(simulator);
-g.TractorColor = <span class="string">'c'</span>;
-g.SemitrailerColor = <span class="string">'m'</span>;
-g.Frame(0);
-g.Animation(0);
+g.TractorColor = <span class="string">'r'</span>;
+g.SemitrailerColor = <span class="string">'g'</span>;
+g.Frame();
+g.Animation();
 </pre><img vspace="5" hspace="5" src="TemplateArticulated_01.png" alt=""> <img vspace="5" hspace="5" src="TemplateArticulated_02.png" alt=""> <p><img vspace="5" hspace="5" src="illustrations/AnimationArticulated.gif" alt=""> </p><h2>See Also<a name="5"></a></h2><p><a href="index.html">Index</a> | <a href="TemplateSimple.html">TemplateSimple</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Template Articulated
@@ -106,14 +120,28 @@ import VehicleDynamicsLateral.*
 
 % Choosing tire
 TireModel = TirePacejka();
+TireModel.a0 = 1;
+TireModel.a1 = 2;
+TireModel.a2 = 700;
+TireModel.a3 = 5000;
+TireModel.a4 = 80;
+TireModel.a5 = 0;
+TireModel.a6 = 0;
+TireModel.a7 = 0.6;
+
 % Choosing vehicle
 System = VehicleArticulatedNonlinear();
 System.tire = TireModel;
 % Choosing simulation
-T = 6;                      % Total simulation time [s]
+T = 7;                      % Total simulation time [s]
 resol = 50;                 % Resolution
 TSPAN = 0:T/resol:T;        % Time span [s]
 simulator = Simulator(System, TSPAN);
+
+simulator.ALPHAT0 = 0.3;              % Initial tractor side slip angle [rad]
+simulator.dPSI0 = 0.25;               % Initial tractor yaw rate [rad/s]
+simulator.dPHI0 = 0.25;        % Initial articulation rate [rad/s]
+
 
 % Simulation
 simulator.Simulate();
@@ -122,10 +150,10 @@ simulator.Simulate();
 %
 
 g = Graphics(simulator);
-g.TractorColor = 'c';
-g.SemitrailerColor = 'm';
-g.Frame(0);
-g.Animation(0);
+g.TractorColor = 'r';
+g.SemitrailerColor = 'g';
+g.Frame();
+g.Animation();
 
 %%
 %

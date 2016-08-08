@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Graphics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="Graphics.m"><style type="text/css">
+      --><title>Graphics</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="Graphics.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -77,7 +77,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             self.SemitrailerColor = <span class="string">'g'</span>;
         <span class="keyword">end</span>
 
-        <span class="keyword">function</span> Animation(self, saveit, varargin)
+        <span class="keyword">function</span> Animation(self, varargin)
             <span class="comment">% Verifying number of columns of the state output matrix</span>
             <span class="comment">% col = 6 -&gt; simples</span>
             <span class="comment">% col = 8 -&gt; articulado</span>
@@ -218,25 +218,25 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 velt(i, 1:2) = interp1(TOUT, VEL, TEMPO(i));
             <span class="keyword">end</span>
 
-            XSize = 25 ;                            <span class="comment">% Horizontal size of the figure [cm]</span>
+
+            figWidth = 20 ;                             <span class="comment">% Defining the width of the figure [centimeters]</span>
+            <span class="comment">% Margins added to Position to include text labels [left bottom right top] Property - TightInset (read only)</span>
+            tight = [1.3 1.3 0.2 0.2];
+            PosAxX = figWidth - tight(1) - tight(3);     <span class="comment">% Width of the axes (axes position x)</span>
+            XLim = [min(XT)-20 max(XT)+10];              <span class="comment">% Limits of x</span>
+            rangeX = XLim(2) - XLim(1);                  <span class="comment">% Range of x</span>
+            YLim = [min(YT)-5 max(YT)+5];              <span class="comment">% Limits of y</span>
+            <span class="comment">% YLim = [min(YT)-10 max(YT)+10];              % Limits of y</span>
+            rangeY = YLim(2) - YLim(1);                  <span class="comment">% Range of y</span>
+            PosAxY = PosAxX*rangeY/rangeX;               <span class="comment">% Height of the axes (axes position y) - Equivalent to axis equal</span>
+
             <span class="comment">% Defining figure</span>
-            f666=figure(666);
-            set(f666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
-            set(f666,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
-            <span class="comment">% Position and size of the figure window</span>
-            set(f666,<span class="string">'Position'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            <span class="comment">% Position and size of the figure on the printed page</span>
-            set(f666,<span class="string">'PaperPosition'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            <span class="comment">% % Size of the paper</span>
-            set(f666,<span class="string">'PaperSize'</span>,[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            f666 = figure(666);
+            <span class="comment">% Defining axes</span>
             ax666=gca;
-            set(ax666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
-            set(ax666,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
-            axis <span class="string">equal</span>
-            set(ax666,<span class="string">'XLim'</span>,[min(XT)-20 max(XT)+10])
-            set(ax666,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
+            set(ax666,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>)                 <span class="comment">% hold on</span>
+
             <span class="comment">% Description</span>
-            title(<span class="string">'Trajectory'</span>)
             xlabel(<span class="string">'Distance [m]'</span>);
             ylabel(<span class="string">'Distance [m]'</span>);
 
@@ -328,12 +328,35 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 fill(xn, yn, self.SemitrailerColor)
             <span class="keyword">end</span>
 
-            <span class="keyword">if</span> saveit == 1
+            <span class="keyword">if</span> nargin == 2
+                [pathstr, name, ext] = fileparts(varargin{1});
+
+                <span class="keyword">if</span> not(exist(pathstr, <span class="string">'file'</span>) == 7)
+                    mkdir(pathstr);
+                <span class="keyword">end</span>
+
+                <span class="comment">% Setting figure</span>
+                set(f666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
+                set(f666,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
+                <span class="comment">% Position and size of the figure window</span>
+                set(f666,<span class="string">'Position'</span>,[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                <span class="comment">% Position and size of the figure on the printed page</span>
+                set(f666,<span class="string">'PaperPosition'</span>,[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                <span class="comment">% % Size of the paper</span>
+                set(f666,<span class="string">'PaperSize'</span>,[PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                set(ax666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
+
+                <span class="comment">% Setting axes</span>
+                set(ax666,<span class="string">'XLim'</span>,XLim)
+                set(ax666,<span class="string">'YLim'</span>,YLim)
+                set(ax666,<span class="string">'Position'</span>,[tight(1:2) PosAxX PosAxY])
+                set(ax666,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
+
                 <span class="comment">% Initializing gif</span>
                 frame = getframe(666);
                 im = frame2im(frame);
                 [A, map] = rgb2ind(im, 256, <span class="string">'nodither'</span>);
-                imwrite(A, map, <span class="string">'Animation.gif'</span>, <span class="string">'LoopCount'</span>, Inf, <span class="string">'DelayTime'</span>, 0.05);
+                imwrite(A, map, strcat(pathstr, <span class="string">'/'</span>, name, <span class="string">'.gif'</span>), <span class="string">'LoopCount'</span>, Inf, <span class="string">'DelayTime'</span>, 0.05);
             <span class="keyword">end</span>
 
             <span class="comment">% Remaining frames</span>
@@ -363,12 +386,30 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                     self.Vector(emsemi(j, 1:2),(alpham(j)+psii(j)-phii(j)),velm(j),<span class="string">'b'</span>);
                 <span class="keyword">end</span>
 
-                <span class="keyword">if</span> saveit == 1
+                <span class="comment">% Setting figure</span>
+                set(f666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
+                set(f666,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
+                <span class="comment">% Position and size of the figure window</span>
+                set(f666,<span class="string">'Position'</span>,[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                <span class="comment">% Position and size of the figure on the printed page</span>
+                set(f666,<span class="string">'PaperPosition'</span>,[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                <span class="comment">% % Size of the paper</span>
+                set(f666,<span class="string">'PaperSize'</span>,[PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                set(ax666,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
+
+                <span class="comment">% Setting axes</span>
+                set(ax666,<span class="string">'XLim'</span>,XLim)
+                set(ax666,<span class="string">'YLim'</span>,YLim)
+                set(ax666,<span class="string">'Position'</span>,[tight(1:2) PosAxX PosAxY])
+                set(ax666,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
+                <span class="keyword">if</span> nargin == 2
+                    [pathstr, name, ext] = fileparts(varargin{1});
+
                     <span class="comment">% Adding the current frame to the initialized gif</span>
                     frame = getframe(666);
                     im = frame2im(frame);
                     [A, map] = rgb2ind(im, 256, <span class="string">'nodither'</span>);
-                    imwrite(A, map, <span class="string">'Animation.gif'</span>, <span class="string">'WriteMode'</span>, <span class="string">'append'</span>, <span class="string">'DelayTime'</span>, 0.05);
+                    imwrite(A, map, strcat(pathstr, <span class="string">'/'</span>, name, <span class="string">'.gif'</span>), <span class="string">'WriteMode'</span>, <span class="string">'append'</span>, <span class="string">'DelayTime'</span>, 0.05);
                 <span class="keyword">end</span>
 
                 pause(0.05)                 <span class="comment">% OBS: It has to be the same value of the time adjustment</span>
@@ -403,7 +444,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             <span class="keyword">end</span>
         <span class="keyword">end</span>
 
-        <span class="keyword">function</span> Frame(self, saveit, varargin)
+        <span class="keyword">function</span> Frame(self, varargin)
             articulated = isa(self.Simulator.Vehicle, <span class="string">'VehicleDynamicsLateral.VehicleArticulated'</span>);
 
             <span class="comment">% States</span>
@@ -528,23 +569,21 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 velt(i, 1:2) = interp1(TOUT, VEL, TEMPO(i));
             <span class="keyword">end</span>
 
-            XSize = 25 ;                            <span class="comment">% Horizontal size of the figure [cm]</span>
+            figWidth = 20 ;                             <span class="comment">% Defining the width of the figure [centimeters]</span>
+            <span class="comment">% Margins added to Position to include text labels [left bottom right top] Property - TightInset (read only)</span>
+            tight = [1.3 1.3 0.2 0.2];
+            PosAxX = figWidth - tight(1) - tight(3);     <span class="comment">% Width of the axes (axes position x)</span>
+            XLim = [min(XT)-20 max(XT)+10];              <span class="comment">% Limits of x</span>
+            rangeX = XLim(2) - XLim(1);                  <span class="comment">% Range of x</span>
+            YLim = [min(YT)-10 max(YT)+10];              <span class="comment">% Limits of y</span>
+            rangeY = YLim(2) - YLim(1);                  <span class="comment">% Range of y</span>
+            PosAxY = PosAxX*rangeY/rangeX;               <span class="comment">% Height of the axes (axes position y) - Equivalent to axis equal</span>
+
             <span class="comment">% Defining figure</span>
             f999 = figure(999);
-            set(f999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
-            set(f999,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
-            <span class="comment">% Position and size of the figure window</span>
-            set(f999,<span class="string">'Position'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            <span class="comment">% Position and size of the figure on the printed page</span>
-            set(f999,<span class="string">'PaperPosition'</span>,[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            <span class="comment">% % Size of the paper</span>
-            set(f999,<span class="string">'PaperSize'</span>,[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            <span class="comment">% Defining axes</span>
             ax999=gca;
-            set(ax999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
-            set(ax999,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
-            axis <span class="string">equal</span>
-            set(ax999,<span class="string">'XLim'</span>,[min(XT)-20 max(XT)+10])
-            set(ax999,<span class="string">'YLim'</span>,[min(YT)-10 max(YT)+10])
+            set(ax999,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>)                 <span class="comment">% hold on</span>
 
             xlabel(<span class="string">'Distance [m]'</span>)
             ylabel(<span class="string">'Distance [m]'</span>)
@@ -647,8 +686,31 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 <span class="keyword">end</span>
             <span class="keyword">end</span>
 
-            <span class="keyword">if</span> saveit == 1
-                print(f999, <span class="string">'-dpdf'</span>, <span class="string">'Trajectory.pdf'</span>)
+            <span class="comment">% Setting figure</span>
+            set(f999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)         <span class="comment">% Changing units of the figure to centimeters</span>
+            set(f999,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)    <span class="comment">% Changing units of the paper to centimeters</span>
+            <span class="comment">% Position and size of the figure window</span>
+            set(f999,<span class="string">'Position'</span>,[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+            <span class="comment">% Position and size of the figure on the printed page</span>
+            set(f999,<span class="string">'PaperPosition'</span>,[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+            <span class="comment">% % Size of the paper</span>
+            set(f999,<span class="string">'PaperSize'</span>,[PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+            set(ax999,<span class="string">'Units'</span>,<span class="string">'centimeters'</span>)        <span class="comment">% Changing units of the axes to centimeters</span>
+
+            <span class="comment">% Setting axes</span>
+            set(ax999,<span class="string">'XLim'</span>,XLim)
+            set(ax999,<span class="string">'YLim'</span>,YLim)
+            set(ax999,<span class="string">'Position'</span>,[tight(1:2) PosAxX PosAxY])
+            set(ax999,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XGrid'</span>,<span class="string">'on'</span>,<span class="string">'YGrid'</span>,<span class="string">'on'</span>,<span class="string">'ZGrid'</span>,<span class="string">'on'</span>)
+
+            <span class="keyword">if</span> nargin == 2
+                [pathstr, name, ext] = fileparts(varargin{1});
+
+                <span class="keyword">if</span> not(exist(pathstr, <span class="string">'file'</span>) == 7)
+                    mkdir(pathstr);
+                <span class="keyword">end</span>
+
+                print(f999, <span class="string">'-dpdf'</span>, strcat(strcat(pathstr, <span class="string">'/'</span>, name), <span class="string">'.pdf'</span>))
             <span class="keyword">end</span>
         <span class="keyword">end</span>
     <span class="keyword">end</span>
@@ -748,7 +810,7 @@ classdef Graphics
             self.SemitrailerColor = 'g';
         end
 
-        function Animation(self, saveit, varargin)
+        function Animation(self, varargin)
             % Verifying number of columns of the state output matrix
             % col = 6 -> simples
             % col = 8 -> articulado
@@ -889,25 +951,25 @@ classdef Graphics
                 velt(i, 1:2) = interp1(TOUT, VEL, TEMPO(i));
             end
 
-            XSize = 25 ;                            % Horizontal size of the figure [cm]
+
+            figWidth = 20 ;                             % Defining the width of the figure [centimeters]
+            % Margins added to Position to include text labels [left bottom right top] Property - TightInset (read only)
+            tight = [1.3 1.3 0.2 0.2];
+            PosAxX = figWidth - tight(1) - tight(3);     % Width of the axes (axes position x)
+            XLim = [min(XT)-20 max(XT)+10];              % Limits of x
+            rangeX = XLim(2) - XLim(1);                  % Range of x
+            YLim = [min(YT)-5 max(YT)+5];              % Limits of y
+            % YLim = [min(YT)-10 max(YT)+10];              % Limits of y
+            rangeY = YLim(2) - YLim(1);                  % Range of y
+            PosAxY = PosAxX*rangeY/rangeX;               % Height of the axes (axes position y) - Equivalent to axis equal
+
             % Defining figure
-            f666=figure(666);
-            set(f666,'Units','centimeters')         % Changing units of the figure to centimeters
-            set(f666,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
-            % Position and size of the figure window
-            set(f666,'Position',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            % Position and size of the figure on the printed page
-            set(f666,'PaperPosition',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            % % Size of the paper
-            set(f666,'PaperSize',[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            f666 = figure(666);
+            % Defining axes
             ax666=gca;
-            set(ax666,'Units','centimeters')        % Changing units of the axes to centimeters
-            set(ax666,'NextPlot','add','Box','on','XGrid','on','YGrid','on','ZGrid','on')
-            axis equal
-            set(ax666,'XLim',[min(XT)-20 max(XT)+10])
-            set(ax666,'YLim',[min(YT)-10 max(YT)+10])
+            set(ax666,'NextPlot','add')                 % hold on
+
             % Description
-            title('Trajectory')
             xlabel('Distance [m]');
             ylabel('Distance [m]');
 
@@ -999,12 +1061,35 @@ classdef Graphics
                 fill(xn, yn, self.SemitrailerColor)
             end
 
-            if saveit == 1
+            if nargin == 2
+                [pathstr, name, ext] = fileparts(varargin{1});
+
+                if not(exist(pathstr, 'file') == 7)
+                    mkdir(pathstr);
+                end
+
+                % Setting figure
+                set(f666,'Units','centimeters')         % Changing units of the figure to centimeters
+                set(f666,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
+                % Position and size of the figure window
+                set(f666,'Position',[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                % Position and size of the figure on the printed page
+                set(f666,'PaperPosition',[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                % % Size of the paper
+                set(f666,'PaperSize',[PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                set(ax666,'Units','centimeters')        % Changing units of the axes to centimeters
+
+                % Setting axes
+                set(ax666,'XLim',XLim)
+                set(ax666,'YLim',YLim)
+                set(ax666,'Position',[tight(1:2) PosAxX PosAxY])
+                set(ax666,'Box','on','XGrid','on','YGrid','on','ZGrid','on')
+
                 % Initializing gif
                 frame = getframe(666);
                 im = frame2im(frame);
                 [A, map] = rgb2ind(im, 256, 'nodither');
-                imwrite(A, map, 'Animation.gif', 'LoopCount', Inf, 'DelayTime', 0.05);
+                imwrite(A, map, strcat(pathstr, '/', name, '.gif'), 'LoopCount', Inf, 'DelayTime', 0.05);
             end
 
             % Remaining frames
@@ -1034,12 +1119,30 @@ classdef Graphics
                     self.Vector(emsemi(j, 1:2),(alpham(j)+psii(j)-phii(j)),velm(j),'b');
                 end
 
-                if saveit == 1
+                % Setting figure
+                set(f666,'Units','centimeters')         % Changing units of the figure to centimeters
+                set(f666,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
+                % Position and size of the figure window
+                set(f666,'Position',[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                % Position and size of the figure on the printed page
+                set(f666,'PaperPosition',[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                % % Size of the paper
+                set(f666,'PaperSize',[PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+                set(ax666,'Units','centimeters')        % Changing units of the axes to centimeters
+
+                % Setting axes
+                set(ax666,'XLim',XLim)
+                set(ax666,'YLim',YLim)
+                set(ax666,'Position',[tight(1:2) PosAxX PosAxY])
+                set(ax666,'Box','on','XGrid','on','YGrid','on','ZGrid','on')
+                if nargin == 2
+                    [pathstr, name, ext] = fileparts(varargin{1});
+
                     % Adding the current frame to the initialized gif
                     frame = getframe(666);
                     im = frame2im(frame);
                     [A, map] = rgb2ind(im, 256, 'nodither');
-                    imwrite(A, map, 'Animation.gif', 'WriteMode', 'append', 'DelayTime', 0.05);
+                    imwrite(A, map, strcat(pathstr, '/', name, '.gif'), 'WriteMode', 'append', 'DelayTime', 0.05);
                 end
 
                 pause(0.05)                 % OBS: It has to be the same value of the time adjustment
@@ -1074,7 +1177,7 @@ classdef Graphics
             end
         end
 
-        function Frame(self, saveit, varargin)
+        function Frame(self, varargin)
             articulated = isa(self.Simulator.Vehicle, 'VehicleDynamicsLateral.VehicleArticulated');
 
             % States
@@ -1199,23 +1302,21 @@ classdef Graphics
                 velt(i, 1:2) = interp1(TOUT, VEL, TEMPO(i));
             end
 
-            XSize = 25 ;                            % Horizontal size of the figure [cm]
+            figWidth = 20 ;                             % Defining the width of the figure [centimeters]
+            % Margins added to Position to include text labels [left bottom right top] Property - TightInset (read only)
+            tight = [1.3 1.3 0.2 0.2];
+            PosAxX = figWidth - tight(1) - tight(3);     % Width of the axes (axes position x)
+            XLim = [min(XT)-20 max(XT)+10];              % Limits of x
+            rangeX = XLim(2) - XLim(1);                  % Range of x
+            YLim = [min(YT)-10 max(YT)+10];              % Limits of y
+            rangeY = YLim(2) - YLim(1);                  % Range of y
+            PosAxY = PosAxX*rangeY/rangeX;               % Height of the axes (axes position y) - Equivalent to axis equal
+
             % Defining figure
             f999 = figure(999);
-            set(f999,'Units','centimeters')         % Changing units of the figure to centimeters
-            set(f999,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
-            % Position and size of the figure window
-            set(f999,'Position',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            % Position and size of the figure on the printed page
-            set(f999,'PaperPosition',[0 0 XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
-            % % Size of the paper
-            set(f999,'PaperSize',[XSize ((max(YT)+10) - (min(YT)-10))/((max(XT)+10) - (min(XT)-20))*XSize])
+            % Defining axes
             ax999=gca;
-            set(ax999,'Units','centimeters')        % Changing units of the axes to centimeters
-            set(ax999,'NextPlot','add','Box','on','XGrid','on','YGrid','on','ZGrid','on')
-            axis equal
-            set(ax999,'XLim',[min(XT)-20 max(XT)+10])
-            set(ax999,'YLim',[min(YT)-10 max(YT)+10])
+            set(ax999,'NextPlot','add')                 % hold on
 
             xlabel('Distance [m]')
             ylabel('Distance [m]')
@@ -1318,8 +1419,31 @@ classdef Graphics
                 end
             end
 
-            if saveit == 1
-                print(f999, '-dpdf', 'Trajectory.pdf')
+            % Setting figure
+            set(f999,'Units','centimeters')         % Changing units of the figure to centimeters
+            set(f999,'PaperUnits','centimeters')    % Changing units of the paper to centimeters
+            % Position and size of the figure window
+            set(f999,'Position',[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+            % Position and size of the figure on the printed page
+            set(f999,'PaperPosition',[0 0 PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+            % % Size of the paper
+            set(f999,'PaperSize',[PosAxX+tight(1)+tight(3) PosAxY+tight(2)+tight(4)])
+            set(ax999,'Units','centimeters')        % Changing units of the axes to centimeters
+
+            % Setting axes
+            set(ax999,'XLim',XLim)
+            set(ax999,'YLim',YLim)
+            set(ax999,'Position',[tight(1:2) PosAxX PosAxY])
+            set(ax999,'Box','on','XGrid','on','YGrid','on','ZGrid','on')
+
+            if nargin == 2
+                [pathstr, name, ext] = fileparts(varargin{1});
+
+                if not(exist(pathstr, 'file') == 7)
+                    mkdir(pathstr);
+                end
+
+                print(f999, '-dpdf', strcat(strcat(pathstr, '/', name), '.pdf'))
             end
         end
     end

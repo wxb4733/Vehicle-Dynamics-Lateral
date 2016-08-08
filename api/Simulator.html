@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Simulator</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="Simulator.m"><style type="text/css">
+      --><title>Simulator</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="Simulator.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -79,16 +79,16 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 self.PSI0 = 0;                   <span class="comment">% Initial tractor yaw angle [rad]</span>
                 self.PHI0 = 0;                   <span class="comment">% Initial articulation angle [rad]</span>
                 self.V0 = 20;                    <span class="comment">% Initial tractor CG velocity [m/s]</span>
-                self.ALPHAT0 = 0.3;              <span class="comment">% Initial tractor side slip angle [rad]</span>
-                self.dPSI0 = 0.25;               <span class="comment">% Initial tractor yaw rate [rad/s]</span>
-                self.dPHI0 = self.dPSI0;        <span class="comment">% Initial articulation rate [rad/s]</span>
+                self.ALPHAT0 = 0;              <span class="comment">% Initial tractor side slip angle [rad]</span>
+                self.dPSI0 = 0;               <span class="comment">% Initial tractor yaw rate [rad/s]</span>
+                self.dPHI0 = 0;        <span class="comment">% Initial articulation rate [rad/s]</span>
             <span class="keyword">else</span>
                 self.X0 = 0;                     <span class="comment">% Initial CG horizontal position [m]</span>
                 self.Y0 = 0;                     <span class="comment">% Initial CG vertical position [m]</span>
                 self.PSI0 = 0;                   <span class="comment">% Initial yaw angle [rad]</span>
                 self.V0 = 20;                    <span class="comment">% Initial CG velocity [m/s]</span>
-                self.ALPHAT0 = -0.2;             <span class="comment">% Initial side slip angle [rad]</span>
-                self.dPSI0 = 0.7;                <span class="comment">% Initial yaw rate [rad/s]</span>
+                self.ALPHAT0 = 0;             <span class="comment">% Initial side slip angle [rad]</span>
+                self.dPSI0 = 0;                <span class="comment">% Initial yaw rate [rad/s]</span>
             <span class="keyword">end</span>
         <span class="keyword">end</span>
 
@@ -106,13 +106,25 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
         <span class="keyword">function</span> Simulate(self)
             <span class="comment">% TODO: gravity can be passed to the simulator so vertical load and other forces are calculated here</span>
 
+
+            <span class="keyword">if</span> isa(self.Vehicle.deltaf,<span class="string">'function_handle'</span>)
+                self.Vehicle.deltaf = self.Vehicle.deltaf;
+            <span class="keyword">else</span>
+                <span class="comment">% The length of deltaf and tspan must be the same</span>
+                <span class="comment">% If not, the last value of delta is repeated in the remaining array positions</span>
+                ldeltaf = length(self.Vehicle.deltaf);
+                lTSpan = length(self.TSpan);
+                <span class="keyword">if</span> ldeltaf &lt; lTSpan
+                    self.Vehicle.deltaf = [self.Vehicle.deltaf self.Vehicle.deltaf(end)*ones(1,lTSpan-ldeltaf)];
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
             <span class="comment">% integration</span>
             <span class="comment">% if vehicle is articulated, adds mass matrix as an integration option</span>
             <span class="keyword">if</span> isa(self.Vehicle, <span class="string">'VehicleDynamicsLateral.VehicleArticulated'</span>)
                 fun = self.Vehicle;
-                options = odeset(<span class="string">'Mass'</span>, @fun.MassMatrix);
-                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados), self.TSpan, self.getInitialState(), options);
-
+                options = odeset(<span class="string">'Mass'</span>, @fun.MassMatrix,<span class="string">'Events'</span>, @fun.velocity);
+                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados,self.TSpan), self.TSpan, self.getInitialState(), options);
                 <span class="comment">% retrieve states exclusive to the articulated vehicle</span>
                 self.XT = XOUT(:, 1);
                 self.YT = XOUT(:, 2);
@@ -123,7 +135,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 self.dPSI = XOUT(:, 7);
                 self.dPHI = XOUT(:, 8);
             <span class="keyword">else</span>
-                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados), self.TSpan, self.getInitialState());
+                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados,self.TSpan), self.TSpan, self.getInitialState());
 
                 <span class="comment">% Retrieving states post integration</span>
                 self.XT = XOUT(:, 1);
@@ -176,16 +188,16 @@ classdef Simulator<handle
                 self.PSI0 = 0;                   % Initial tractor yaw angle [rad]
                 self.PHI0 = 0;                   % Initial articulation angle [rad]
                 self.V0 = 20;                    % Initial tractor CG velocity [m/s]
-                self.ALPHAT0 = 0.3;              % Initial tractor side slip angle [rad]
-                self.dPSI0 = 0.25;               % Initial tractor yaw rate [rad/s]
-                self.dPHI0 = self.dPSI0;        % Initial articulation rate [rad/s]
+                self.ALPHAT0 = 0;              % Initial tractor side slip angle [rad]
+                self.dPSI0 = 0;               % Initial tractor yaw rate [rad/s]
+                self.dPHI0 = 0;        % Initial articulation rate [rad/s]
             else
                 self.X0 = 0;                     % Initial CG horizontal position [m]
                 self.Y0 = 0;                     % Initial CG vertical position [m]
                 self.PSI0 = 0;                   % Initial yaw angle [rad]
                 self.V0 = 20;                    % Initial CG velocity [m/s]
-                self.ALPHAT0 = -0.2;             % Initial side slip angle [rad]
-                self.dPSI0 = 0.7;                % Initial yaw rate [rad/s]
+                self.ALPHAT0 = 0;             % Initial side slip angle [rad]
+                self.dPSI0 = 0;                % Initial yaw rate [rad/s]
             end
         end
 
@@ -203,13 +215,25 @@ classdef Simulator<handle
         function Simulate(self)
             % TODO: gravity can be passed to the simulator so vertical load and other forces are calculated here
 
+
+            if isa(self.Vehicle.deltaf,'function_handle')
+                self.Vehicle.deltaf = self.Vehicle.deltaf;
+            else
+                % The length of deltaf and tspan must be the same
+                % If not, the last value of delta is repeated in the remaining array positions
+                ldeltaf = length(self.Vehicle.deltaf);
+                lTSpan = length(self.TSpan);
+                if ldeltaf < lTSpan
+                    self.Vehicle.deltaf = [self.Vehicle.deltaf self.Vehicle.deltaf(end)*ones(1,lTSpan-ldeltaf)];
+                end
+            end
+
             % integration
             % if vehicle is articulated, adds mass matrix as an integration option
             if isa(self.Vehicle, 'VehicleDynamicsLateral.VehicleArticulated')
                 fun = self.Vehicle;
-                options = odeset('Mass', @fun.MassMatrix);
-                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados), self.TSpan, self.getInitialState(), options);
-
+                options = odeset('Mass', @fun.MassMatrix,'Events', @fun.velocity);
+                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados,self.TSpan), self.TSpan, self.getInitialState(), options);
                 % retrieve states exclusive to the articulated vehicle
                 self.XT = XOUT(:, 1);
                 self.YT = XOUT(:, 2);
@@ -220,7 +244,7 @@ classdef Simulator<handle
                 self.dPSI = XOUT(:, 7);
                 self.dPHI = XOUT(:, 8);
             else
-                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados), self.TSpan, self.getInitialState());
+                [TOUT, XOUT] = ode45(@(t, estados) self.Vehicle.Model(t, estados,self.TSpan), self.TSpan, self.getInitialState());
 
                 % Retrieving states post integration
                 self.XT = XOUT(:, 1);

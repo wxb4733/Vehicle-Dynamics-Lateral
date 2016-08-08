@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>VehicleSimpleLinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="VehicleSimpleLinear.m"><style type="text/css">
+      --><title>VehicleSimpleLinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="VehicleSimpleLinear.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -83,7 +83,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             self.muy = .8;
             self.deltaf = 0;
         <span class="keyword">end</span>
-</pre><h2>Model<a name="3"></a></h2><p>Function with the model</p><pre class="codeinput">        <span class="keyword">function</span> dx = Model(self, ~, estados)
+</pre><h2>Model<a name="3"></a></h2><p>Function with the model</p><pre class="codeinput">        <span class="keyword">function</span> dx = Model(self, t, estados,tspan)
             <span class="comment">% Data</span>
             mT = self.mT;
             IT = self.IT;
@@ -92,7 +92,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             nF = self.nF;
             nR = self.nR;
             muy = self.muy;
-            deltaf = self.deltaf;
+
+
 
             g = 9.81;                 <span class="comment">% Gravity [m/s^2]</span>
 
@@ -102,12 +103,18 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             v0 = 20;                  <span class="comment">% [m/s]</span>
 
             <span class="comment">% State variables</span>
-            <span class="comment">% X = estados(1,1);         % Not used</span>
-            <span class="comment">% Y = estados(2,1);         % Not used</span>
+            X = estados(1,1);         <span class="comment">% Not used</span>
+            Y = estados(2,1);         <span class="comment">% Not used</span>
             PSI     = estados(3,1);
             VT       = estados(4,1);
             ALPHAT  = estados(5,1);
             dPSI    = estados(6,1);
+
+            <span class="keyword">if</span> isa(self.deltaf,<span class="string">'function_handle'</span>)
+                deltaf = self.deltaf([X;Y;PSI;VT;ALPHAT;dPSI],t);
+            <span class="keyword">else</span>
+                deltaf = interp1(tspan,self.deltaf,t);
+            <span class="keyword">end</span>
 
             <span class="comment">% Slip angles</span>
             ALPHAF = ALPHAT + a/v0*dPSI - deltaf;
@@ -155,7 +162,7 @@ classdef VehicleSimpleLinear < VehicleDynamicsLateral.VehicleSimple
 
         %% Model
         % Function with the model
-        function dx = Model(self, ~, estados)
+        function dx = Model(self, t, estados,tspan)
             % Data
             mT = self.mT;
             IT = self.IT;
@@ -164,7 +171,8 @@ classdef VehicleSimpleLinear < VehicleDynamicsLateral.VehicleSimple
             nF = self.nF;
             nR = self.nR;
             muy = self.muy;
-            deltaf = self.deltaf;
+
+
 
             g = 9.81;                 % Gravity [m/s^2]
 
@@ -174,12 +182,18 @@ classdef VehicleSimpleLinear < VehicleDynamicsLateral.VehicleSimple
             v0 = 20;                  % [m/s]
 
             % State variables
-            % X = estados(1,1);         % Not used
-            % Y = estados(2,1);         % Not used
+            X = estados(1,1);         % Not used
+            Y = estados(2,1);         % Not used
             PSI     = estados(3,1);
             VT       = estados(4,1);
             ALPHAT  = estados(5,1);
             dPSI    = estados(6,1);
+
+            if isa(self.deltaf,'function_handle')
+                deltaf = self.deltaf([X;Y;PSI;VT;ALPHAT;dPSI],t);
+            else
+                deltaf = interp1(tspan,self.deltaf,t);
+            end
 
             % Slip angles
             ALPHAF = ALPHAT + a/v0*dPSI - deltaf;

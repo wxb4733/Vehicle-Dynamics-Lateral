@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>VehicleSimpleNonlinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-03"><meta name="DC.source" content="VehicleSimpleNonlinear.m"><style type="text/css">
+      --><title>VehicleSimpleNonlinear</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-08"><meta name="DC.source" content="VehicleSimpleNonlinear.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -83,7 +83,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             self.muy = .8;
             self.deltaf = 0;
         <span class="keyword">end</span>
-</pre><h2>Model<a name="3"></a></h2><p>Fun&ccedil;&atilde;o com as equa&ccedil;&otilde;es de estado do modelo</p><pre class="codeinput">        <span class="keyword">function</span> dx = Model(self, ~, estados)
+</pre><h2>Model<a name="3"></a></h2><p>Fun&ccedil;&atilde;o com as equa&ccedil;&otilde;es de estado do modelo</p><pre class="codeinput">        <span class="keyword">function</span> dx = Model(self, t, estados,tspan)
             <span class="comment">% Data</span>
             m = self.mT;
             I = self.IT;
@@ -92,18 +92,28 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
             nF = self.nF;
             nR = self.nR;
             muy = self.muy;
-            DELTA = self.deltaf;
 
-            g = 9.81;                 <span class="comment">% Acelera&#65533;&#65533;o da gravidade [m/s^2]</span>
+
+            g = 9.81;                 <span class="comment">% Gravity [m/s^2]</span>
 
             FzF = self.mF0 * g;       <span class="comment">% Vertical load @ F [N]</span>
             FzR = self.mR0 * g;       <span class="comment">% Vertical load @ R [N]</span>
 
             <span class="comment">% Estados</span>
+            X = estados(1);
+            Y = estados(2);
             PSI = estados(3);
             v = estados(4);
             ALPHAT = estados(5);
             dPSI = estados(6);
+
+
+            <span class="keyword">if</span> isa(self.deltaf,<span class="string">'function_handle'</span>)
+                DELTA = self.deltaf([X;Y;PSI;v;ALPHAT;dPSI],t);
+            <span class="keyword">else</span>
+                DELTA = interp1(tspan,self.deltaf,t);
+            <span class="keyword">end</span>
+
 
             <span class="comment">% Slip angles</span>
             ALPHAF = atan2((v * sin(ALPHAT) + a * dPSI), (v * cos(ALPHAT))) - DELTA; <span class="comment">% Dianteiro</span>
@@ -151,7 +161,7 @@ classdef VehicleSimpleNonlinear < VehicleDynamicsLateral.VehicleSimple
 
         %% Model
         % Função com as equações de estado do modelo
-        function dx = Model(self, ~, estados)
+        function dx = Model(self, t, estados,tspan)
             % Data
             m = self.mT;
             I = self.IT;
@@ -160,18 +170,28 @@ classdef VehicleSimpleNonlinear < VehicleDynamicsLateral.VehicleSimple
             nF = self.nF;
             nR = self.nR;
             muy = self.muy;
-            DELTA = self.deltaf;
 
-            g = 9.81;                 % Acelera��o da gravidade [m/s^2]
+
+            g = 9.81;                 % Gravity [m/s^2]
 
             FzF = self.mF0 * g;       % Vertical load @ F [N]
             FzR = self.mR0 * g;       % Vertical load @ R [N]
 
             % Estados
+            X = estados(1);
+            Y = estados(2);
             PSI = estados(3);
             v = estados(4);
             ALPHAT = estados(5);
             dPSI = estados(6);
+
+
+            if isa(self.deltaf,'function_handle')
+                DELTA = self.deltaf([X;Y;PSI;v;ALPHAT;dPSI],t);
+            else
+                DELTA = interp1(tspan,self.deltaf,t);
+            end
+
 
             % Slip angles
             ALPHAF = atan2((v * sin(ALPHAT) + a * dPSI), (v * cos(ALPHAT))) - DELTA; % Dianteiro
