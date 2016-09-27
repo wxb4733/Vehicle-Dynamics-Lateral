@@ -265,7 +265,7 @@ disp(Kplace)
 %%
 % Control law
 %
-% \]\delta = - {\bf K} {\bf z} + K_1 r \]
+% \[ \delta = - {\bf K} {\bf z} + K_1 r \]
 %
 %% Double Lane Change Maneuver
 % *Control - Step y*
